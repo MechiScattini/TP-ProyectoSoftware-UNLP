@@ -1,2 +1,3 @@
-Grupo 18
+Nombre: Henry Ezequiel Espinoza 
+Legajo: 14669/8
 

@@ -3,7 +3,7 @@ from app.models.category import Category
 from app.models.status import Status
 
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relation, relationship
+from sqlalchemy.orm import relationship
 
 class Issue(db.Model):
     __tablename__ = "issues"

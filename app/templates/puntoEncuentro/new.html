@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Crear un usuario</h1>
+<form action="{{ url_for('puntoEncuentro_create') }}" method="POST">
+    <p>
+        <label>Nombre<label></br>
+        <input name="nombre" placeholder="Nombre"/>
+    </p>
+    <p>
+        <label>Dirección<label></br>
+        <input name="direccion" placeholder="Direccion"/>
+    </p>
+    <p>
+        <label>Coordenadas<label></br>
+        <input name="coordenadas" placeholder="Coordenadas"/>
+    </p>
+    <p>
+        <label>Estado<label></br>
+        <select name='estado_id'>
+            <option value='1'>Publicado</option>
+            <option value='2'>Despublicado</option>
+        </select>
+    </p>
+    <p>
+        <label>Teléfono<label></br>
+        <input name="telefono" placeholder="Telefono"/>
+    </p>
+    <p>
+    <p>
+        <label>Email<label></br>
+        <input name="email" placeholder="Email"/>
+    </p>
+    <input type="submit" value="Crear">
+    <button type="reset">Limpiar</button>
+    </p>
+</form>
+<a href="{{ url_for('puntoEncuentro_index') }}" class="btn btn-outline-dark" style="width: 100px;
+height: 50px;">Volver</a>
+{% endblock %}

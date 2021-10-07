@@ -1,10 +1,9 @@
-from app.db import db
-from app.models.category import Category
-from app.models.status import Status
-
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+from app.db import db
+from app.models.category import Category
+from app.models.status import Status
 class Issue(db.Model):
     __tablename__ = "issues"
     id = Column(Integer, primary_key=True)

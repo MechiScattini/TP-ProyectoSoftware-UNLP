@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     {% block head %}
@@ -17,10 +17,10 @@
         <div class="collapse navbar-collapse" id="navbarScroll">
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Puntos de encuentro</a>
+              <a class="nav-link" href="{{ url_for('puntoEncuentro_index') }}">Puntos de encuentro</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Zonas inundables</a>
@@ -35,7 +35,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                 <li><a class="dropdown-item" href="#">Editar Perfil</a></li>
-                <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('auth_logout') }}">Cerrar Sesion</a></li>
               </ul>
             </li>
             {% endif %}

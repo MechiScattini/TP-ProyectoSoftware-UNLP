@@ -2,14 +2,17 @@ from os import path, environ
 from flask import Flask, render_template, g, Blueprint
 from flask_session import Session
 from config import config
+
 from app import db
 from app.resources import issue
 from app.resources import user
+from app.resources import puntoEncuentro
+import logging
+
 from app.resources import auth
 from app.resources.api.issue import issue_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
-import logging
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
@@ -50,6 +53,11 @@ def create_app(environment="development"):
     app.add_url_rule("/usuarios", "user_index", user.index)
     app.add_url_rule("/usuarios", "user_create", user.create, methods=["POST"])
     app.add_url_rule("/usuarios/nuevo", "user_new", user.new)
+
+    # Rutas de PuntosEncuentro
+    app.add_url_rule("/puntosEncuentro", "puntoEncuentro_index", puntoEncuentro.index)
+    app.add_url_rule("/puntosEncuentro", "puntoEncuentro_create", puntoEncuentro.create, methods=["POST"])
+    app.add_url_rule("/puntosEncuentro/nuevo", "puntoEncuentro_new", puntoEncuentro.new)
 
     # Ruta para el Home (usando decorator)
     @app.route("/")

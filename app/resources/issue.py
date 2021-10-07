@@ -5,7 +5,6 @@ from app.db import db
 
 # Public resources
 def index():
-
     issues = Issue.query.all()
     return render_template("issue/index.html", issues=issues)
 
@@ -15,7 +14,6 @@ def new():
 
 
 def create():
-
     new_issue = Issue(**request.form)
 
     db.session.add(new_issue)

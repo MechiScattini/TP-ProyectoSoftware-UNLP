@@ -11,8 +11,8 @@ def index():
 
     user = User.query.filter(User.email==session['user'])
 
-    if not check_permission(user[0].id, 'punto_encuentro_index'):
-        abort(401)
+    """ if not check_permission(user[0].id, 'punto_encuentro_index'):
+        abort(401) """
     
     #falta módulo de configuración para traer la cant de elementos por pagina
     #cantPaginas = Config.query....
@@ -29,8 +29,8 @@ def new():
 
     user = User.query.filter(User.email==session['user'])
 
-    if not check_permission(user[0].id, 'punto_encuentro_new'):
-        abort(401)
+    """ if not check_permission(user[0].id, 'punto_encuentro_new'):
+        abort(401) """
     
     return render_template("puntoEncuentro/new.html")
 
@@ -40,16 +40,24 @@ def create():
 
     user = User.query.filter(User.email==session['user'])
 
-    if not check_permission(user[0].id, 'punto_encuentro_create'):
-        abort(401) 
+    """ if not check_permission(user[0].id, 'punto_encuentro_create'):
+        abort(401)  """
 
-    #chequea los datos ingresados 
-    if len(request.form['coordenadas']) > 3:
-        flash("Las coordenadas deben tener formato x,y")
+    #catchea todos los errores que levantan los validadores de campos
+    try:
+        new_punto = PuntoEncuentro(**request.form)
+    except ValueError as e:
+        flash(e)
         return render_template("puntoEncuentro/new.html")
+    else:
+        db.session.add(new_punto)
 
-    new_punto = PuntoEncuentro(**request.form)
-    db.session.add(new_punto)
-    db.session.commit()
+    #si el nombre ingresado ya se encuentra registrado en la db se produce la exeption
+    try:
+        db.session.commit()
+    except:
+        flash("Ya existe un punto de encuentro con ese nombre")
+        return render_template("puntoEncuentro/new.html")
+        
 
     return redirect(url_for("puntoEncuentro_index"))

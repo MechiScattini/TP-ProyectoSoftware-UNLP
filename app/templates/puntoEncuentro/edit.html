@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Modificar punto</h1>
+<form action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
+    <p>
+        <label>Nombre<label></br>
+        <input name="nombre" placeholder="Nombre" value="{{puntoEncuentro.nombre}}" />
+    </p>
+    <p>
+        <label>Dirección<label></br>
+        <input name="direccion" placeholder="Direccion" value="{{puntoEncuentro.direccion}}" />
+    </p>
+    <p>
+        <label>Coordenadas<label></br>
+        <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+" value="{{puntoEncuentro.coordenadas}}" />
+    </p>
+    <p>
+        <label>Estado<label></br>
+        <select name='estado_id' >
+            {% if puntoEncuentro.estado_id==1 %}
+            <option value='1' selected>Publicado</option>
+            <option value='2'>Despublicado</option>
+            {% else %}
+            <option value='1'>Publicado</option>
+            <option value='2' selected>Despublicado</option>
+            {% endif %}
+        </select>
+    </p>
+    <p>
+        <label>Teléfono<label></br>
+        <input name="telefono" placeholder="Telefono" value="{{puntoEncuentro.telefono}}" />
+    </p>
+    <p>
+    <p>
+        <label>Email<label></br>
+        <input name="email" placeholder="Email" value="{{puntoEncuentro.email}}" />
+    </p>
+    <input type="submit" value="Guardar">
+    </p>
+</form>
+<a href="{{ url_for('puntoEncuentro_index') }}" class="btn btn-outline-dark" style="width: 100px;
+height: 50px;">Volver</a>
+{% endblock %}

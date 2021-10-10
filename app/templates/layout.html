@@ -20,15 +20,15 @@
               <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="#">Denuncias</a>
+            </li>
+            {% if is_authenticated(session) %}
+            <li class="nav-item">
               <a class="nav-link" href="{{ url_for('puntoEncuentro_index') }}">Puntos de encuentro</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Zonas inundables</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Denuncias</a>
-            </li>
-            {% if is_authenticated(session) %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Perfil
@@ -39,14 +39,9 @@
               </ul>
             </li>
             {% else %}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Perfil
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                <li><a class="dropdown-item" href="{{ url_for('auth_login') }}">Iniciar Sesion</a></li>
-              </ul>
-            </li>
+              <li class="nav-item">
+                <a href="{{ url_for('auth_login') }}" class="nav-link" >Iniciar sesión</a>
+              </li>
             {% endif %}
           </ul>
         </div>

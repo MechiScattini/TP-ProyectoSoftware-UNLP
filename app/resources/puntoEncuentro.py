@@ -71,7 +71,7 @@ def update(id_punto):
 
     user = User.query.filter(User.email==session['user'])
 
-    if not check_permission(user[0].id, 'punto_encuentro_create'):
+    if not check_permission(user[0].id, 'punto_encuentro_update'):
         abort(401) 
 
     punto = PuntoEncuentro.query.get_or_404(id_punto)
@@ -107,7 +107,7 @@ def destroy(id_punto):
 
     user = User.query.filter(User.email==session['user'])
 
-    if not check_permission(user[0].id, 'punto_encuentro_create'):
+    if not check_permission(user[0].id, 'punto_encuentro_destroy'):
         abort(401)  
     
     punto = PuntoEncuentro.query.get_or_404(id_punto)

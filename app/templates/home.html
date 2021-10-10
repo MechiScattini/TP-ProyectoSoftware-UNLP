@@ -10,8 +10,6 @@
   {% if is_authenticated(session) %}
     <a href="{{ url_for('user_index') }}" class="link">Usuarios</a>
     <a href="{{ url_for('auth_logout') }}" class="link">Cerrar sesión</a>
-  {% else %}
-    <a href="{{ url_for('auth_login') }}" class="link">Iniciar sesión</a>
   {% endif %}
 
 {% endblock %}

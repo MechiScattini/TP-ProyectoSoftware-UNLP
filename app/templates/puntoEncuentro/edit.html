@@ -8,15 +8,15 @@
 <form action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
     <p>
         <label>Nombre<label></br>
-        <input name="nombre" placeholder="Nombre" value={{puntoEncuentro.nombre}} />
+        <input name="nombre" placeholder="Nombre" value="{{puntoEncuentro.nombre}}" />
     </p>
     <p>
         <label>Dirección<label></br>
-        <input name="direccion" placeholder="Direccion" value={{puntoEncuentro.direccion}} />
+        <input name="direccion" placeholder="Direccion" value="{{puntoEncuentro.direccion}}" />
     </p>
     <p>
         <label>Coordenadas<label></br>
-        <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+" value={{puntoEncuentro.coordenadas}} />
+        <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+" value="{{puntoEncuentro.coordenadas}}" />
     </p>
     <p>
         <label>Estado<label></br>
@@ -32,12 +32,12 @@
     </p>
     <p>
         <label>Teléfono<label></br>
-        <input name="telefono" placeholder="Telefono" value={{puntoEncuentro.telefono}} />
+        <input name="telefono" placeholder="Telefono" value="{{puntoEncuentro.telefono}}" />
     </p>
     <p>
     <p>
         <label>Email<label></br>
-        <input name="email" placeholder="Email" value={{puntoEncuentro.email}} />
+        <input name="email" placeholder="Email" value="{{puntoEncuentro.email}}" />
     </p>
     <input type="submit" value="Guardar">
     </p>

@@ -6,7 +6,7 @@
 {% block content %}
   <h1>Usuarios</h1>
   {% for user in users %}
-  <li>{{ user.email }}  - {{ user.first_name }} - {{ user.last_name }} <a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link"> Eliminar</a>  </li>
+  <li>{{ user.email }}  - {{ user.first_name }} - {{ user.last_name }} <a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li>
   {% endfor %}
   <br>
   <a href="{{ url_for('home') }}" class="link">Volver</a>

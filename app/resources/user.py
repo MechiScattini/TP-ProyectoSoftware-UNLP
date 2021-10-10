@@ -1,8 +1,6 @@
 from flask import redirect, render_template, request, url_for, session, abort
 from flask.helpers import flash
-from sqlalchemy.sql.elements import Null
-from sqlalchemy.sql.expression import null
-from sqlalchemy.sql.functions import user
+from sqlalchemy import exc
 from app.models.user import User
 from app.helpers.auth import authenticated
 from app.db import db
@@ -35,35 +33,40 @@ def edit(user_id):
     if request.method == 'POST':
         params = request.form   
         error = None
-
         if not params["first_name"]:
             error = 'nombre es requerido' 
-        if not params["last_name"]:
+        elif not params["last_name"]:
             error = 'apellido es requerido'  
-        if not params["email"]:
+        elif not params["email"]:
             error = 'email es requerido'
-        if not params["username"]:
+        elif not params["username"]:
             error = 'nombre de usuario es requerido'
-
-        """if user.email != params["email"]:
-            email_en_db= User.query.filter(user.email == params["email"]).first()
-            if email_en_db is not None:
-                error = 'email {} se encuentra registrado.'.format(params["email"])
-        if user.username != params["username"]:
-            username_en_db= User.query.filter(user.username == params["username"]).first()
-            if username_en_db is not None:
-                error = 'username {} se encuentra registrado.'.format(params["username"])    """       
-
         if error is None:
-            user.email =params['email']
-            user.username =params['username']
-            user.first_name =params['first_name']
-            user.last_name =params['last_name']
-            db.session.commit()
+            try:
+                user.email =params['email'] #falta chequear que sea un email valido
+                user.username =params['username']
+                user.first_name =params['first_name']
+                user.last_name =params['last_name']
+                user.lbloqueado =params['bloqueado'] #no funciona 
+                db.session.commit()        
+            except exc.IntegrityError as e:
+                if 'email' in e.orig.args[1]:
+                    flash("ya existe usuario con ese email")
+                elif 'username' in e.orig.args[1]:
+                    flash("ya existe usuario con ese nombre de usuario")
+                db.session.rollback()
+                return render_template("user/edit.html", user=user) 
+            except ValueError as e:
+                flash(e)
+                db.session.rollback()
+                return render_template("user/edit.html", user=user)
             flash("Usuario actualizado")
             return redirect(url_for("user_index"))
-        flash(error)
+        else:
+            flash(error)
+            return render_template("user/edit.html", user=user)
     return render_template('user/edit.html', user= user)
+
 
 def create():
     """ Creacion de usuarios """

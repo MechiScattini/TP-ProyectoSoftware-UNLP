@@ -4,6 +4,7 @@ from flask_session import Session
 from config import config
 from app import db
 from app.resources import issue
+from app.models.issue import Issue
 from app.resources import user
 from app.resources import auth
 from app.resources.api.issue import issue_api
@@ -18,6 +19,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 def create_app(environment="development"):
     # Configuración inicial de la app
     app = Flask(__name__)
+    app.debug = True
 
     # Carga de la configuración
     env = environ.get("FLASK_ENV", environment)
@@ -26,6 +28,7 @@ def create_app(environment="development"):
     # Server Side session
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
+    
 
     # Configure db
     db.init_app(app)
@@ -42,9 +45,24 @@ def create_app(environment="development"):
     )
 
     # Rutas de Consultas
-    app.add_url_rule("/consultas", "issue_index", issue.index)
+    
+    app.add_url_rule("/consultas", "issue_index", issue.index, methods=["GET"])
+    app.add_url_rule('/consultas/<int:page>', "issue_index", issue.index,methods=['GET'])
+
+    # @app.route('/consultas', methods=['GET'], defaults={"page": 1 , "per_pag": 1}) 
+    # @app.route('/consultas/<int:page>', methods=['GET'])
+    # def index(page,per_pag):
+    #     page = page
+    #     per_page = 1
+    #     issues = Issue.query.paginate(page,per_page,error_out=False)
+    #     return render_template("issue/index.html", issues=issues)
     app.add_url_rule("/consultas", "issue_create", issue.create, methods=["POST"])
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
+ 
+    # Rutas de Admin
+    app.add_url_rule("/Configuracion", "issue_config", issue.config)
+    app.add_url_rule("/Configurado", "issue_configurado", issue.configurado, methods=["POST"])
+    
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index)

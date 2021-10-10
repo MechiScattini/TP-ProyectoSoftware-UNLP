@@ -5,9 +5,27 @@
 {% endblock %}
 {% block content %}
   <h1>Consultas</h1>
-  {% for issue in issues %}
+  {% for issue in issues.items %}
     <li>{{ issue.email }} - {{ issue.description }} - {{ issue.category.name }} - {{ issue.status.name }}</li>
   {% endfor %}
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if issues.has_prev %}
+          <li class="page-item"> <a class="page-link" href="{{ url_for('index', page=issues.prev_num) }}">Siguiente</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
+        {% endif %}
+
+
+        {% if issues.has_next %}
+          <li class="page-item"> <a class="page-link" href="{{ url_for('index', page=issues.next_num) }}">Siguiente</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
+        {% endif %}
+
+    </ul>
+  </nav>
+  
   <a href="{{ url_for('home') }}" class="link">Volver</a>
   <a href="{{ url_for('issue_new') }}" class="link">Nuevo</a>
 {% endblock %}

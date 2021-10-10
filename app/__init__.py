@@ -60,6 +60,8 @@ def create_app(environment="development"):
     app.add_url_rule("/puntosEncuentro", "puntoEncuentro_index", puntoEncuentro.index)
     app.add_url_rule("/puntosEncuentro", "puntoEncuentro_create", puntoEncuentro.create, methods=["POST"])
     app.add_url_rule("/puntosEncuentro/nuevo", "puntoEncuentro_new", puntoEncuentro.new)
+    app.add_url_rule("/puntosEncuentro/editar/<int:id_punto>", "puntoEncuentro_update", puntoEncuentro.update, methods=["POST","GET"])
+    app.add_url_rule("/puntosEncuentro/eliminar/<int:id_punto>", "puntoEncuentro_destroy", puntoEncuentro.destroy, methods=["POST", "GET"])
 
     # Ruta para el Home (usando decorator)
     @app.route("/")

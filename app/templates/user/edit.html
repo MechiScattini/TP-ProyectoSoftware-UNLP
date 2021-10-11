@@ -8,23 +8,23 @@
   <form action="{{ url_for('user_edit', user_id=user.id) }}" method="POST">
     <p>
       <label>Email <label></br>
-      <input name="email" value="{{user.email}}"/>
+      <input name="email" required value="{{user.email}}"/>
     </p>
     <p>
       <label>Nombre de usuario <label></br>
-      <input name="username" value="{{user.username}}"/>
+      <input name="username" required value="{{user.username}}"/>
     </p>
     <p>
       <label>Nombre <label></br>
-      <input name="first_name" value="{{user.first_name}}"/>
+      <input name="first_name" required value="{{user.first_name}}"/>
     </p>
     <p>
       <label>Apellido <label></br>
-      <input name="last_name" value="{{user.last_name}}"/>
+      <input name="last_name" required value="{{user.last_name}}"/>
     </p>
     <p>
     <label>Bloqueado <label></br>
-      <input name="bloqueado" value="{{user.bloqueado}}"/>
+      <input name="bloqueado" required value="{{user.bloqueado}}"/>
     </p>
     <p>
       <input type="submit" value="Actualizar">

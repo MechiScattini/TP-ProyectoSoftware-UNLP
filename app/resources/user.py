@@ -11,20 +11,15 @@ def index():
     if not authenticated(session):
         abort(401)
 
+    if request.method == "GET":
+        users = User.query.all()
+        return render_template("user/index.html", users=users)
+
     if request.method == "POST":
-        user_email =request.args.get('user_email',None)
-        user = User.query.filter(User.email == user_email).first()
-        db.session.delete(user)
-        db.session.commit()
-    users = User.query.all()
-    return render_template("user/index.html", users=users)
+        q = request.form["q"]
+        users_con_nombre = User.query.filter(User.username == q)
+        return render_template("user/index.html", users=users_con_nombre)
 
-
-def new():
-    if not authenticated(session):
-        abort(401)
-
-    return render_template("user/new.html")
 
 def edit(user_id):
     if not authenticated(session):
@@ -72,32 +67,36 @@ def create():
     """ Creacion de usuarios """
     if not authenticated(session):
         abort(401)
-    
-    params = request.form   
-    error = None
-    if not params["username"]:
-        error = 'Nombre de usuario es requerido'
-    if not params["email"]:
-        error = 'Email de usuario es requerido'
-    elif not params["password"]:
-        error = 'Contraseña es requerido'  
+    if request.method == "GET":
+        return render_template("user/new.html")
+
+    if request.method == "POST":
+        params = request.form   
+        error = None
+        if not params["username"]:
+            error = 'Nombre de usuario es requerido'
+        if not params["email"]:
+            error = 'Email de usuario es requerido'
+        elif not params["password"]:
+            error = 'Contraseña es requerido'  
     
     #Chequeos de uusername y email unicos 
-    email_en_db = User.query.filter(User.email==params["email"]).first()
-    username_en_db= User.query.filter(User.username==params["username"]).first()
-    if email_en_db is not None:
-        error = 'Email {} se encuentra registrado.'.format(params["email"])
-    if username_en_db is not None:
-        error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
-    if error is None:
-        new_user = User(**request.form)
-        new_user.password = generate_password_hash(params["password"])
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for("user_index"))
-    
-    flash(error)
-    return redirect(url_for("user_new"))
+        email_en_db = User.query.filter(User.email==params["email"]).first()
+        username_en_db= User.query.filter(User.username==params["username"]).first()
+        if email_en_db is not None:
+            error = 'Email {} se encuentra registrado.'.format(params["email"])
+        if username_en_db is not None:
+            error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
+        if error is None:
+            new_user = User(**request.form)
+            new_user.password = generate_password_hash(params["password"])
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Usuario agregado con exito")
+            return redirect(url_for("user_create"))
+        else:
+            flash(error)
+            return redirect(url_for("user_create"))
 
 def delete(user_id):
     user = User.query.get(user_id)
@@ -105,3 +104,4 @@ def delete(user_id):
     db.session.commit()
     flash("Usuario eliminado")
     return redirect(url_for("user_index"))
+

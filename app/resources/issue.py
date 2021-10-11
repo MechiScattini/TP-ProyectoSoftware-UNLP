@@ -1,14 +1,15 @@
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, session
 
+from app.models.elementos import Elementos
 from app.models.issue import Issue
 from app.db import db
-
+from sqlalchemy import update
+from sqlalchemy import select
 # Public resources
-
-
-def index(page):
-        page = 1
-        per_page = 2
+def index():
+        elem = Elementos.query.filter_by(id = 1).first()
+        per_page = int(elem.cant)
+        page  = int(request.args.get('page', 1))
         issues = Issue.query.paginate(page,per_page,error_out=False)
         return render_template("issue/index.html", issues=issues)
     
@@ -17,7 +18,6 @@ def new():
 
 
 def create():
-
     new_issue = Issue(**request.form)
 
     db.session.add(new_issue)
@@ -29,4 +29,7 @@ def config():
     return render_template("issue/config.html")
 def configurado():
     
-    return redirect(url_for("index", per_pag = request.form["numero"]))
+    elem = Elementos.query.filter_by(id = 1).first()
+    elem.cant = int(request.form.get('numero'))
+    db.session.commit()
+    return redirect(url_for("home"))

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from app.db import db
 
-class Status(db.Model):
+class Colores(db.Model):
     """Define una entidad de tipo Status que se corresponde con el table statuses"""
 
 

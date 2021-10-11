@@ -11,16 +11,16 @@
   <nav aria-label="Page navigation example">
     <ul class="pagination">
         {% if issues.has_prev %}
-          <li class="page-item"> <a class="page-link" href="{{ url_for('index', page=issues.prev_num) }}">Siguiente</a></li>
+          <li class="page-item"> <a class="page-link" href="{{ url_for('issue_index', page=issues.prev_num) }}">Siguiente</a></li>
         {% else %}
           <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
         {% endif %}
 
 
         {% if issues.has_next %}
-          <li class="page-item"> <a class="page-link" href="{{ url_for('index', page=issues.next_num) }}">Siguiente</a></li>
+          <li class="page-item"> <a class="page-link" href="{{ url_for('issue_index', page=issues.next_num) }}">Siguiente</a></li>
         {% else %}
-          <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
+          <li class="page-item"><a class="page-link btn disabled" href="#">Siguiente</a></li>
         {% endif %}
 
     </ul>

@@ -42,6 +42,17 @@ CREATE TABLE IF NOT EXISTS `colores` (
 /*!40000 ALTER TABLE `colores` DISABLE KEYS */;
 /*!40000 ALTER TABLE `colores` ENABLE KEYS */;
 
+-- Volcando estructura para tabla proyecto.elementos
+CREATE TABLE IF NOT EXISTS `elementos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cant` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Volcando datos para la tabla proyecto.elementos: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `elementos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `elementos` ENABLE KEYS */;
+
 -- Volcando estructura para tabla proyecto.issues
 CREATE TABLE IF NOT EXISTS `issues` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -58,12 +69,6 @@ CREATE TABLE IF NOT EXISTS `issues` (
 
 -- Volcando datos para la tabla proyecto.issues: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `issues` DISABLE KEYS */;
-INSERT INTO `issues` (`id`, `email`, `description`, `category_id`, `status_id`) VALUES
-	(1, 'fede@mail.com', 'No puedo iniciar sesión correctamente', 1, 1),
-	(2, 'jose@mail.com', 'El sistema de dice que hay un error', 1, 2),
-	(4, 'maria@mail.com', 'No tengo acceso al sistema', 1, 1);
-/*!40000 ALTER TABLE `issues` ENABLE KEYS */;
-
 -- Volcando estructura para tabla proyecto.paletas
 CREATE TABLE IF NOT EXISTS `paletas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -76,6 +81,25 @@ CREATE TABLE IF NOT EXISTS `paletas` (
 -- Volcando datos para la tabla proyecto.paletas: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `paletas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `paletas` ENABLE KEYS */;
+
+-- Volcando estructura para tabla proyecto.puntosdeencuentro
+CREATE TABLE IF NOT EXISTS `puntosdeencuentro` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(40) DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `coordenadas` varchar(3) DEFAULT NULL,
+  `estado_id` int(11) DEFAULT NULL,
+  `telefono` varchar(30) DEFAULT NULL,
+  `email` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`),
+  KEY `estado_id` (`estado_id`),
+  CONSTRAINT `puntosdeencuentro_ibfk_1` FOREIGN KEY (`estado_id`) REFERENCES `statuses` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Volcando datos para la tabla proyecto.puntosdeencuentro: ~0 rows (aproximadamente)
+/*!40000 ALTER TABLE `puntosdeencuentro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `puntosdeencuentro` ENABLE KEYS */;
 
 -- Volcando estructura para tabla proyecto.statuses
 CREATE TABLE IF NOT EXISTS `statuses` (

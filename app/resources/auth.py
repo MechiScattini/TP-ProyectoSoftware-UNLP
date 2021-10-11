@@ -12,7 +12,7 @@ def authenticate():
 
     params = request.form
     user = db.session.query(User).filter(
-        User.email==params["email"] and User.password==params["password"]
+        User.email==params["email"] or User.username==params["email"] and User.password==params["password"]
     ).first()
     error = None
     if not user:

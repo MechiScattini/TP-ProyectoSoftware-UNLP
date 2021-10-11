@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, abort, session, flash
 from werkzeug.security import check_password_hash
-
+from app.db import db
 from app.models.user import User
 
 
@@ -11,7 +11,7 @@ def login():
 def authenticate():
 
     params = request.form
-    user = User.query.filter(
+    user = db.session.query(User).filter(
         User.email==params["email"] and User.password==params["password"]
     ).first()
     error = None

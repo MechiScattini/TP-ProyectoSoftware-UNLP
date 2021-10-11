@@ -14,6 +14,8 @@ from app.resources.api.issue import issue_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
+
+
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 

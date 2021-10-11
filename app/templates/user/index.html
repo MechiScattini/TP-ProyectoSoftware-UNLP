@@ -5,9 +5,14 @@
 {% endblock %}
 {% block content %}
   <h1>Usuarios</h1>
+  <form method="POST" action="{{ url_for('user_index') }}" target="_blank">
+  <input type="search" name="q" placeholder="ingrese username" autofocus required>
+  <input type="submit" value= "Buscar"> 
+</form>
   {% for user in users %}
-  <li>{{ user.email }} - {{ user.first_name }} - {{ user.last_name }} - {{ user.password }}</li>
+  <li>{{ user.email }}  - {{ user.first_name }} - {{ user.last_name }} <a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> - <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li>
   {% endfor %}
+  <br>
   <a href="{{ url_for('home') }}" class="link">Volver</a>
-  <a href="{{ url_for('user_new') }}" class="link">Nuevo</a>
+  <a href="{{ url_for('user_create') }}" class="link">Nuevo</a>
 {% endblock %}

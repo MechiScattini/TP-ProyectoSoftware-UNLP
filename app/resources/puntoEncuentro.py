@@ -10,7 +10,7 @@ def index():
     if not authenticated(session):
         abort(401)
 
-    user = User.query.filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user'])
 
     if not check_permission(user[0].id, 'punto_encuentro_index'):
         abort(401) 
@@ -28,7 +28,7 @@ def new():
     if not authenticated(session):
         abort(401)
 
-    user = User.query.filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user'])
 
     if not check_permission(user[0].id, 'punto_encuentro_new'):
         abort(401)
@@ -39,7 +39,7 @@ def create():
     if not authenticated(session):
         abort(401)
 
-    user = User.query.filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user'])
 
     if not check_permission(user[0].id, 'punto_encuentro_create'):
         abort(401) 
@@ -69,7 +69,7 @@ def update(id_punto):
     if not authenticated(session):
         abort(401)
 
-    user = User.query.filter(User.email==session['user'])
+    user =db.session.query(User).filter(User.email==session['user'])
 
     if not check_permission(user[0].id, 'punto_encuentro_update'):
         abort(401) 
@@ -105,7 +105,7 @@ def destroy(id_punto):
     if not authenticated(session):
         abort(401)
 
-    user = User.query.filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user'])
 
     if not check_permission(user[0].id, 'punto_encuentro_destroy'):
         abort(401)  

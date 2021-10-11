@@ -117,9 +117,6 @@ CREATE TABLE `users` (
   `last_name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `password` (`password`),
-  UNIQUE KEY `first_name` (`first_name`),
-  UNIQUE KEY `last_name` (`last_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

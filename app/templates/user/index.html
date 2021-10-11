@@ -6,7 +6,7 @@
 {% block content %}
   <h1>Usuarios</h1>
   <form method="POST" action="{{ url_for('user_index') }}" target="_blank">
-  <input name="q" placeholder="ingrese username" autofocus required>
+  <input type="search" name="q" placeholder="ingrese username" autofocus required>
   <input type="submit" value= "Buscar"> 
 </form>
   {% for user in users %}

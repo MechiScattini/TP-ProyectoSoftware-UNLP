@@ -12,9 +12,9 @@ def index():
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user[0].id, 'punto_encuentro_index'):
+    if not check_permission(user.id, 'punto_encuentro_index'):
         abort(401) 
     
     #falta módulo de configuración para traer la cant de elementos por pagina
@@ -32,16 +32,16 @@ def index():
     else:
         puntos = PuntoEncuentro.query.paginate(page=page, per_page=cantPaginas)
 
-    return render_template("puntoEncuentro/index.html", puntos=puntos)
+    return render_template("puntoEncuentro/index.html", puntos=puntos, user=user)
 
 def new():
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user[0].id, 'punto_encuentro_new'):
+    if not check_permission(user.id, 'punto_encuentro_new'):
         abort(401)
     
     return render_template("puntoEncuentro/new.html")
@@ -51,9 +51,9 @@ def create():
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user[0].id, 'punto_encuentro_create'):
+    if not check_permission(user.id, 'punto_encuentro_create'):
         abort(401) 
 
     #catchea todos los errores que levantan los validadores de campos
@@ -82,9 +82,9 @@ def update(id_punto):
     if not authenticated(session):
         abort(401)
 
-    user =db.session.query(User).filter(User.email==session['user'])
+    user =db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user[0].id, 'punto_encuentro_update'):
+    if not check_permission(user.id, 'punto_encuentro_update'):
         abort(401) 
 
     punto = PuntoEncuentro.query.get_or_404(id_punto)
@@ -117,9 +117,9 @@ def destroy(id_punto):
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user'])
+    user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user[0].id, 'punto_encuentro_destroy'):
+    if not check_permission(user.id, 'punto_encuentro_destroy'):
         abort(401)  
     
     #busca y elimina

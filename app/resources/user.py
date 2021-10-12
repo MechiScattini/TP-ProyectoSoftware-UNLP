@@ -1,7 +1,7 @@
 from flask import redirect, render_template, request, url_for, session, abort
 from flask.helpers import flash
 from sqlalchemy import exc
-from app.models.user import User
+from app.models.user import Rol, User, users_roles,Rol
 from app.models.elementos import Elementos
 from app.helpers.auth import authenticated, check_permission
 from app.db import db
@@ -43,6 +43,7 @@ def no_bloqueados():
     return render_template("user/index.html", users=users)
 
 def edit(user_id):
+    """ Edicion de usuarios """
     if not authenticated(session):
         abort(401)
     user = db.session.query(User).get(user_id)
@@ -65,10 +66,13 @@ def edit(user_id):
                 user.username =params['username']
                 user.first_name =params['first_name']
                 user.last_name =params['last_name']
-                if params["bloqueado"] == 1:
-                    user.bloqueado = 1
+                if params["bloqueado"] == "True":
+                    rol_admin = db.session.query(Rol).get(Rol.name == "administrador")
+                    users_admin= db.session.query(users_roles).filter(rol_id = rol_admin.id)
+                    if user not in users_admin:
+                        user.bloqueado= True
                 else:
-                    user.bloqueado = 0 #no funciona 
+                    user.bloqueado= False
                 db.session.commit()        
             except exc.IntegrityError as e:
                 if 'email' in e.orig.args[1]:

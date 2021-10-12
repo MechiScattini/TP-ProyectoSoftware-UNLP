@@ -8,6 +8,7 @@ from geoalchemy2 import Geometry
 from app.models.user import User
 
 def index():
+    #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
@@ -19,13 +20,22 @@ def index():
     #falta módulo de configuración para traer la cant de elementos por pagina
     #cantPaginas = Config.query....
     cantPaginas = 4 #puse 2 de prueba
-
     page = request.args.get('page', 1, type=int)
-    puntos = PuntoEncuentro.query.paginate(page=page, per_page=cantPaginas)
+
+    #falta opcion de order_by seteado en configuración
+    filter_option = request.args.get("filter_option") #opción de filtrado
+    q = request.args.get("q") #opcion de búsqueda por nombre
+    if q:
+        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).paginate(page=page, per_page=cantPaginas)
+    elif filter_option:
+        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado_id.contains(filter_option)).paginate(page=page, per_page=cantPaginas)
+    else:
+        puntos = PuntoEncuentro.query.paginate(page=page, per_page=cantPaginas)
 
     return render_template("puntoEncuentro/index.html", puntos=puntos)
 
 def new():
+    #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
@@ -37,6 +47,7 @@ def new():
     return render_template("puntoEncuentro/new.html")
 
 def create():
+    #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
@@ -67,6 +78,7 @@ def create():
     return redirect(url_for("puntoEncuentro_index"))
 
 def update(id_punto):
+    #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
@@ -77,11 +89,9 @@ def update(id_punto):
 
     punto = PuntoEncuentro.query.get_or_404(id_punto)
     if request.method == 'POST':
-        
         punto.coordenadas = request.form['coordenadas']
         punto.estado_id = request.form['estado_id']
         punto.telefono = request.form['telefono']
-
         try:
             punto.nombre = request.form['nombre']
             punto.direccion = request.form['direccion']
@@ -103,6 +113,7 @@ def update(id_punto):
     return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
 
 def destroy(id_punto):
+    #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
 
@@ -111,9 +122,9 @@ def destroy(id_punto):
     if not check_permission(user[0].id, 'punto_encuentro_destroy'):
         abort(401)  
     
+    #busca y elimina
     punto = PuntoEncuentro.query.get_or_404(id_punto)
     db.session.delete(punto)
     db.session.commit()
-    
     return redirect(url_for("puntoEncuentro_index"))
 

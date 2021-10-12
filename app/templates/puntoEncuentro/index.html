@@ -4,6 +4,20 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
+<div style="display: flex; justify-content: space-around;">
+  <form action="" method="GET">
+    <input type="search" placeholder="Buscar por nombre" name="q">
+    <button type="submit">Buscar</button>
+  </form>
+  <form action="" method="GET">
+    <label for="publicado">Publicado</label>
+    <input type="checkbox" placeholder="Publicado" name="filter_option" id="publicado" value="1">
+    <label for="despublicado">Despublicado</label>
+    <input type="checkbox" placeholder="Despublicado" name="filter_option" id="despublicado" value="2">
+    <button type="submit">Filtrar</button>
+  </form>
+  
+</div>
 <h1>Puntos de encuentro</h1>
   {% if puntos.items %}
     <div class="table-responsive">

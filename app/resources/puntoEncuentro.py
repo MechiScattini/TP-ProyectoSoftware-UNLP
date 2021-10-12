@@ -4,15 +4,18 @@ from sqlalchemy import exc
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import authenticated, check_permission
 from app.db import db
+from geoalchemy2 import Geometry
 from app.models.user import User
 
 def index():
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
-    user = User.query.filter(User.email==session['user'])
-    """ if not check_permission(user[0].id, 'punto_encuentro_index'):
-        abort(401)  """
+
+    user = db.session.query(User).filter(User.email==session['user'])
+
+    if not check_permission(user[0].id, 'punto_encuentro_index'):
+        abort(401) 
     
     #falta módulo de configuración para traer la cant de elementos por pagina
     #cantPaginas = Config.query....
@@ -35,9 +38,11 @@ def new():
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
-    user = User.query.filter(User.email==session['user'])
-    """ if not check_permission(user[0].id, 'punto_encuentro_new'):
-        abort(401) """
+
+    user = db.session.query(User).filter(User.email==session['user'])
+
+    if not check_permission(user[0].id, 'punto_encuentro_new'):
+        abort(401)
     
     return render_template("puntoEncuentro/new.html")
 
@@ -45,9 +50,11 @@ def create():
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
-    user = User.query.filter(User.email==session['user'])
-    """ if not check_permission(user[0].id, 'punto_encuentro_create'):
-        abort(401) """ 
+
+    user = db.session.query(User).filter(User.email==session['user'])
+
+    if not check_permission(user[0].id, 'punto_encuentro_create'):
+        abort(401) 
 
     #catchea todos los errores que levantan los validadores de campos
     try:
@@ -74,9 +81,11 @@ def update(id_punto):
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
-    user = User.query.filter(User.email==session['user'])
-    """ if not check_permission(user[0].id, 'punto_encuentro_update'):
-        abort(401) """ 
+
+    user =db.session.query(User).filter(User.email==session['user'])
+
+    if not check_permission(user[0].id, 'punto_encuentro_update'):
+        abort(401) 
 
     punto = PuntoEncuentro.query.get_or_404(id_punto)
     if request.method == 'POST':
@@ -107,9 +116,11 @@ def destroy(id_punto):
     #Chequea autenticación y permisos
     if not authenticated(session):
         abort(401)
-    user = User.query.filter(User.email==session['user'])
-    """ if not check_permission(user[0].id, 'punto_encuentro_destroy'):
-        abort(401) """  
+
+    user = db.session.query(User).filter(User.email==session['user'])
+
+    if not check_permission(user[0].id, 'punto_encuentro_destroy'):
+        abort(401)  
     
     #busca y elimina
     punto = PuntoEncuentro.query.get_or_404(id_punto)

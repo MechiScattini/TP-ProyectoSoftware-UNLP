@@ -2,7 +2,8 @@ from flask import redirect, render_template, request, url_for, session, abort
 from flask.helpers import flash
 from sqlalchemy import exc
 from app.models.user import User
-from app.helpers.auth import authenticated
+from app.models.elementos import Elementos
+from app.helpers.auth import authenticated, check_permission
 from app.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -12,19 +13,39 @@ def index():
         abort(401)
 
     if request.method == "GET":
-        users = User.query.all()
+
+        user = db.session.query(User).filter(User.email==session['user'])
+        if not check_permission(user[0].id, 'user_index'):
+            abort(401) 
+
+        users = db.session.query(User).all()
         return render_template("user/index.html", users=users)
 
     if request.method == "POST":
         q = request.form["q"]
-        users_con_nombre = User.query.filter(User.username == q)
+        users_con_nombre = db.session.query(User).filter(User.username == q)
         return render_template("user/index.html", users=users_con_nombre)
 
+def bloqueados():
+    user = db.session.query(User).filter(User.email==session['user'])
+    if not check_permission(user[0].id, 'user_index'):
+        abort(401) 
+
+    users =  db.session.query(User).filter(User.bloqueado == True)
+    return render_template("user/index.html", users=users)
+
+def no_bloqueados():
+    user = db.session.query(User).filter(User.email==session['user'])
+    if not check_permission(user[0].id, 'user_index'):
+        abort(401) 
+
+    users =  db.session.query(User).filter(User.bloqueado == False)
+    return render_template("user/index.html", users=users)
 
 def edit(user_id):
     if not authenticated(session):
         abort(401)
-    user = User.query.get(user_id)
+    user = db.session.query(User).get(user_id)
     if request.method == 'POST':
         params = request.form   
         error = None
@@ -36,13 +57,18 @@ def edit(user_id):
             error = 'email es requerido'
         elif not params["username"]:
             error = 'nombre de usuario es requerido'
+        elif '@' not in params["email"]:
+             error = 'ingrese un email valido'
         if error is None:
             try:
                 user.email =params['email'] #falta chequear que sea un email valido
                 user.username =params['username']
                 user.first_name =params['first_name']
                 user.last_name =params['last_name']
-                user.lbloqueado =params['bloqueado'] #no funciona 
+                if params["bloqueado"] == 1:
+                    user.bloqueado = 1
+                else:
+                    user.bloqueado = 0 #no funciona 
                 db.session.commit()        
             except exc.IntegrityError as e:
                 if 'email' in e.orig.args[1]:
@@ -78,11 +104,13 @@ def create():
         if not params["email"]:
             error = 'Email de usuario es requerido'
         elif not params["password"]:
-            error = 'Contraseña es requerido'  
+            error = 'Contraseña es requerido' 
+        elif '@' not in params["email"]:
+            error = 'ingrese un email valido' 
     
     #Chequeos de uusername y email unicos 
-        email_en_db = User.query.filter(User.email==params["email"]).first()
-        username_en_db= User.query.filter(User.username==params["username"]).first()
+        email_en_db = db.session.query(User).filter(User.email==params["email"]).first()
+        username_en_db= db.session.query(User).filter(User.username==params["username"]).first()
         if email_en_db is not None:
             error = 'Email {} se encuentra registrado.'.format(params["email"])
         if username_en_db is not None:
@@ -99,7 +127,7 @@ def create():
             return redirect(url_for("user_create"))
 
 def delete(user_id):
-    user = User.query.get(user_id)
+    user = db.session.query(User).get(user_id)
     db.session.delete(user)
     db.session.commit()
     flash("Usuario eliminado")

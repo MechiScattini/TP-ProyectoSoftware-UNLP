@@ -5,6 +5,7 @@ from config import config
 
 from app import db
 from app.resources import issue
+from app.models.issue import Issue
 from app.resources import user
 from app.resources import puntoEncuentro
 import logging
@@ -14,6 +15,8 @@ from app.resources.api.issue import issue_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
+
+
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
@@ -21,6 +24,7 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 def create_app(environment="development"):
     # Configuración inicial de la app
     app = Flask(__name__)
+    app.debug = True
 
     # Carga de la configuración
     env = environ.get("FLASK_ENV", environment)
@@ -29,6 +33,7 @@ def create_app(environment="development"):
     # Server Side session
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
+    
 
     # Configure db
     db.init_app(app)
@@ -45,12 +50,29 @@ def create_app(environment="development"):
     )
 
     # Rutas de Consultas
-    app.add_url_rule("/consultas", "issue_index", issue.index)
+    
+    app.add_url_rule("/consultas", "issue_index", issue.index, methods=["GET"])
+    #app.add_url_rule('/consultas?page=<int:page>&perpag=<int:per_pag>', "issue_index", issue.index,methods=['GET'])
+    #@app.route('/Consultas')
+    # @app.route('/consultas', methods=['GET'], defaults={"page": 1 }) 
+    # @app.route('/consultas/<int:page>', methods=['GET'])
+    # def index(page):
+    #     page = page
+    #     per_page = 1
+    #     issues = Issue.query.paginate(page,per_page,error_out=False)
+    #     return render_template("issue/index.html", issues=issues)
     app.add_url_rule("/consultas", "issue_create", issue.create, methods=["POST"])
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
+ 
+    # Rutas de Admin
+    app.add_url_rule("/Configuracion", "issue_config", issue.config)
+    app.add_url_rule("/Configurado", "issue_configurado", issue.configurado, methods=["POST"])
+    
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
+    app.add_url_rule("/usuarios/bloqueados", "user_bloqueados", user.bloqueados, methods=["GET"])
+    app.add_url_rule("/usuarios/nobloqueados", "user_no_bloqueados", user.no_bloqueados, methods=["GET"])
     app.add_url_rule("/usuarios/nuevo", "user_create", user.create, methods=["POST", "GET"])
     app.add_url_rule("/usuarios/delete<int:user_id>", "user_delete", user.delete,methods=["POST","GET"])
     app.add_url_rule("/usuarios/editar<int:user_id>", "user_edit", user.edit,methods=["POST","GET"])

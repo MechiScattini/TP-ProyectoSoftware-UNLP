@@ -6,9 +6,12 @@
 {% block content %}
   <h1>Usuarios</h1>
   <form method="POST" action="{{ url_for('user_index') }}" target="_blank">
-  <input type="search" name="q" placeholder="ingrese username" autofocus required>
-  <input type="submit" value= "Buscar"> 
-</form>
+    <input type="search" name="q" placeholder="ingrese username" autofocus required>
+    <input type="submit" value= "Buscar"> 
+  </form>
+  <a href="{{ url_for('user_index') }}" class="link" method="GET">Todos</a>
+  <a href="{{ url_for('user_bloqueados') }}" class="link" method="GET">Bloqueados</a>
+  <a href="{{ url_for('user_no_bloqueados') }}" class="link"  method="GET">No bloqueados</a>
   {% for user in users %}
   <li>{{ user.email }}  - {{ user.first_name }} - {{ user.last_name }} <a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> - <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li>
   {% endfor %}

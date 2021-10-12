@@ -39,10 +39,10 @@ def new():
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user']).first()
+  #  user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user.id, 'punto_encuentro_new'):
-        abort(401)
+   # if not check_permission(user.id, 'punto_encuentro_new'):
+    #    abort(401)
     
     return render_template("puntoEncuentro/new.html")
 
@@ -51,10 +51,10 @@ def create():
     if not authenticated(session):
         abort(401)
 
-    user = db.session.query(User).filter(User.email==session['user']).first()
+   # user = db.session.query(User).filter(User.email==session['user']).first()
 
-    if not check_permission(user.id, 'punto_encuentro_create'):
-        abort(401) 
+    #if not check_permission(user.id, 'punto_encuentro_create'):
+     #   abort(401) 
 
     #catchea todos los errores que levantan los validadores de campos
     try:

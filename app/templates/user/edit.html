@@ -25,11 +25,10 @@
     <p>
       {% if user.bloqueado == True %}
         <label>Usuario Bloqueado, (presione para desbloquearlo) <label>
-        <input type="checkbox"  name="bloqueado" />
       {% else %}
         <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
-        <input type="checkbox"  name="bloqueado" />
       {% endif %}
+        <input type="checkbox"  value="True" name="bloqueado"/>
     </p>
     <p>
       <input type="submit" value="Actualizar">

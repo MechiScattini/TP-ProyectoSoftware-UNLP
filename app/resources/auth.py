@@ -12,14 +12,12 @@ def authenticate():
 
     params = request.form
     user = db.session.query(User).filter(
-        User.email==params["email"] or User.username==params["email"] and User.password==params["password"]
+        User.email==params["email"] and User.password==params["password"]
     ).first()
     error = None
     if not user:
-        error= "Usuario y/o clave incorrecto."
+        error= "Email y/o clave incorrecto."
         return redirect(url_for("auth_login"))
-    #elif not check_password_hash(user.password, params['password']):
-       # error = ('Usuario y/o contraseña invalidos')
 
     if error is None:
         session["user"] = user.email

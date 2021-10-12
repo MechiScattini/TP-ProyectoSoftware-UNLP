@@ -71,6 +71,8 @@ def create_app(environment="development"):
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
+    app.add_url_rule("/usuarios/bloqueados", "user_bloqueados", user.bloqueados, methods=["GET"])
+    app.add_url_rule("/usuarios/nobloqueados", "user_no_bloqueados", user.no_bloqueados, methods=["GET"])
     app.add_url_rule("/usuarios/nuevo", "user_create", user.create, methods=["POST", "GET"])
     app.add_url_rule("/usuarios/delete<int:user_id>", "user_delete", user.delete,methods=["POST","GET"])
     app.add_url_rule("/usuarios/editar<int:user_id>", "user_edit", user.edit,methods=["POST","GET"])

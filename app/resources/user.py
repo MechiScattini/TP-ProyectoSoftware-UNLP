@@ -2,7 +2,8 @@ from flask import redirect, render_template, request, url_for, session, abort
 from flask.helpers import flash
 from sqlalchemy import exc
 from app.models.user import User
-from app.helpers.auth import authenticated
+from app.models.elementos import Elementos
+from app.helpers.auth import authenticated, check_permission
 from app.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -12,6 +13,11 @@ def index():
         abort(401)
 
     if request.method == "GET":
+
+        user = db.session.query(User).filter(User.email==session['user'])
+        if not check_permission(user[0].id, 'user_index'):
+            abort(401) 
+
         users = db.session.query(User).all()
         return render_template("user/index.html", users=users)
 
@@ -20,6 +26,21 @@ def index():
         users_con_nombre = db.session.query(User).filter(User.username == q)
         return render_template("user/index.html", users=users_con_nombre)
 
+def bloqueados():
+    user = db.session.query(User).filter(User.email==session['user'])
+    if not check_permission(user[0].id, 'user_index'):
+        abort(401) 
+
+    users =  db.session.query(User).filter(User.bloqueado == True)
+    return render_template("user/index.html", users=users)
+
+def no_bloqueados():
+    user = db.session.query(User).filter(User.email==session['user'])
+    if not check_permission(user[0].id, 'user_index'):
+        abort(401) 
+
+    users =  db.session.query(User).filter(User.bloqueado == False)
+    return render_template("user/index.html", users=users)
 
 def edit(user_id):
     if not authenticated(session):

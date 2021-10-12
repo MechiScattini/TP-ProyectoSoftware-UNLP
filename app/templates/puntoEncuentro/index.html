@@ -4,6 +4,20 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
+<div style="display: flex; justify-content: space-around;">
+  <form action="" method="GET">
+    <input type="search" placeholder="Buscar por nombre" name="q">
+    <button type="submit">Buscar</button>
+  </form>
+  <form action="" method="GET">
+    <label for="publicado">Publicado</label>
+    <input type="checkbox" placeholder="Publicado" name="filter_option" id="publicado" value="1">
+    <label for="despublicado">Despublicado</label>
+    <input type="checkbox" placeholder="Despublicado" name="filter_option" id="despublicado" value="2">
+    <button type="submit">Filtrar</button>
+  </form>
+  
+</div>
 <h1>Puntos de encuentro</h1>
   {% if puntos.items %}
     <div class="table-responsive">
@@ -30,9 +44,10 @@
                   <td>{{ punto.email }}</td>
                   <td><a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
                     height: 50px;">Editar</a>
-                    <!-- Faltaría chequear si tiene permisos %} -->
+                    {% if has_permission(user.id, "punto_encuentro_destroy") %}
                     <a href="{{ url_for('puntoEncuentro_destroy', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
                     height: 50px;" onclick="return confirm('Eliminar {{punto.nombre}}')">Eliminar</a>
+                    {% endif %}
                   </td>
               </tr>
               {% endfor %}

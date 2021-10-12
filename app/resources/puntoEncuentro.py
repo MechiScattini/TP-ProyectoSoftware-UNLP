@@ -4,7 +4,6 @@ from sqlalchemy import exc
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import authenticated, check_permission
 from app.db import db
-from geoalchemy2 import Geometry
 from app.models.user import User
 
 def index():

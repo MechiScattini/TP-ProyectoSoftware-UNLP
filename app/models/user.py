@@ -42,23 +42,22 @@ class User(db.Model):
     
 
     def has_permission(user_id, permission):
-        
+        user = User.query.filter(User.id==user_id).first()
+        permisos = []
+        nombres_permisos = []
+        for rol in user.roles:
+            permisos.append(rol.permisos)
+        for a in permisos:
+            for permiso in a:
+                nombres_permisos.append(permiso.name)
 
-        #permiso = db.session.query(Permiso).filter(Permiso.name == permission).first()
-       # roles_con_permiso= db.session.query(Roles_permisos).filter(Roles_permisos.permiso_id == permiso.id)
-        #for rol_con_permiso in roles_con_permiso:
-          #  users_con_rol= db.session.query(Users_roles).filter(Users_roles.rol_id ==rol_con_permiso.rol_id)
-            #for u in users_con_rol:
-              #  if user_id == u:
-                    return True
-       # return False
+        return permission in nombres_permisos
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""
 
     __tablename__ = 'roles'
     id = Column(Integer, primary_key=True)
     name = Column(String(30), unique=True)
-    
     permisos = relationship( "Permiso", secondary='roles_permisos',lazy='subquery', backref=db.backref('roles',lazy='subquery'))
 
 class Permiso(db.Model):

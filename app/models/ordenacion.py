@@ -1,6 +1,4 @@
-from sqlalchemy import Column, Integer, String
-from geoalchemy2 import Geometry
-from sqlalchemy import update
+from sqlalchemy import Column, Integer
 
 from app.db import db
 

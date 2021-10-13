@@ -12,10 +12,27 @@
   <a href="{{ url_for('user_index') }}" class="link" method="GET">Todos</a>
   <a href="{{ url_for('user_bloqueados') }}" class="link" method="GET">Bloqueados</a>
   <a href="{{ url_for('user_no_bloqueados') }}" class="link"  method="GET">No bloqueados</a>
-  {% for user in users %}
+  {% for user in users.items %}
   <li>{{ user.email }}  - {{ user.first_name }} - {{ user.last_name }} <a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> - <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li>
   {% endfor %}
   <br>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if users.has_prev %}
+          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.prev_num) }}">Siguiente</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
+        {% endif %}
+
+
+        {% if users.has_next %}
+          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.next_num) }}">Siguiente</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link btn disabled" href="#">Siguiente</a></li>
+        {% endif %}
+
+    </ul>
+  </nav>
   <a href="{{ url_for('home') }}" class="link">Volver</a>
   <a href="{{ url_for('user_create') }}" class="link">Nuevo</a>
 {% endblock %}

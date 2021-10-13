@@ -3,6 +3,7 @@ from flask.helpers import flash
 from sqlalchemy import exc
 from app.models.user import User
 from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
 from app.helpers.auth import authenticated, check_permission
 from app.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -15,10 +16,20 @@ def index():
     if request.method == "GET":
 
         user = db.session.query(User).filter(User.email==session['user'])
-        if not check_permission(user[0].id, 'user_index'):
-            abort(401) 
+        # if not check_permission(user[0].id, 'user_index'):
+        #     abort(401) 
 
-        users = db.session.query(User).all()
+        #users = db.session.query(User).all()
+        orden = Ordenacion.query.filter_by(id=1).first()
+        elem = Elementos.query.filter_by(id=1).first()
+        if elem is not None:
+            per_page = int(elem.cant)
+        page  = int(request.args.get('page', 1))
+        #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
+        if orden.id_orden == 1:
+            users = db.session.query(User).order_by(User.email).paginate(page,per_page,error_out=False)
+        else:   
+            users = db.session.query(User).order_by(User.first_name).paginate(page,per_page,error_out=False) 
         return render_template("user/index.html", users=users)
 
     if request.method == "POST":

@@ -4,7 +4,7 @@ from app.db import db
 from sqlalchemy.orm import relationship
 
 class Paletas(db.Model):
-    """Define una entidad de tipo Status que se corresponde con el table statuses"""
+    """Define una entidad de tipo Paletas que se corresponde con el table paletas"""
 
 
     __tablename__ = "paletas"

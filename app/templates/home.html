@@ -10,7 +10,7 @@
   {% if is_authenticated(session) %}
     <a href="{{ url_for('user_index') }}" class="link">Usuarios</a>
     <a href="{{ url_for('auth_logout') }}" class="link">Cerrar sesión</a>
-    <a href="{{ url_for('issue_config') }}" class="link">Configuración Sistema</a>
+    <a href="{{ url_for('config_index') }}" class="link">Configuración Sistema</a>
   {% else %}
     <a href="{{ url_for('auth_login') }}" class="link">Iniciar sesión</a>
   {% endif %}

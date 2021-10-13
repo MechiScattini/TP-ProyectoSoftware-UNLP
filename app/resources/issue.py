@@ -1,16 +1,23 @@
 from flask import redirect, render_template, request, url_for, session
 
 from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
 from app.models.issue import Issue
 from app.db import db
 from sqlalchemy import update
 from sqlalchemy import select
 # Public resources
 def index():
-        elem = Elementos.query.filter_by(id = 1).first()
-        per_page = int(elem.cant)
+        orden = Ordenacion.query.filter_by(id=1).first()
+        elem = Elementos.query.filter_by(id=1).first()
+        if elem is not None:
+            per_page = int(elem.cant)
         page  = int(request.args.get('page', 1))
-        issues = Issue.query.paginate(page,per_page,error_out=False)
+        #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
+        if orden.id_orden == 1:
+            issues = Issue.query.order_by(Issue.email).paginate(page,per_page,error_out=False)
+        else:   
+            issues = Issue.query.order_by(Issue.description).paginate(page,per_page,error_out=False) 
         return render_template("issue/index.html", issues=issues)
     
 def new():
@@ -27,9 +34,3 @@ def create():
 def config():
 
     return render_template("issue/config.html")
-def configurado():
-    
-    elem = Elementos.query.filter_by(id = 1).first()
-    elem.cant = int(request.form.get('numero'))
-    db.session.commit()
-    return redirect(url_for("home"))

@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
   <h1>Configuración del sistema</h1>
-  <form action="{{ url_for('issue_configurado') }}" method="POST">
+  <form action="{{ url_for('configurado') }}" method="POST">
     <p>
       <label>Elementos por página <label></br>
       <input type = "number" name="numero" placeholder="Numero"/>
@@ -13,8 +13,8 @@
     <p>
       <label>Criterio de ordenación <label></br>
       <select name='category_id'>
-        <option value='1'> Nombre</option>
-        <option value='2'> Fecha</option>
+        <option value='1'> email</option>
+        <option value='2'> nombre</option>
       </select>
     </p>
     <p>

@@ -8,6 +8,7 @@ from app.resources import issue
 from app.models.issue import Issue
 from app.resources import user
 from app.resources import puntoEncuentro
+from app.resources import configuracion
 import logging
 
 from app.resources import auth
@@ -65,8 +66,8 @@ def create_app(environment="development"):
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
  
     # Rutas de Admin
-    app.add_url_rule("/Configuracion", "issue_config", issue.config)
-    app.add_url_rule("/Configurado", "issue_configurado", issue.configurado, methods=["POST"])
+    app.add_url_rule("/Configuracion", "config_index", configuracion.conf)
+    app.add_url_rule("/Configurado", "configurado", configuracion.configurado, methods=["POST"])
     
 
     # Rutas de Usuarios

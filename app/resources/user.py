@@ -1,7 +1,8 @@
 from flask import redirect, render_template, request, url_for, session, abort
 from flask.helpers import flash
 from sqlalchemy import exc
-from app.models.user import User
+from sqlalchemy.sql.expression import false
+from app.models.user import Rol, User, users_roles,Rol
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.helpers.auth import authenticated, check_permission
@@ -54,6 +55,7 @@ def no_bloqueados():
     return render_template("user/index.html", users=users)
 
 def edit(user_id):
+    """ Edicion de usuarios """
     if not authenticated(session):
         abort(401)
     user = db.session.query(User).get(user_id)
@@ -76,10 +78,20 @@ def edit(user_id):
                 user.username =params['username']
                 user.first_name =params['first_name']
                 user.last_name =params['last_name']
-                if params["bloqueado"] == 1:
-                    user.bloqueado = 1
-                else:
-                    user.bloqueado = 0 #no funciona 
+                cheackbox = None
+                cheackbox = params.get("bloqueado")
+                if cheackbox is not None:
+                        if user.bloqueado == False:
+                            rol_admin = db.session.query(Rol).filter(Rol.name =="administrador").first()
+                            roles = []
+                            for rol in user.roles:
+                                roles.append(rol.id)
+                            if  rol_admin.id not in roles:
+                                user.bloqueado= True
+                            else:
+                                error="no puede bloquear a un administrador"
+                        else:
+                            user.bloqueado= False
                 db.session.commit()        
             except exc.IntegrityError as e:
                 if 'email' in e.orig.args[1]:
@@ -93,6 +105,7 @@ def edit(user_id):
                 db.session.rollback()
                 return render_template("user/edit.html", user=user)
             flash("Usuario actualizado")
+            flash(error)
             return redirect(url_for("user_index"))
         else:
             flash(error)

@@ -23,8 +23,12 @@
       <input name="last_name" required value="{{user.last_name}}"/>
     </p>
     <p>
-    <label>Bloqueado <label></br>
-      <input type="checkbox"  name="bloqueado" value="{{user.bloqueado}}"/>
+      {% if user.bloqueado == True %}
+        <label>Usuario Bloqueado, (presione para desbloquearlo) <label>
+      {% else %}
+        <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
+      {% endif %}
+        <input type="checkbox"  value="True" name="bloqueado"/>
     </p>
     <p>
       <input type="submit" value="Actualizar">

@@ -53,15 +53,6 @@ def create_app(environment="development"):
     # Rutas de Consultas
     
     app.add_url_rule("/consultas", "issue_index", issue.index, methods=["GET"])
-    #app.add_url_rule('/consultas?page=<int:page>&perpag=<int:per_pag>', "issue_index", issue.index,methods=['GET'])
-    #@app.route('/Consultas')
-    # @app.route('/consultas', methods=['GET'], defaults={"page": 1 }) 
-    # @app.route('/consultas/<int:page>', methods=['GET'])
-    # def index(page):
-    #     page = page
-    #     per_page = 1
-    #     issues = Issue.query.paginate(page,per_page,error_out=False)
-    #     return render_template("issue/index.html", issues=issues)
     app.add_url_rule("/consultas", "issue_create", issue.create, methods=["POST"])
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
  

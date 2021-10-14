@@ -17,7 +17,7 @@ def index():
         abort(401) 
     
     #variables para paginación
-    elem = Elementos.query.filter_by(id=1).first()
+    elem = Elementos.query.first()
     if elem:
         cantPaginas = elem.cant 
     else: #si todavía no existe el objeto asigna 2 por defecto
@@ -25,7 +25,7 @@ def index():
     page = request.args.get('page', 1, type=int)
 
     #variable para opción de ordenación
-    ordenacion = Ordenacion.query.filter_by(id=1).first()
+    ordenacion = Ordenacion.query.first()
     if ordenacion:
         if ordenacion.id_orden == 1:
             opcion_orden = 'email'

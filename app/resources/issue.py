@@ -12,6 +12,8 @@ def index():
         elem = Elementos.query.filter_by(id=1).first()
         if elem is not None:
             per_page = int(elem.cant)
+        else:
+            per_page = 2 #si todavía no se creo el objeto asigna 2 por defecto
         page  = int(request.args.get('page', 1))
         #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
         if orden.id_orden == 1:

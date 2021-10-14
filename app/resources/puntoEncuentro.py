@@ -18,15 +18,22 @@ def index():
     
     #variables para paginación
     elem = Elementos.query.filter_by(id=1).first()
-    cantPaginas = elem.cant 
+    if elem:
+        cantPaginas = elem.cant 
+    else: #si todavía no existe el objeto asigna 2 por defecto
+        cantPaginas = 2
     page = request.args.get('page', 1, type=int)
 
     #variable para opción de ordenación
     ordenacion = Ordenacion.query.filter_by(id=1).first()
-    if ordenacion.id_orden == 1:
+    if ordenacion:
+        if ordenacion.id_orden == 1:
+            opcion_orden = 'email'
+        else:
+            opcion_orden = 'nombre'
+    else: #si todavía no se creo el objeto asigna nombre por defecto
         opcion_orden = 'email'
-    else:
-        opcion_orden = 'nombre'
+        
     #variable para opción de filtrado: por nombre o estado
     filter_option = request.args.get("filter_option") 
 

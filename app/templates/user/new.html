@@ -26,6 +26,11 @@
       <label>Apellido<label></br>
       <input name="last_name" required placeholder="Apellido"/>
     </p>
+    <select name="roles[]" size="2" multiple>
+      {% for rol in roles%}
+        <option value={{rol.id}} >{{rol.name}}</option>
+      {% endfor %}
+    </select>
     <p>
       <input type="submit" value="Crear">
       <button type="reset">Limpiar</button>

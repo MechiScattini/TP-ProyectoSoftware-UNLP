@@ -19,7 +19,7 @@
   <nav aria-label="Page navigation example">
     <ul class="pagination">
         {% if users.has_prev %}
-          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.prev_num) }}">Siguiente</a></li>
+          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.prev_num) }}">Anterior</a></li>
         {% else %}
           <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
         {% endif %}

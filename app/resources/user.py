@@ -14,20 +14,19 @@ def index():
     if not authenticated(session):
         abort(401)
 
+    orden = Ordenacion.query.first()
+    elem = Elementos.query.first()
+    if elem is not None:
+        per_page = int(elem.cant)
+    else:
+        per_page = 2
+    page  = int(request.args.get('page', 1,type=int))
     if request.method == "GET":
 
         user = db.session.query(User).filter(User.email==session['user'])
-        # if not check_permission(user[0].id, 'user_index'):
-        #     abort(401) 
+        if not check_permission(user[0].id, 'user_index'):
+            abort(401) 
 
-        #users = db.session.query(User).all()
-        orden = Ordenacion.query.first()
-        elem = Elementos.query.first()
-        if elem is not None:
-            per_page = int(elem.cant)
-        else:
-            per_page = 2
-        page  = int(request.args.get('page', 1))
         #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
         if orden.id_orden == 1:
             users = db.session.query(User).order_by(User.email).paginate(page,per_page,error_out=False)
@@ -37,7 +36,10 @@ def index():
 
     if request.method == "POST":
         q = request.form["q"]
-        users_con_nombre = db.session.query(User).filter(User.username == q)
+        if orden.id_orden == 1:
+            users_con_nombre = db.session.query(User).filter(User.username == q).order_by(User.email).paginate(page,per_page,error_out=False)
+        else:
+            users_con_nombre = db.session.query(User).filter(User.username == q).order_by(User.first_name).paginate(page,per_page,error_out=False) 
         return render_template("user/index.html", users=users_con_nombre)
 
 def bloqueados():
@@ -45,7 +47,18 @@ def bloqueados():
     if not check_permission(user[0].id, 'user_index'):
         abort(401) 
 
-    users =  db.session.query(User).filter(User.bloqueado == True)
+    orden = Ordenacion.query.first()
+    elem = Elementos.query.first()
+    if elem is not None:
+        per_page = int(elem.cant)
+    else:
+        per_page = 2
+    page  = int(request.args.get('page', 1,type=int))
+    #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
+    if orden.id_orden == 1:
+        users =  db.session.query(User).filter(User.bloqueado == True).order_by(User.email).paginate(page,per_page,error_out=False)
+    else:
+        users =  db.session.query(User).filter(User.bloqueado == True).order_by(User.first_name).paginate(page,per_page,error_out=False)
     return render_template("user/index.html", users=users)
 
 def no_bloqueados():
@@ -53,7 +66,18 @@ def no_bloqueados():
     if not check_permission(user[0].id, 'user_index'):
         abort(401) 
 
-    users =  db.session.query(User).filter(User.bloqueado == False)
+    orden = Ordenacion.query.first()
+    elem = Elementos.query.first()
+    if elem is not None:
+        per_page = int(elem.cant)
+    else:
+        per_page = 2
+    page  = int(request.args.get('page', 1,type=int))
+    #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
+    if orden.id_orden == 1:
+        users =  db.session.query(User).filter(User.bloqueado == False).order_by(User.email).paginate(page,per_page,error_out=False)
+    else:
+        users =  db.session.query(User).filter(User.bloqueado == False).order_by(User.first_name).paginate(page,per_page,error_out=False)
     return render_template("user/index.html", users=users)
 
 def edit(user_id):
@@ -120,7 +144,8 @@ def create():
     if not authenticated(session):
         abort(401)
     if request.method == "GET":
-        return render_template("user/new.html")
+        roles= db.session.query(Rol).all()
+        return render_template("user/new.html", roles= roles)
 
     if request.method == "POST":
         params = request.form   
@@ -142,15 +167,20 @@ def create():
         if username_en_db is not None:
             error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
         if error is None:
-            new_user = User(**request.form)
+            new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
             new_user.password = generate_password_hash(params["password"])
+            lista_roles= request.form["roles[]"]
+            for rol_id in lista_roles:
+                rol_obj= db.session.query(Rol).get(rol_id)
+                new_user.roles.append(rol_obj)
             db.session.add(new_user)
             db.session.commit()
             flash("Usuario agregado con exito")
             return redirect(url_for("user_create"))
         else:
             flash(error)
-            return redirect(url_for("user_create"))
+            roles= db.session.query(Rol).all()
+            return redirect(url_for("user_create", roles = roles))
 
 def delete(user_id):
     user = db.session.query(User).get(user_id)

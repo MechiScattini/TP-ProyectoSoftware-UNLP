@@ -14,14 +14,14 @@ def conf():
 
 def configurado():
     #Acá actualizo en la bd los nuevos valores ingresados
-    orden = Ordenacion.query.filter_by(id = 1).first()
+    orden = Ordenacion.query.first()
     if orden is not None: 
         orden.id_orden = int(request.form.get('category_id'))
     else:
         new_orden = Ordenacion(1)
         db.session.add(new_orden)  
-    elem = Elementos.query.filter_by(id = 1).first()
-    if elem is not None:
+    elem = Elementos.query.first()
+    if elem:
         if request.form.get('numero'):
             elem.cant = int(request.form.get('numero'))
     else:

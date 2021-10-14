@@ -21,8 +21,8 @@ def index():
         #     abort(401) 
 
         #users = db.session.query(User).all()
-        orden = Ordenacion.query.filter_by(id=1).first()
-        elem = Elementos.query.filter_by(id=1).first()
+        orden = Ordenacion.query.first()
+        elem = Elementos.query.first()
         if elem is not None:
             per_page = int(elem.cant)
         else:

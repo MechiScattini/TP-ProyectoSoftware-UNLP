@@ -3,19 +3,15 @@ from sqlalchemy import exc
 from app.models.ordenacion import Ordenacion
 
 from app.models.puntoEncuentro import PuntoEncuentro
-from app.helpers.auth import authenticated, check_permission
+from app.helpers.auth import assert_permission
 from app.db import db
 from app.models.user import User
 from app.models.elementos import Elementos
 
 def index():
     #Chequea autenticación y permisos
-    if not authenticated(session):
-        abort(401)
-    user = db.session.query(User).filter(User.email==session['user']).first()
-    if not check_permission(user.id, 'punto_encuentro_index'):
-        abort(401) 
-    
+    assert_permission(session, 'punto_encuentro_index')
+
     #variables para paginación
     elem = Elementos.query.first()
     if elem:
@@ -41,33 +37,34 @@ def index():
     if q:
         puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
     elif filter_option:
-        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado_id.contains(filter_option)).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+        if filter_option == '1':
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+        else:
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
     else:
         puntos = PuntoEncuentro.query.order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
 
-    return render_template("puntoEncuentro/index.html", puntos=puntos, user=user)
+    return render_template("puntoEncuentro/index.html", puntos=puntos)
 
 def new():
     #Chequea autenticación y permisos
-    if not authenticated(session):
-        abort(401)
-    user = db.session.query(User).filter(User.email==session['user']).first()
-    if not check_permission(user.id, 'punto_encuentro_new'):
-        abort(401)
+    assert_permission(session, 'punto_encuentro_new')
     
     return render_template("puntoEncuentro/new.html")
 
 def create():
     #Chequea autenticación y permisos
-    if not authenticated(session):
-        abort(401)
-    user = db.session.query(User).filter(User.email==session['user']).first()
-    if not check_permission(user.id, 'punto_encuentro_create'):
-        abort(401) 
+    assert_permission(session, 'punto_encuentro_create')
 
     #catchea todos los errores que levantan los validadores de campos
     try:
-        new_punto = PuntoEncuentro(**request.form)
+        nombre = request.form['nombre']
+        direccion = request.form['direccion']
+        coordenadas = request.form['coordenadas']
+        estado = int(request.form['estado'])
+        telefono = request.form['telefono']
+        email = request.form['email']
+        new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
         flash(e)
         return render_template("puntoEncuentro/new.html")
@@ -88,16 +85,12 @@ def create():
 
 def update(id_punto):
     #Chequea autenticación y permisos
-    if not authenticated(session):
-        abort(401)
-    user =db.session.query(User).filter(User.email==session['user']).first()
-    if not check_permission(user.id, 'punto_encuentro_update'):
-        abort(401) 
+    assert_permission(session, 'punto_encuentro_update')
 
     punto = PuntoEncuentro.query.get_or_404(id_punto)
     if request.method == 'POST':
         punto.coordenadas = request.form['coordenadas']
-        punto.estado_id = request.form['estado_id']
+        punto.estado = int(request.form['estado'])
         punto.telefono = request.form['telefono']
         try:
             punto.nombre = request.form['nombre']
@@ -121,11 +114,7 @@ def update(id_punto):
 
 def destroy(id_punto):
     #Chequea autenticación y permisos
-    if not authenticated(session):
-        abort(401)
-    user = db.session.query(User).filter(User.email==session['user']).first()
-    if not check_permission(user.id, 'punto_encuentro_destroy'):
-        abort(401)  
+    assert_permission(session, 'punto_encuentro_destroy')
     
     #busca y elimina
     punto = PuntoEncuentro.query.get_or_404(id_punto)

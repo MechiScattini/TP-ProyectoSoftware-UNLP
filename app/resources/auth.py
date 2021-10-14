@@ -26,14 +26,15 @@ def authenticate():
             flash(error)
             return redirect(url_for("auth_login"))
     #elif not check_password_hash(user.password, params['password']):
-       # error = ('Usuario y/o contraseña invalidos')
+    # error = ('Usuario y/o contraseña invalidos')
     if user.bloqueado == True:
-       error= "Usuario bloqueado no puede iniciar sesion"
-       flash(error)
-       return redirect(url_for("auth_login"))   
+        error= "Usuario bloqueado no puede iniciar sesion"
+        flash(error)
+        return redirect(url_for("auth_login"))   
 
     if error is None:
         session["user"] = user.email
+        session["user2"] = user
         flash("La sesión se inició correctamente.")
         return redirect(url_for("home"))
     

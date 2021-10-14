@@ -11,9 +11,9 @@
   </form>
   <form action="" method="GET">
     <label for="publicado">Publicado</label>
-    <input type="checkbox" placeholder="Publicado" name="filter_option" id="publicado" value="1">
+    <input type="checkbox" placeholder="Publicado" name="filter_option" id="publicado" value=1>
     <label for="despublicado">Despublicado</label>
-    <input type="checkbox" placeholder="Despublicado" name="filter_option" id="despublicado" value="2">
+    <input type="checkbox" placeholder="Despublicado" name="filter_option" id="despublicado" value=0>
     <button type="submit">Filtrar</button>
   </form>
   
@@ -44,7 +44,7 @@
                   <td>{{ punto.email }}</td>
                   <td><a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
                     height: 50px;">Editar</a>
-                    {% if has_permission(user.id, "punto_encuentro_destroy") %}
+                    {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
                     <a href="{{ url_for('puntoEncuentro_destroy', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
                     height: 50px;" onclick="return confirm('Eliminar {{punto.nombre}}')">Eliminar</a>
                     {% endif %}

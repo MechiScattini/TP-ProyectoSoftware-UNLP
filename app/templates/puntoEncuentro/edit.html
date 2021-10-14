@@ -20,13 +20,13 @@
     </p>
     <p>
         <label>Estado<label></br>
-        <select name='estado_id' >
+        <select name='estado' >
             {% if puntoEncuentro.estado_id==1 %}
-            <option value='1' selected>Publicado</option>
-            <option value='2'>Despublicado</option>
+            <option value=1 selected>Publicado</option>
+            <option value=0>Despublicado</option>
             {% else %}
-            <option value='1'>Publicado</option>
-            <option value='2' selected>Despublicado</option>
+            <option value=1>Publicado</option>
+            <option value=0 selected>Despublicado</option>
             {% endif %}
         </select>
     </p>

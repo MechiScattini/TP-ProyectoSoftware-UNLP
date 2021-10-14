@@ -25,10 +25,14 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 def create_app(environment="development"):
     # Configuración inicial de la app
     app = Flask(__name__)
-    app.debug = True
+    env = environ.get("FLASK_ENV", environment)
+    if env == 'development':
+        app.debug = True
+    else:
+        app.debug = False
 
     # Carga de la configuración
-    env = environ.get("FLASK_ENV", environment)
+    
     app.config.from_object(config[env])
 
     # Server Side session

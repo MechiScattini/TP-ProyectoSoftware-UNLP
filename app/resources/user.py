@@ -6,10 +6,9 @@ from app.models.user import Rol, User, users_roles,Rol
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
-from app.helpers.auth import authenticated, check_permission
 from app.helpers.auth import assert_permission, authenticated, check_permission
 from app.db import db
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 # Protected resources
 def index():

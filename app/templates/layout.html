@@ -1,6 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <style>
+      .naranja {
+        background-color: tomato;
+        color: white;
+        border: 2px solid black;
+        margin: 20px;
+        padding: 20px;
+      }
+      .azul {
+        background-color: rgb(74, 71, 255);
+        color: white;
+        border: 2px solid black;
+        margin: 20px;
+        padding: 20px;
+      }
+      .rojo {
+        background-color: rgb(255, 71, 71);
+        color: rgb(255, 255, 255);
+        border: 2px solid black;
+        margin: 20px;
+        padding: 20px;
+      }
+      .default {
+        background-color: rgb(71, 212, 255);
+        color: rgb(255, 255, 255);
+        border: 2px solid black;
+        margin: 20px;
+        padding: 20px;
+      }
+      </style>
     {% block head %}
     <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" /> -->
 
@@ -9,8 +39,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
+
   </head>
-  <body>
+  <body class = "{{color}}">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Logotipo</a>

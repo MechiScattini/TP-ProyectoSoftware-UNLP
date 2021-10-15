@@ -2,13 +2,18 @@ from flask import redirect, render_template, request, url_for, session
 
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 from app.models.issue import Issue
 from app.db import db
 from sqlalchemy import update
 from sqlalchemy import select
 # Public resources
 def index():
-        orden = Ordenacion.query.first()
+        color = "default"
+        colores = Colores.query.first()
+        if colores is not None:
+            color = colores.nombre
+        orden = Ordenacion.query.filter_by(lista='issues').first()
         elem = Elementos.query.first()
         if elem is not None:
             per_page = int(elem.cant)
@@ -16,11 +21,8 @@ def index():
             per_page = 2 #si todavía no se creo el objeto asigna 2 por defecto
         page  = int(request.args.get('page', 1))
         #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
-        if orden.id_orden == 1:
-            issues = Issue.query.order_by(Issue.email).paginate(page,per_page,error_out=False)
-        else:   
-            issues = Issue.query.order_by(Issue.description).paginate(page,per_page,error_out=False) 
-        return render_template("issue/index.html", issues=issues)
+        issues = Issue.query.order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+        return render_template("issue/index.html", issues=issues,color = color)
     
 def new():
     return render_template("issue/new.html")

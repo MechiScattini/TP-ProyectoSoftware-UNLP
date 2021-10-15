@@ -1,14 +1,15 @@
-from flask import redirect, render_template, request, url_for, session, abort, flash
+from flask import redirect, render_template, request, url_for, session, flash
 from sqlalchemy import exc
-from app.models.ordenacion import Ordenacion
 
+from app.models.ordenacion import Ordenacion
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
 from app.db import db
-from app.models.user import User
 from app.models.elementos import Elementos
 
 def index():
+    """Controlador para mostrar el listado de puntos de encuentro"""
+
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
 
@@ -16,43 +17,42 @@ def index():
     elem = Elementos.query.first()
     if elem:
         cantPaginas = elem.cant 
-    else: #si todavía no existe el objeto asigna 2 por defecto
-        cantPaginas = 2
+    else: #si no hay nada cargado en la db asigna 4 por defecto
+        cantPaginas = 4
     page = request.args.get('page', 1, type=int)
 
     #variable para opción de ordenación
-    ordenacion = Ordenacion.query.first()
-    if ordenacion:
-        if ordenacion.id_orden == 1:
-            opcion_orden = 'email'
-        else:
-            opcion_orden = 'nombre'
-    else: #si todavía no se creo el objeto asigna nombre por defecto
-        opcion_orden = 'email'
-        
-    #variable para opción de filtrado: por nombre o estado
+    ordenacion = Ordenacion.query.filter_by(lista='puntos').first()
+    if not ordenacion:
+        #si no hay nada en la db pone por defecto ordenar por nombre
+        ordenacion = Ordenacion('nombre','puntos')
+
+    #variable para opción de filtrado por estado: publicado o despublicado
     filter_option = request.args.get("filter_option") 
 
     q = request.args.get("q") #query de búsqueda por nombre
     if q:
-        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
     elif filter_option:
         if filter_option == '1':
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
         else:
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
     else:
-        puntos = PuntoEncuentro.query.order_by(opcion_orden).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.query.order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
 
     return render_template("puntoEncuentro/index.html", puntos=puntos)
 
 def new():
+    """Controlador para mostrar el formulario para crear puntos de encuentro"""
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_new')
     
     return render_template("puntoEncuentro/new.html")
 
 def create():
+    """Controlador para crear un punto de encuentro"""
+
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_create')
 
@@ -71,7 +71,7 @@ def create():
     else:
         db.session.add(new_punto)
 
-    #si el nombre ingresado o direccion ya se encuentra registrado en la db se produce la exeption
+    #si el nombre ingresado o direccion ya se encuentra registrado en la db se produce maneja las excepciones
     try:
         db.session.commit()
     except exc.IntegrityError as e:
@@ -84,6 +84,8 @@ def create():
     return redirect(url_for("puntoEncuentro_index"))
 
 def update(id_punto):
+    """Controlador para editar un punto de encuentro"""
+
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_update')
 
@@ -113,6 +115,8 @@ def update(id_punto):
     return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
 
 def destroy(id_punto):
+    """Controlador para eliminar un punto de encuentro"""
+
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_destroy')
     

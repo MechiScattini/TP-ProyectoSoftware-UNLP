@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <h1>Modificar punto</h1>
-<form action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
+<form class="form-user" action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
     <p>
         <label>Nombre<label></br>
         <input name="nombre" placeholder="Nombre" value="{{puntoEncuentro.nombre}}" />

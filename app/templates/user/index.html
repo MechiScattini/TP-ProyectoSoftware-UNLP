@@ -36,7 +36,10 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
-                <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a> <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li></td>
+                <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
+                {% if has_permission(session["user2"].id, "user_delete") %}
+                  <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

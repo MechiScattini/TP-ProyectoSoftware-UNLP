@@ -7,13 +7,13 @@ from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
 from app.helpers.auth import authenticated, check_permission
+from app.helpers.auth import assert_permission, authenticated, check_permission
 from app.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Protected resources
 def index():
-    if not authenticated(session):
-        abort(401)
+    assert_permission(session,'user_index')
 
     orden = Ordenacion.query.filter_by(lista='usuarios').first()
     elem = Elementos.query.first()
@@ -22,11 +22,9 @@ def index():
     else:
         per_page = 2
     page  = int(request.args.get('page', 1,type=int))
-    if request.method == "GET":
+    
 
-        user = db.session.query(User).filter(User.email==session['user'])
-        if not check_permission(user[0].id, 'user_index'):
-            abort(401) 
+    if request.method == "GET":
 
         #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
         # if orden.id_orden == 1:
@@ -49,9 +47,7 @@ def index():
         return render_template("user/index.html", users=users_con_nombre)
 
 def bloqueados():
-    user = db.session.query(User).filter(User.email==session['user'])
-    if not check_permission(user[0].id, 'user_index'):
-        abort(401) 
+    assert_permission(session,'user_index') 
 
     orden = Ordenacion.query.first()
     elem = Elementos.query.first()
@@ -68,9 +64,7 @@ def bloqueados():
     return render_template("user/index.html", users=users)
 
 def no_bloqueados():
-    user = db.session.query(User).filter(User.email==session['user'])
-    if not check_permission(user[0].id, 'user_index'):
-        abort(401) 
+    assert_permission(session,'user_index')
 
     orden = Ordenacion.query.first()
     elem = Elementos.query.first()
@@ -88,9 +82,9 @@ def no_bloqueados():
 
 def edit(user_id):
     """ Edicion de usuarios """
-    if not authenticated(session):
-        abort(401)
+    assert_permission(session,'user_index')
     user = db.session.query(User).get(user_id)
+
     if request.method == 'POST':
         params = request.form   
         error = None
@@ -163,8 +157,7 @@ def edit(user_id):
 
 def create():
     """ Creacion de usuarios """
-    if not authenticated(session):
-        abort(401)
+    assert_permission(session,'user_create')
     if request.method == "GET":
         roles= db.session.query(Rol).all()
         return render_template("user/new.html", roles= roles)
@@ -208,6 +201,7 @@ def create():
             return redirect(url_for("user_create", roles = roles))
 
 def delete(user_id):
+    assert_permission(session,'user_index')
     user = db.session.query(User).get(user_id)
     db.session.delete(user)
     db.session.commit()

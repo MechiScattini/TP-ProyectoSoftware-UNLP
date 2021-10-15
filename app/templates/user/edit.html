@@ -4,23 +4,36 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h1>Editar un usuario</h1>
-  <form action="{{ url_for('user_edit', user_id=user.id) }}" method="POST">
+  <form class="form-user"action="{{ url_for('user_edit', user_id=user.id) }}" method="POST">
+    <h2 style="display: flex; justify-content: center;">Editar un usuario</h2>
     <p>
       <label>Email <label></br>
-      <input name="email" required value="{{user.email}}"/>
+      <input type="email" name="email" required value="{{user.email}}"/>
     </p>
     <p>
       <label>Nombre de usuario <label></br>
-      <input name="username" required value="{{user.username}}"/>
+      <input type="text" name="username" required value="{{user.username}}"/>
     </p>
     <p>
       <label>Nombre <label></br>
-      <input name="first_name" required value="{{user.first_name}}"/>
+      <input type="text" name="first_name" required value="{{user.first_name}}"/>
     </p>
     <p>
       <label>Apellido <label></br>
-      <input name="last_name" required value="{{user.last_name}}"/>
+      <input type="text" name="last_name" required value="{{user.last_name}}"/>
+    </p>
+    <p>
+    <label>Roles<label></br>
+    <input type="hidden" name="roles[]"/>
+    <select type="roles" name="roles[]" size="2" multiple>
+      {% for rol in roles%}
+        {% if rol in user.roles %}
+          <option selected value={{rol.id}} >{{rol.name}}</option>
+        {% else %}
+          <option value={{rol.id}} >{{rol.name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
     </p>
     <p>
       {% if user.bloqueado == True %}

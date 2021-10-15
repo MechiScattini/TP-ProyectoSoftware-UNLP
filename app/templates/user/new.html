@@ -4,15 +4,15 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h1>Crear un usuario</h1>
-  <form action="{{ url_for('user_create') }}" method="POST">
+  <form class="form-user"action="{{ url_for('user_create') }}" method="POST">
+    <h2 style="display: flex; justify-content: center;">Crear un usuario</h2>
     <p>
       <label>Email<label></br>
-      <input name="email"required placeholder="Correo"/>
+      <input type="email" name="email"required placeholder="Correo"/>
     </p>
     <p>
       <label>Nombre de usuario<label></br>
-      <input name="username"required placeholder="Nombre de usuario"/>
+      <input type="text" name="username"required placeholder="Nombre de usuario"/>
     </p>
     <p>
       <label>Clave<label></br>
@@ -20,11 +20,21 @@
     </p>
     <p>
       <label>Nombre<label></br>
-      <input name="first_name" required placeholder="Nombre"/>
+      <input type="text" name="first_name" required placeholder="Nombre"/>
     </p>
     <p>
       <label>Apellido<label></br>
-      <input name="last_name" required placeholder="Apellido"/>
+      <input type="text" name="last_name" required placeholder="Apellido"/>
+    </p>
+    <p>
+    <input type="hidden" name="roles[]"/>
+    <label>Roles<label></br>
+    <select type="roles" name="roles[]" size="2" multiple>
+      {% for rol in roles%}
+        <option value={{rol.id}} >{{rol.name}}</option>
+      {% endfor %}
+    </select>
+    
     </p>
     <p>
       <input type="submit" value="Crear">

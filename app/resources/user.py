@@ -88,6 +88,7 @@ def edit(user_id):
     if request.method == 'POST':
         params = request.form   
         error = None
+        #chequeo campos invalidos
         if not params["first_name"]:
             error = 'nombre es requerido' 
         elif not params["last_name"]:
@@ -98,9 +99,10 @@ def edit(user_id):
             error = 'nombre de usuario es requerido'
         elif '@' not in params["email"]:
              error = 'ingrese un email valido'
+
         if error is None:
             try:
-                user.email =params['email'] #falta chequear que sea un email valido
+                user.email =params['email'] 
                 user.username =params['username']
                 user.first_name =params['first_name']
                 user.last_name =params['last_name']
@@ -116,27 +118,41 @@ def edit(user_id):
                                 user.bloqueado= True
                             else:
                                 error="no puede bloquear a un administrador"
+                                flash(error)
+                                roles= db.session.query(Rol).all()
+                                return render_template("user/edit.html", user=user, roles=roles)
                         else:
                             user.bloqueado= False
-                db.session.commit()        
+                #actualizo roles seleccionados
+                user.roles.clear()
+                lista_roles= request.form["roles[]"]
+                for rol_id in lista_roles:
+                    rol_obj= db.session.query(Rol).get(rol_id)
+                    user.roles.append(rol_obj)
+                db.session.commit()    
+
             except exc.IntegrityError as e:
                 if 'email' in e.orig.args[1]:
                     flash("ya existe usuario con ese email")
                 elif 'username' in e.orig.args[1]:
                     flash("ya existe usuario con ese nombre de usuario")
                 db.session.rollback()
-                return render_template("user/edit.html", user=user) 
+                roles= db.session.query(Rol).all()
+                return render_template("user/edit.html", user=user,roles=roles) 
+
             except ValueError as e:
                 flash(e)
                 db.session.rollback()
-                return render_template("user/edit.html", user=user)
+                roles= db.session.query(Rol).all()
+                return render_template("user/edit.html", user=user,roles=roles)
             flash("Usuario actualizado")
-            flash(error)
             return redirect(url_for("user_index"))
         else:
             flash(error)
-            return render_template("user/edit.html", user=user)
-    return render_template('user/edit.html', user= user)
+            roles= db.session.query(Rol).all()
+            return render_template("user/edit.html", user=user, roles=roles)
+    roles= db.session.query(Rol).all()
+    return render_template('user/edit.html', user= user, roles=roles)
 
 
 def create():
@@ -166,6 +182,7 @@ def create():
             error = 'Email {} se encuentra registrado.'.format(params["email"])
         if username_en_db is not None:
             error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
+
         if error is None:
             new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
             new_user.password = generate_password_hash(params["password"])

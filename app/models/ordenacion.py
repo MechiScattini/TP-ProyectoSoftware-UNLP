@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, Integer, String
 
 from app.db import db
 
@@ -9,7 +9,9 @@ class Ordenacion(db.Model):
 
     __tablename__ = "Ordenacion"
     id = Column(Integer, primary_key=True)
-    id_orden = Column(Integer)
+    orderBy = Column(String(50))
+    lista = Column(String(50))
 
-    def __init__(self, id_orden=None):
-        self.id_orden = id_orden
+    def __init__(self, orderBy=None, lista = None):
+        self.orderBy = orderBy
+        self.lista = lista

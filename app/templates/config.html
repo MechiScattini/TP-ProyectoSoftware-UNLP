@@ -11,18 +11,27 @@
       <input type = "number" name="numero" placeholder="Numero"/>
     </p>
     <p>
-      <label>Criterio de ordenación <label></br>
-      <select name='category_id'>
-        <option value='1'> email</option>
-        <option value='2'> nombre</option>
+      <label>Criterio de ordenación Usuarios <label></br>
+      <select name='orden_usuarios'>
+        <option value='email'> email</option>
+        <option value='last_name'> apellido</option>
+        <option value='first_name'> nombre</option>
+      </select>
+    </p>
+    <p>
+      <label>Criterio de ordenación Puntos de Encuentro <label></br>
+      <select name='orden_puntos'>
+        <option value='nombre'> nombre</option>
+        <option value='direccion'> direccion</option>
+        <option value='email'> email</option>
       </select>
     </p>
     <p>
       <label>Paleta de color privada <label></br>
-      <select name='status_id'>
-        <option value='1'> Rojo</option>
-        <option value='2'> Azul</option>
-        <option value='3'> Blanco</option>
+      <select name='color'>
+        <option value='naranja'> Naranja</option>
+        <option value='azul'> Azul</option>
+        <option value='rojo'> Rojo</option>
       </select>
     </p>
     <p>
@@ -40,4 +49,3 @@
   </form>
   <a href="{{ url_for('home') }}" class="link">Volver</a>
 {% endblock %}
-

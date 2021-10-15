@@ -6,6 +6,7 @@ from config import config
 from app import db
 from app.resources import issue
 from app.models.issue import Issue
+from app.models.colores import Colores
 from app.resources import user
 from app.resources import puntoEncuentro
 from app.resources import configuracion
@@ -83,7 +84,11 @@ def create_app(environment="development"):
     # Ruta para el Home (usando decorator)
     @app.route("/")
     def home():
-        return render_template("home.html")
+        color = "default"
+        colores = Colores.query.first()
+        if colores is not None:
+            color = colores.nombre
+        return render_template("home.html",color = color)
 
     # Rutas de API-REST (usando Blueprints)
     api = Blueprint("api", __name__, url_prefix="/api")

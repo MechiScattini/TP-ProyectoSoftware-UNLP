@@ -5,6 +5,8 @@ from sqlalchemy.sql.expression import false
 from app.models.user import Rol, User, users_roles,Rol
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
+from app.helpers.auth import authenticated, check_permission
 from app.helpers.auth import assert_permission, authenticated, check_permission
 from app.db import db
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -13,7 +15,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 def index():
     assert_permission(session,'user_index')
 
-    orden = Ordenacion.query.first()
+    orden = Ordenacion.query.filter_by(lista='usuarios').first()
     elem = Elementos.query.first()
     if elem is not None:
         per_page = int(elem.cant)
@@ -25,11 +27,16 @@ def index():
     if request.method == "GET":
 
         #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
-        if orden.id_orden == 1:
-            users = db.session.query(User).order_by(User.email).paginate(page,per_page,error_out=False)
-        else:   
-            users = db.session.query(User).order_by(User.first_name).paginate(page,per_page,error_out=False) 
-        return render_template("user/index.html", users=users)
+        # if orden.id_orden == 1:
+        #     users = db.session.query(User).order_by(User.email).paginate(page,per_page,error_out=False)
+        # else:   
+        #     users = db.session.query(User).order_by(User.first_name).paginate(page,per_page,error_out=False) 
+        users = db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+        
+        #aca agarro el color 
+        colores = Colores.query.filter_by(id=1).first()
+        color = colores.nombre
+        return render_template("user/index.html", users=users,color = color)
 
     if request.method == "POST":
         q = request.form["q"]

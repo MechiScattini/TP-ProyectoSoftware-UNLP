@@ -46,23 +46,38 @@
   <br>
   <p>
   <a  style=" justify-content: left;" href="{{ url_for('user_create') }}" class="link">Nuevo</a>
-  <nav  style="display: flex; justify-content: center;" aria-label="Page navigation example">
-    <ul class="pagination">
-        {% if users.has_prev %}
-          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.prev_num) }}">Anterior</a></li>
-        {% else %}
-          <li class="page-item"><a class="page-link btn disabled" href="#">Anterior</a></li>
-        {% endif %}
 
 
-        {% if users.has_next %}
-          <li class="page-item"> <a class="page-link" href="{{ url_for('user_index', page=users.next_num) }}">Siguiente</a></li>
-        {% else %}
-          <li class="page-item"><a class="page-link btn disabled" href="#">Siguiente</a></li>
-        {% endif %}
-
-    </ul>
-  </nav>
+    <!-- Pagination Links-->
+    <div class="text-right" style="display: flex; justify-content: center;">
+      <a href="{{ url_for('user_index', page=users.prev_num) }}"
+        class="btn btn-outline-dark 
+        {% if users.page == 1 %}disabled{% endif %}">
+          &laquo;
+      </a><!-- Loop through the number of pages to display a link for each-->
+      {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+    <!-- Check for the active page and set the link to "Active"-->
+              {% if users.page == page_num %}
+              <a href="{{ url_for('user_index', page=page_num) }}"
+                class="btn btn-dark">
+                  {{ page_num }}
+              </a>
+              {% else %}
+              <a href="{{ url_for('user_index', page=page_num) }}"
+                class="btn btn-outline-dark">
+                  {{ page_num }}
+              </a>
+              {% endif %}
+          {% else %}
+              ...
+          {% endif %}
+      {% endfor %}    <a href="{{ url_for('user_index', page=users.next_num) }}"
+        class="btn btn-outline-dark 
+        {% if users.page == users.pages %}disabled{% endif %}">
+          &raquo;
+      </a>
+    </div>
   </p>
   {% else %}
     <h3 style="display: flex; justify-content: center; ">No hay usuarios cargados</h3>

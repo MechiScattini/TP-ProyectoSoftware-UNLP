@@ -27,12 +27,14 @@
       <input type="text" name="last_name" required placeholder="Apellido"/>
     </p>
     <p>
+    <input type="hidden" name="roles[]"/>
     <label>Roles<label></br>
     <select type="roles" name="roles[]" size="2" multiple>
       {% for rol in roles%}
         <option value={{rol.id}} >{{rol.name}}</option>
       {% endfor %}
     </select>
+    
     </p>
     <p>
       <input type="submit" value="Crear">

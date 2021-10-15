@@ -37,9 +37,9 @@ def index():
     if request.method == "POST":
         q = request.form["q"]
         if orden.id_orden == 1:
-            users_con_nombre = db.session.query(User).filter(User.username == q).order_by(User.email).paginate(page,per_page,error_out=False)
+            users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(User.email).paginate(page,per_page,error_out=False)
         else:
-            users_con_nombre = db.session.query(User).filter(User.username == q).order_by(User.first_name).paginate(page,per_page,error_out=False) 
+            users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(User.first_name).paginate(page,per_page,error_out=False) 
         return render_template("user/index.html", users=users_con_nombre)
 
 def bloqueados():
@@ -186,14 +186,16 @@ def create():
         if error is None:
             new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
             new_user.password = generate_password_hash(params["password"])
+            
             lista_roles= request.form["roles[]"]
-            for rol_id in lista_roles:
-                rol_obj= db.session.query(Rol).get(rol_id)
-                new_user.roles.append(rol_obj)
-            db.session.add(new_user)
-            db.session.commit()
-            flash("Usuario agregado con exito")
-            return redirect(url_for("user_create"))
+            if lista_roles is not None:
+                for rol_id in lista_roles:
+                    rol_obj= db.session.query(Rol).get(rol_id)
+                    new_user.roles.append(rol_obj)
+                db.session.add(new_user)
+                db.session.commit()
+                flash("Usuario agregado con exito")
+                return redirect(url_for("user_create"))
         else:
             flash(error)
             roles= db.session.query(Rol).all()

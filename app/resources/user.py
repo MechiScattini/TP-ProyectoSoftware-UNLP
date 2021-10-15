@@ -13,9 +13,15 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 # Protected resources
 def index():
+    """ Muestra los usuarios del sistema """
     assert_permission(session,'user_index')
 
     orden = Ordenacion.query.filter_by(lista='usuarios').first()
+    #chequeo si habia un orden creado
+    if orden is None:
+        orden = Ordenacion("email","usuarios")
+    
+    #paginacion
     elem = Elementos.query.first()
     if elem is not None:
         per_page = int(elem.cant)
@@ -25,64 +31,66 @@ def index():
     
 
     if request.method == "GET":
-
-        #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
-        # if orden.id_orden == 1:
-        #     users = db.session.query(User).order_by(User.email).paginate(page,per_page,error_out=False)
-        # else:   
-        #     users = db.session.query(User).order_by(User.first_name).paginate(page,per_page,error_out=False) 
         users = db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
         
         #aca agarro el color 
         colores = Colores.query.filter_by(id=1).first()
-        color = colores.nombre
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.nombre
         return render_template("user/index.html", users=users,color = color)
 
     if request.method == "POST":
         q = request.form["q"]
-        if orden.id_orden == 1:
-            users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(User.email).paginate(page,per_page,error_out=False)
-        else:
-            users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(User.first_name).paginate(page,per_page,error_out=False) 
+        users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
         return render_template("user/index.html", users=users_con_nombre)
 
 def bloqueados():
+    """ Muestra los usuarios bloqueados """
     assert_permission(session,'user_index') 
 
-    orden = Ordenacion.query.first()
+    orden = Ordenacion.query.filter_by(lista='usuarios').first()
+    #chequeo si habia un orden creado
+    if orden is None:
+        orden = Ordenacion("email","orden_usuarios")
+    elem = Elementos.query.first()
     elem = Elementos.query.first()
     if elem is not None:
         per_page = int(elem.cant)
     else:
         per_page = 2
     page  = int(request.args.get('page', 1,type=int))
-    #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
-    if orden.id_orden == 1:
-        users =  db.session.query(User).filter(User.bloqueado == True).order_by(User.email).paginate(page,per_page,error_out=False)
-    else:
-        users =  db.session.query(User).filter(User.bloqueado == True).order_by(User.first_name).paginate(page,per_page,error_out=False)
+
+    users =  db.session.query(User).filter(User.bloqueado == True).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
     return render_template("user/index.html", users=users)
 
 def no_bloqueados():
+    """ Muestra los usuarios no bloqueados """
     assert_permission(session,'user_index')
+    orden = Ordenacion.query.filter_by(lista='usuarios').first()
 
-    orden = Ordenacion.query.first()
+    #chequeo si habia un orden creado
+    if orden is None:
+        orden = Ordenacion("email","orden_usuarios")
     elem = Elementos.query.first()
     if elem is not None:
         per_page = int(elem.cant)
     else:
         per_page = 2
     page  = int(request.args.get('page', 1,type=int))
-    #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
-    if orden.id_orden == 1:
-        users =  db.session.query(User).filter(User.bloqueado == False).order_by(User.email).paginate(page,per_page,error_out=False)
-    else:
-        users =  db.session.query(User).filter(User.bloqueado == False).order_by(User.first_name).paginate(page,per_page,error_out=False)
+    
+    users =  db.session.query(User).filter(User.bloqueado == False).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
     return render_template("user/index.html", users=users)
 
 def edit(user_id):
     """ Edicion de usuarios """
     assert_permission(session,'user_index')
+    orden = Ordenacion.query.filter_by(lista='usuarios').first()
+    #chequeo si habia un orden creado
+    if orden is None:
+        orden = Ordenacion("email","orden_usuarios")
+    elem = Elementos.query.first()
     user = db.session.query(User).get(user_id)
 
     if request.method == 'POST':

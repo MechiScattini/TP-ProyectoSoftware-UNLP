@@ -42,11 +42,12 @@
                   <td>{{ punto.coordenadas }}</td>
                   <td>{{ punto.telefono }}</td>
                   <td>{{ punto.email }}</td>
-                  <td><a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
-                    height: 50px;">Editar</a>
+                  <td>
                     {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
-                    <a href="{{ url_for('puntoEncuentro_destroy', id_punto=punto.id) }}" class="btn btn-outline-dark" style="width: 100px;
-                    height: 50px;" onclick="return confirm('Eliminar {{punto.nombre}}')">Eliminar</a>
+                    <a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="link" >Editar</a>
+                    {% endif %}
+                    {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
+                    <a href="{{ url_for('puntoEncuentro_destroy', id_punto=punto.id) }}" class="link" onclick="return confirm('Eliminar {{punto.nombre}}')">Eliminar</a>
                     {% endif %}
                   </td>
               </tr>
@@ -54,7 +55,8 @@
           </tbody>
       </table>
     </div>
-
+    <p>
+      <a  style=" justify-content: left;" href="{{ url_for('puntoEncuentro_new') }}" class="link">Nuevo</a>
     <!-- Pagination Links-->
     <div class="text-right" style="display: flex; justify-content: center;">
       <a href="{{ url_for('puntoEncuentro_index', page=puntos.prev_num) }}"
@@ -85,16 +87,11 @@
           &raquo;
       </a>
     </div>
+    </p>
     <p class="text-right mt-3" style="display: flex; justify-content: center;">
     Página {{ puntos.page }} de {{ puntos.pages }}
     </p>
     {% else %}
       <h3 style="display: flex; justify-content: center; ">No hay puntos de encuentro cargados</h3>
     {% endif %}
-    <div style="display: flex; justify-content: center; ">
-    <a href="{{ url_for('puntoEncuentro_new') }}" class="btn btn-outline-dark" style="width: 100px;
-    height: 50px;">Nuevo</a>
-    <a href="{{ url_for('home') }}" class="btn btn-outline-dark" style="width: 100px;
-    height: 50px;">Volver</a>
-    </div>
 {% endblock %}

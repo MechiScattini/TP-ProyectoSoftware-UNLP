@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, String, ForeignKey, SmallInteger, Boolean
+from sqlalchemy import Column, String, SmallInteger, Boolean
 from sqlalchemy.orm import validates
 
 from app.db import db
@@ -26,7 +26,7 @@ class PuntoEncuentro(db.Model):
     
     @validates('direccion')
     def validate_direccion(self, key, direccion):
-        """Chequea que se ingrese una dirección"""
+        """Valida el campo dirección"""
 
         if not direccion:
             raise ValueError("Debe ingresar una direccion")
@@ -34,7 +34,7 @@ class PuntoEncuentro(db.Model):
 
     @validates('nombre')
     def validate_nombre(self, key, nombre):
-        """Chequea que se ingrese un nombre"""
+        """Valida el campo nombre"""
 
         if not nombre:
             raise ValueError("Debe ingresar un nombre")
@@ -42,7 +42,7 @@ class PuntoEncuentro(db.Model):
 
     @validates('email')
     def validate_email(self, key, email):
-        """Chequea que se ingrese un email válido"""
+        """Valida el campo email"""
 
         if email and '@' not in email:
             raise ValueError("Ingrese un mail válido")

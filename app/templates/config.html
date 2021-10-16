@@ -73,9 +73,21 @@
     <p>
       <label>Paleta de color pública <label></br>
       <select name='colorPub'>
+        {% if coloresPub=='naranja' %}
+        <option value='naranja'> Naranja</option>
+        <option value='azul'> Azul</option>
         <option value='rojo'> Rojo</option>
-        <option value='naranja'> Azul</option>
-        <option value='azul'> Blanco</option>
+        {% else %}
+              {% if coloresPub=='rojo' %}
+                <option value='rojo'> Rojo</option>
+                <option value='naranja'> Naranja</option>
+                <option value='azul'> Azul</option>
+              {% else %}
+              <option value='azul'> Azul</option>
+              <option value='rojo'> Rojo</option>
+              <option value='naranja'> Naranja</option>       
+              {% endif %}
+        {% endif %}
       </select>
     </p>
     <p>

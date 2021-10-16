@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <h1>Crear un punto de encuentro</h1>
-<form action="{{ url_for('puntoEncuentro_create') }}" method="POST">
+<form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST">
     <p>
         <label>Nombre<label></br>
         <input name="nombre" placeholder="Nombre"/>
@@ -20,9 +20,9 @@
     </p>
     <p>
         <label>Estado<label></br>
-        <select name='estado_id'>
-            <option value='1'>Publicado</option>
-            <option value='2'>Despublicado</option>
+        <select name='estado'>
+            <option value=1>Publicado</option>
+            <option value=0>Despublicado</option>
         </select>
     </p>
     <p>

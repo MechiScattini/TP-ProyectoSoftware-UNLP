@@ -11,20 +11,33 @@ def login():
 def authenticate():
 
     params = request.form
+
+    
     user = db.session.query(User).filter(
         User.email==params["email"] and User.password==params["password"]
     ).first()
     error = None
     if not user:
-        error= "Email y/o clave incorrecto."
-        return redirect(url_for("auth_login"))
+        user = db.session.query(User).filter(
+            User.username==params["email"] and User.password==params["password"]
+        ).first()
+        if not user:
+            error= "Usuario y/o clave incorrecto."
+            flash(error)
+            return redirect(url_for("auth_login"))
+    #elif not check_password_hash(user.password, params['password']):
+    # error = ('Usuario y/o contraseña invalidos')
+    if user.bloqueado == True:
+        error= "Usuario bloqueado no puede iniciar sesion"
+        flash(error)
+        return redirect(url_for("auth_login"))   
 
     if error is None:
         session["user"] = user.email
+        session["user2"] = user
         flash("La sesión se inició correctamente.")
         return redirect(url_for("home"))
     
-    flash(error)
 
 
 def logout():

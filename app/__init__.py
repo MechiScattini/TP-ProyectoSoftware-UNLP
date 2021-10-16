@@ -6,8 +6,10 @@ from config import config
 from app import db
 from app.resources import issue
 from app.models.issue import Issue
+from app.models.colores import Colores
 from app.resources import user
 from app.resources import puntoEncuentro
+from app.resources import configuracion
 import logging
 
 from app.resources import auth
@@ -24,10 +26,14 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 def create_app(environment="development"):
     # Configuración inicial de la app
     app = Flask(__name__)
-    app.debug = True
+    env = environ.get("FLASK_ENV", environment)
+    if env == 'development':
+        app.debug = True
+    else:
+        app.debug = False
 
     # Carga de la configuración
-    env = environ.get("FLASK_ENV", environment)
+    
     app.config.from_object(config[env])
 
     # Server Side session
@@ -52,21 +58,12 @@ def create_app(environment="development"):
     # Rutas de Consultas
     
     app.add_url_rule("/consultas", "issue_index", issue.index, methods=["GET"])
-    #app.add_url_rule('/consultas?page=<int:page>&perpag=<int:per_pag>', "issue_index", issue.index,methods=['GET'])
-    #@app.route('/Consultas')
-    # @app.route('/consultas', methods=['GET'], defaults={"page": 1 }) 
-    # @app.route('/consultas/<int:page>', methods=['GET'])
-    # def index(page):
-    #     page = page
-    #     per_page = 1
-    #     issues = Issue.query.paginate(page,per_page,error_out=False)
-    #     return render_template("issue/index.html", issues=issues)
     app.add_url_rule("/consultas", "issue_create", issue.create, methods=["POST"])
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
  
     # Rutas de Admin
-    app.add_url_rule("/Configuracion", "issue_config", issue.config)
-    app.add_url_rule("/Configurado", "issue_configurado", issue.configurado, methods=["POST"])
+    app.add_url_rule("/Configuracion", "config_index", configuracion.conf)
+    app.add_url_rule("/Configurado", "configurado", configuracion.configurado, methods=["POST"])
     
 
     # Rutas de Usuarios
@@ -87,7 +84,18 @@ def create_app(environment="development"):
     # Ruta para el Home (usando decorator)
     @app.route("/")
     def home():
-        return render_template("home.html")
+        # if helper_auth.authenticated(session):
+        #     color = "default"
+        #     colores = Colores.query.first()
+        #     if colores is not None:
+        #         color = colores.nombre
+        #     return render_template("home.html",color = color)
+        # else:
+            color = "default"
+            colores = Colores.query.first()
+            if colores is not None:
+                color = colores.publico
+            return render_template("home.html",color = color)
 
     # Rutas de API-REST (usando Blueprints)
     api = Blueprint("api", __name__, url_prefix="/api")

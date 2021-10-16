@@ -1,17 +1,28 @@
 from flask import redirect, render_template, request, url_for, session
 
 from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 from app.models.issue import Issue
 from app.db import db
 from sqlalchemy import update
 from sqlalchemy import select
 # Public resources
 def index():
-        elem = Elementos.query.filter_by(id = 1).first()
-        per_page = int(elem.cant)
+        color = "default"
+        colores = Colores.query.first()
+        if colores is not None:
+            color = colores.publico
+        orden = Ordenacion.query.filter_by(lista='issues').first()
+        elem = Elementos.query.first()
+        if elem is not None:
+            per_page = int(elem.cant)
+        else:
+            per_page = 2 #si todavía no se creo el objeto asigna 2 por defecto
         page  = int(request.args.get('page', 1))
-        issues = Issue.query.paginate(page,per_page,error_out=False)
-        return render_template("issue/index.html", issues=issues)
+        #aca defino por default 2 crioterios de ordenacion, por mail o descripcion
+        issues = Issue.query.order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+        return render_template("issue/index.html", issues=issues,color = color)
     
 def new():
     return render_template("issue/new.html")
@@ -27,9 +38,3 @@ def create():
 def config():
 
     return render_template("issue/config.html")
-def configurado():
-    
-    elem = Elementos.query.filter_by(id = 1).first()
-    elem.cant = int(request.form.get('numero'))
-    db.session.commit()
-    return redirect(url_for("home"))

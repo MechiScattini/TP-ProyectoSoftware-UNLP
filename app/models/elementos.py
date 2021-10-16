@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy import update
+from sqlalchemy import Column, Integer
 
 from app.db import db
 
 
 class Elementos(db.Model):
-    """Define una entidad de tipo Status que se corresponde con el table elementos"""
+    """Define una entidad de tipo Elementos que se corresponde con el table elementos"""
 
 
     __tablename__ = "Elementos"

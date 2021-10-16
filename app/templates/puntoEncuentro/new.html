@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <h1>Crear un punto de encuentro</h1>
-<form action="{{ url_for('puntoEncuentro_create') }}" method="POST">
+<form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST">
     <p>
         <label>Nombre<label></br>
         <input name="nombre" placeholder="Nombre"/>

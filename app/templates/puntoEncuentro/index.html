@@ -43,7 +43,7 @@
                   <td>{{ punto.telefono }}</td>
                   <td>{{ punto.email }}</td>
                   <td>
-                    {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
+                    {% if has_permission(session["user2"].id, "punto_encuentro_update") %}
                     <a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="link" >Editar</a>
                     {% endif %}
                     {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
@@ -56,7 +56,9 @@
       </table>
     </div>
     <p>
+      {% if has_permission(session["user2"].id, "punto_encuentro_new") %}
       <a  style=" justify-content: left;" href="{{ url_for('puntoEncuentro_new') }}" class="link">Nuevo</a>
+      {% endif %}
     <!-- Pagination Links-->
     <div class="text-right" style="display: flex; justify-content: center;">
       <a href="{{ url_for('puntoEncuentro_index', page=puntos.prev_num) }}"
@@ -93,5 +95,8 @@
     </p>
     {% else %}
       <h3 style="display: flex; justify-content: center; ">No hay puntos de encuentro cargados</h3>
+      {% if has_permission(session["user2"].id, "punto_encuentro_new") %}
+      <a  style=" justify-content: left;" href="{{ url_for('puntoEncuentro_new') }}" class="link">Nuevo</a>
+      {% endif %}
     {% endif %}
 {% endblock %}

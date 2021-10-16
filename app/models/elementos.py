@@ -7,7 +7,7 @@ class Elementos(db.Model):
     """Define una entidad de tipo Elementos que se corresponde con el table elementos"""
 
 
-    __tablename__ = "Elementos"
+    __tablename__ = "elementos"
     id = Column(Integer, primary_key=True)
     cant = Column(Integer)
 

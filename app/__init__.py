@@ -84,11 +84,18 @@ def create_app(environment="development"):
     # Ruta para el Home (usando decorator)
     @app.route("/")
     def home():
-        color = "default"
-        colores = Colores.query.first()
-        if colores is not None:
-            color = colores.nombre
-        return render_template("home.html",color = color)
+        # if helper_auth.authenticated(session):
+        #     color = "default"
+        #     colores = Colores.query.first()
+        #     if colores is not None:
+        #         color = colores.nombre
+        #     return render_template("home.html",color = color)
+        # else:
+            color = "default"
+            colores = Colores.query.first()
+            if colores is not None:
+                color = colores.publico
+            return render_template("home.html",color = color)
 
     # Rutas de API-REST (usando Blueprints)
     api = Blueprint("api", __name__, url_prefix="/api")

@@ -5,9 +5,11 @@ class Colores(db.Model):
     """Define una entidad de tipo colores que se corresponde con el table colores"""
 
 
-    __tablename__ = "colores"
+    tablename = "colores"
     id = Column(Integer, primary_key=True)
-    nombre = Column(String(30), unique=True)
+    publico = Column(String(30))
+    privado = Column(String(30))
 
-    def __init__(self, color_id=None):
-        self.nombre = nombre
+    def init(self, publica=None, privada=None ):
+        self.publico = publica
+        self.privado = privada

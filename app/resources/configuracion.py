@@ -15,7 +15,12 @@ def conf():
     ordenPuntos = Ordenacion.query.filter_by(lista = 'puntos').first()
     ordenUsuarios = Ordenacion.query.filter_by(lista = 'usuarios').first()
     colores = Colores.query.first()
-    return render_template("config.html", cant = elem.cant, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico)
+    colores2 = Colores.query.filter_by(id=1).first()
+    if colores2 is None:
+        color = "rojo"
+    else:
+        color = colores.privado
+    return render_template("config.html", cant = elem.cant, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico,color = color)
 
 
 def configurado():

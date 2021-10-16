@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for, session, flash
 from sqlalchemy import exc
 
 from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
 from app.db import db
@@ -12,7 +13,12 @@ def index():
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
-
+    #color
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     #variables para paginación
     elem = Elementos.query.first()
     if elem:
@@ -41,14 +47,19 @@ def index():
     else:
         puntos = PuntoEncuentro.query.order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
 
-    return render_template("puntoEncuentro/index.html", puntos=puntos)
+    return render_template("puntoEncuentro/index.html", puntos=puntos, color = color)
 
 def new():
     """Controlador para mostrar el formulario para crear puntos de encuentro"""
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_new')
-    
-    return render_template("puntoEncuentro/new.html")
+    #color
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
+    return render_template("puntoEncuentro/new.html",color = color)
 
 def create():
     """Controlador para crear un punto de encuentro"""
@@ -67,7 +78,12 @@ def create():
         new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
         flash(e)
-        return render_template("puntoEncuentro/new.html")
+        colores = Colores.query.filter_by(id=1).first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.privado
+        return render_template("puntoEncuentro/new.html",color = color)
     else:
         db.session.add(new_punto)
 
@@ -88,7 +104,11 @@ def update(id_punto):
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_update')
-
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     punto = PuntoEncuentro.query.get_or_404(id_punto)
     if request.method == 'POST':
         punto.coordenadas = request.form['coordenadas']
@@ -112,7 +132,7 @@ def update(id_punto):
             return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto)
         flash("Punto actualizado")
         return redirect(url_for("puntoEncuentro_index")) 
-    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
+    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto, color = color)
 
 def destroy(id_punto):
     """Controlador para eliminar un punto de encuentro"""

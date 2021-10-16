@@ -2,10 +2,14 @@ from flask import redirect, render_template, request, url_for, abort, session, f
 from werkzeug.security import check_password_hash
 from app.db import db
 from app.models.user import User
+from app.models.colores import Colores
 
 
 def login():
-    return render_template("auth/login.html")
+    colores = Colores.query.first()
+    if colores is not None:
+        color = colores.publico
+    return render_template("auth/login.html", color = color)
 
 
 def authenticate():

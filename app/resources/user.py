@@ -37,7 +37,7 @@ def index():
         if colores is None:
             color = "rojo"
         else:
-            color = colores.publico
+            color = colores.privado
         return render_template("user/index.html", users=users,color = color)
 
     if request.method == "POST":
@@ -48,9 +48,13 @@ def index():
 def bloqueados():
     """ Muestra los usuarios bloqueados """
     assert_permission(session,'user_index') 
-
-    orden = Ordenacion.query.filter_by(lista='usuarios').first()
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     #chequeo si habia un orden creado
+    orden = Ordenacion.query.filter_by(lista = 'usuarios').first()
     if orden is None:
         orden = Ordenacion("email","orden_usuarios")
     elem = Elementos.query.first()
@@ -62,13 +66,17 @@ def bloqueados():
     page  = int(request.args.get('page', 1,type=int))
 
     users =  db.session.query(User).filter(User.bloqueado == True).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-    return render_template("user/index.html", users=users)
+    return render_template("user/index.html", users=users, color = color)
 
 def no_bloqueados():
     """ Muestra los usuarios no bloqueados """
     assert_permission(session,'user_index')
     orden = Ordenacion.query.filter_by(lista='usuarios').first()
-
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     #chequeo si habia un orden creado
     if orden is None:
         orden = Ordenacion("email","orden_usuarios")
@@ -80,12 +88,17 @@ def no_bloqueados():
     page  = int(request.args.get('page', 1,type=int))
     
     users =  db.session.query(User).filter(User.bloqueado == False).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-    return render_template("user/index.html", users=users)
+    return render_template("user/index.html", users=users, color = color)
 
 def edit(user_id):
     """ Edicion de usuarios """
     assert_permission(session,'user_index')
     orden = Ordenacion.query.filter_by(lista='usuarios').first()
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     #chequeo si habia un orden creado
     if orden is None:
         orden = Ordenacion("email","orden_usuarios")
@@ -159,15 +172,20 @@ def edit(user_id):
             roles= db.session.query(Rol).all()
             return render_template("user/edit.html", user=user, roles=roles)
     roles= db.session.query(Rol).all()
-    return render_template('user/edit.html', user= user, roles=roles)
+    return render_template('user/edit.html', user= user, roles=roles, color = color)
 
 
 def create():
     """ Creacion de usuarios """
     assert_permission(session,'user_create')
+    colores = Colores.query.filter_by(id=1).first()
+    if colores is None:
+        color = "rojo"
+    else:
+        color = colores.privado
     if request.method == "GET":
         roles= db.session.query(Rol).all()
-        return render_template("user/new.html", roles= roles)
+        return render_template("user/new.html", roles= roles, color = color)
 
     if request.method == "POST":
         params = request.form   

@@ -7,7 +7,7 @@ from app.db import db
 class PuntoEncuentro(db.Model):
     """Define una entidad de tipo Punto de Encuentro"""
 
-    __tablename__ = "PuntosDeEncuentro"
+    __tablename__ = "puntos_de_encuentro"
     id = Column(SmallInteger, primary_key=True)
     nombre = Column(String(40), unique=True, nullable=False)
     direccion = Column(String(30), unique=True, nullable=False)

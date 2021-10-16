@@ -12,7 +12,7 @@ def index():
         color = "default"
         colores = Colores.query.first()
         if colores is not None:
-            color = colores.nombre
+            color = colores.publico
         orden = Ordenacion.query.filter_by(lista='issues').first()
         elem = Elementos.query.first()
         if elem is not None:

@@ -37,7 +37,7 @@ def index():
         if colores is None:
             color = "rojo"
         else:
-            color = colores.nombre
+            color = colores.publico
         return render_template("user/index.html", users=users,color = color)
 
     if request.method == "POST":

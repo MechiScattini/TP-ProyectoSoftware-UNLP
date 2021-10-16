@@ -43,7 +43,7 @@
                   <td>{{ punto.telefono }}</td>
                   <td>{{ punto.email }}</td>
                   <td>
-                    {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}
+                    {% if has_permission(session["user2"].id, "punto_encuentro_update") %}
                     <a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="link" >Editar</a>
                     {% endif %}
                     {% if has_permission(session["user2"].id, "punto_encuentro_destroy") %}

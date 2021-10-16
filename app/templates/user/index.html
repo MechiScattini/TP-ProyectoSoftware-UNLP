@@ -36,8 +36,10 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
+                {% if has_permission(session["user2"].id, "user_update") %}
                 <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
-                {% if has_permission(session["user2"].id, "user_delete") %}
+                {% endif %}
+                {% if has_permission(session["user2"].id, "user_destroy") and not user.first_name == 'admin' %}
                   <a href="{{ url_for('user_delete', user_id= user.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar usuario de email {{user.email}}')"> Eliminar</a>  </li></td>
                 {% endif %}
             </tr>
@@ -48,8 +50,9 @@
 
   <br>
   <p>
+  {% if has_permission(session["user2"].id, "user_create") %}
   <a  style=" justify-content: left;" href="{{ url_for('user_create') }}" class="link">Nuevo</a>
-
+  {% endif %}
 
     <!-- Pagination Links-->
     <div class="text-right" style="display: flex; justify-content: center;">
@@ -84,5 +87,8 @@
   </p>
   {% else %}
     <h3 style="display: flex; justify-content: center; ">No hay usuarios cargados</h3>
+    {% if has_permission(session["user2"].id, "user_create") %}
+    <a  style=" justify-content: left;" href="{{ url_for('user_create') }}" class="link">Nuevo</a>
+    {% endif %}
   {% endif %}
 {% endblock %}

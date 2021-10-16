@@ -8,38 +8,74 @@
   <form action="{{ url_for('configurado') }}" method="POST">
     <p>
       <label>Elementos por página <label></br>
-      <input type = "number" name="numero" placeholder="{{cant}}"/>
+      <input type = "number" name="numero" placeholder= 'numero' value = "{{cant}}" />
     </p>
     <p>
       <label>Criterio de ordenación Usuarios <label></br>
-      <select name='orden_usuarios'>
-        <option value='email'> email</option>
-        <option value='last_name'> apellido</option>
-        <option value='first_name'> nombre</option>
+      <select name='orden_usuarios' >
+        {% if ordenU=='first_name' %}
+          <option value='first_name'> nombre</option>
+          <option value='last_name'> apellido</option>
+          <option value='email'> email</option>
+        {% else %}
+              {% if ordenU=='email' %}
+                <option value='email'> email</option>
+                <option value='first_name'> nombre</option>
+                <option value='last_name'> apellido</option>
+              {% else %}
+                <option value='last_name'> apellido</option>
+                <option value='email'> email</option>
+                <option value='first_name'> nombre</option>
+              {% endif %}
+        {% endif %}
       </select>
     </p>
     <p>
       <label>Criterio de ordenación Puntos de Encuentro <label></br>
       <select name='orden_puntos'>
-        <option value='nombre'> nombre</option>
-        <option value='direccion'> direccion</option>
-        <option value='email'> email</option>
+        {% if ordenU=='nombre' %}
+          <option value='nombre'> nombre</option>
+          <option value='direccion'> direccion</option>
+          <option value='email'> email</option>
+        {% else %}
+              {% if ordenU=='email' %}
+                <option value='email'> email</option>
+                <option value='first_name'> nombre</option>
+                <option value='last_name'> dirección</option>
+              {% else %}
+                <option value='direccion'> dirección</option>
+                <option value='email'> email</option>
+                <option value='first_name'> nombre</option>
+              {% endif %}
+        {% endif %}
       </select>
     </p>
     <p>
       <label>Paleta de color privada <label></br>
-      <select name='color'>
+      <select name='colorPri'>
+        {% if coloresPriv=='naranja' %}
         <option value='naranja'> Naranja</option>
         <option value='azul'> Azul</option>
         <option value='rojo'> Rojo</option>
+        {% else %}
+              {% if coloresPriv=='rojo' %}
+                <option value='rojo'> Rojo</option>
+                <option value='naranja'> Naranja</option>
+                <option value='azul'> Azul</option>
+              {% else %}
+              <option value='azul'> Azul</option>
+              <option value='rojo'> Rojo</option>
+              <option value='naranja'> Naranja</option>       
+              {% endif %}
+        {% endif %}
       </select>
     </p>
     <p>
       <label>Paleta de color pública <label></br>
-      <select name='color_id'>
-        <option value='1'> Rojo</option>
-        <option value='2'> Azul</option>
-        <option value='3'> Blanco</option>
+      <select name='colorPub'>
+        <option value='rojo'> Rojo</option>
+        <option value='naranja'> Azul</option>
+        <option value='azul'> Blanco</option>
       </select>
     </p>
     <p>

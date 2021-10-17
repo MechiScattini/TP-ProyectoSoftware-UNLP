@@ -12,7 +12,7 @@ class PuntoEncuentro(db.Model):
     nombre = Column(String(40), unique=True, nullable=False)
     direccion = Column(String(30), unique=True, nullable=False)
     coordenadas = Column(String(80)) 
-    estado = Column(Boolean)
+    estado_id = Column(Boolean)
     telefono = Column(String(30))
     email = Column(String(40))
 
@@ -20,7 +20,7 @@ class PuntoEncuentro(db.Model):
         self.nombre = nombre
         self.direccion = direccion
         self.coordenadas = coordenadas
-        self.estado = estado
+        self.estado_id = estado
         self.telefono = telefono
         self.email = email
     

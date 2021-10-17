@@ -12,14 +12,23 @@ from sqlalchemy import select
 def conf():
     #return a la vista
     elem = Elementos.query.first()
-    return render_template("config.html", cant = elem.cant)
+    ordenPuntos = Ordenacion.query.filter_by(lista = 'puntos').first()
+    ordenUsuarios = Ordenacion.query.filter_by(lista = 'usuarios').first()
+    colores = Colores.query.first()
+    colores2 = Colores.query.filter_by(id=1).first()
+    if colores2 is None:
+        color = "rojo"
+    else:
+        color = colores.privado
+    return render_template("config.html", cant = elem.cant, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico,color = color)
 
 
 def configurado():
     #Acá actualizo en la bd los nuevos valores ingresados
     col = Colores.query.filter_by(id = 1).first()
     if col is not None: 
-        col.publico = str(request.form.get('color'))
+        col.privado = str(request.form.get('colorPri'))
+        col.publico = str(request.form.get('colorPub'))
     db.session.commit()
     orden = Ordenacion.query.filter_by(lista = 'usuarios').first()
     if orden is not None: 

@@ -7,7 +7,7 @@ class Ordenacion(db.Model):
     """Define una entidad de tipo Ordenacion que se corresponde con el table ordenacion"""
 
 
-    __tablename__ = "Ordenacion"
+    __tablename__ = "ordenacion"
     id = Column(Integer, primary_key=True)
     orderBy = Column(String(50))
     lista = Column(String(50))

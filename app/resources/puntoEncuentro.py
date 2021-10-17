@@ -14,7 +14,7 @@ def index():
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
     #color
-    colores = Colores.query.filter_by(id=1).first()
+    colores = Colores.query.first()
     if colores is None:
         color = "rojo"
     else:
@@ -54,7 +54,7 @@ def new():
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_new')
     #color
-    colores = Colores.query.filter_by(id=1).first()
+    colores = Colores.query.first()
     if colores is None:
         color = "rojo"
     else:
@@ -78,7 +78,7 @@ def create():
         new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
         flash(e)
-        colores = Colores.query.filter_by(id=1).first()
+        colores = Colores.query.first()
         if colores is None:
             color = "rojo"
         else:
@@ -104,7 +104,7 @@ def update(id_punto):
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_update')
-    colores = Colores.query.filter_by(id=1).first()
+    colores = Colores.query.first()
     if colores is None:
         color = "rojo"
     else:

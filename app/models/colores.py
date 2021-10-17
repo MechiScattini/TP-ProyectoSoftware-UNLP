@@ -10,6 +10,6 @@ class Colores(db.Model):
     publico = Column(String(30))
     privado = Column(String(30))
 
-    def init(self, publica=None, privada=None ):
+    def __init__(self, publica=None, privada=None ):
         self.publico = publica
         self.privado = privada

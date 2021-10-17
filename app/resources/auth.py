@@ -7,6 +7,7 @@ from app.models.colores import Colores
 
 def login():
     colores = Colores.query.first()
+    color = "default"
     if colores is not None:
         color = colores.publico
     return render_template("auth/login.html", color = color)

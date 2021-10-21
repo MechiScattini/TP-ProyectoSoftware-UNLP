@@ -32,33 +32,8 @@ def conf():
 
 def configurado():
     #Acá actualizo en la bd los nuevos valores ingresados
-    col = Colores.query.first()
-    if col is not None: 
-        col.privado = str(request.form.get('colorPri'))
-        col.publico = str(request.form.get('colorPub'))
-    else:
-        col = Colores('rojo','rojo')
-        db.session.add(col)
-    db.session.commit()
-    ordenU = Ordenacion.query.filter_by(lista = 'usuarios').first()
-    if ordenU is not None: 
-        ordenU.orderBy = str(request.form.get('orden_usuarios'))
-    else:
-        ordenU = Ordenacion('nombre','usuarios')
-        db.session.add(ordenU)
-    db.session.commit()
-
-    ordenP = Ordenacion.query.filter_by(lista = 'puntos').first()
-    if ordenP is not None: 
-        ordenP.orderBy = str(request.form.get('orden_puntos'))
-    else:
-        ordenP = Ordenacion('nombre','puntos')
-        db.session.add(ordenP)
-    elem = Elementos.query.first()
-    if elem is not None:
-        if request.form.get('numero'):
-            elem.cant = int(request.form.get('numero'))
-    else:
-        elem = Elementos(4)
-    db.session.commit()
+    Colores.configurar(request.form.get('colorPri'),request.form.get('colorPub'))
+    ordenU = Ordenacion.ordenUsuarios(request.form.get('orden_usuarios'))
+    ordenP = Ordenacion.ordenPuntos(request.form.get('orden_puntos'))    
+    Elementos.configurar(request.form.get('numero'))
     return redirect(url_for("home"))     

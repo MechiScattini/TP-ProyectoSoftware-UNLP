@@ -13,3 +13,13 @@ class Colores(db.Model):
     def __init__(self, publica=None, privada=None ):
         self.publico = publica
         self.privado = privada
+    
+    def configurar(privado,publico):
+        col = Colores.query.first()
+        if col is not None: 
+            col.privado = str(privado)
+            col.publico = str(publico)
+        else:
+            col = Colores('rojo','rojo')
+            db.session.add(col)
+        db.session.commit()

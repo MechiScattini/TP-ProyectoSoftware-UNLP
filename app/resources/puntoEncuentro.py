@@ -14,25 +14,12 @@ def index():
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
     #color
-    colores = Colores.query.first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
+    color = PuntoEncuentro.colores()
     #variables para paginación
-    elem = Elementos.query.first()
-    if elem:
-        cantPaginas = elem.cant 
-    else: #si no hay nada cargado en la db asigna 4 por defecto
-        cantPaginas = 4
+    cantPaginas = PuntoEncuentro.per_page()
     page = request.args.get('page', 1, type=int)
-
     #variable para opción de ordenación
-    ordenacion = Ordenacion.query.filter_by(lista='puntos').first()
-    if not ordenacion:
-        #si no hay nada en la db pone por defecto ordenar por nombre
-        ordenacion = Ordenacion('nombre','puntos')
-
+    ordenacion = PuntoEncuentro.paginacion()
     #variable para opción de filtrado por estado: publicado o despublicado
     filter_option = request.args.get("filter_option") 
 

@@ -1,7 +1,9 @@
 
 from sqlalchemy import Column, String, SmallInteger, Boolean
 from sqlalchemy.orm import validates
-
+from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 from app.db import db
 
 class PuntoEncuentro(db.Model):
@@ -24,6 +26,30 @@ class PuntoEncuentro(db.Model):
         self.telefono = telefono
         self.email = email
     
+    def per_page():
+        elem = Elementos.query.first()
+        if elem is not None:
+            per_page = int(elem.cant)
+        else:
+            per_page = 4
+        return per_page
+
+    def paginacion():
+        #variable para opción de ordenación
+        ordenacion = Ordenacion.query.filter_by(lista='puntos').first()
+        if not ordenacion:
+            #si no hay nada en la db pone por defecto ordenar por nombre
+            ordenacion = Ordenacion('nombre','puntos')
+        return ordenacion
+    def colores ():
+        #aca agarro el color 
+        colores = Colores.query.filter_by(id=1).first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.privado
+        return color
+
     @validates('direccion')
     def validate_direccion(self, key, direccion):
         """Valida el campo dirección"""

@@ -1,7 +1,9 @@
 
 from sqlalchemy import Column, String, SmallInteger, Boolean
 from sqlalchemy.orm import validates
-
+from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 from app.db import db
 
 class PuntoEncuentro(db.Model):
@@ -23,7 +25,7 @@ class PuntoEncuentro(db.Model):
         self.estado_id = estado
         self.telefono = telefono
         self.email = email
-    
+        
     @validates('direccion')
     def validate_direccion(self, key, direccion):
         """Valida el campo dirección"""

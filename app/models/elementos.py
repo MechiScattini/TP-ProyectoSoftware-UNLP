@@ -14,6 +14,15 @@ class Elementos(db.Model):
     def __init__(self, cant=None):
         self.cant = cant
 
+    def configurar(numero):
+        elem = Elementos.query.first()
+        if elem is not None:
+            if numero:
+                elem.cant = numero
+        else:
+            elem = Elementos(4)
+        db.session.commit()
+ 
     @classmethod
     def get_elementos(self):
         elem = Elementos.query.first()

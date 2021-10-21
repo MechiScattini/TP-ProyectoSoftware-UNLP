@@ -52,6 +52,15 @@ class User(db.Model):
                 nombres_permisos.append(permiso.name)
 
         return permission in nombres_permisos
+
+
+    @classmethod
+    def email(email):
+        return db.session.query(User).filter(User.email== email).first()
+
+    @classmethod
+    def username(username):
+        return db.session.query(User).filter(User.username== username).first()
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""
 
@@ -59,6 +68,15 @@ class Rol(db.Model):
     id = Column(SmallInteger, primary_key=True)
     name = Column(String(30), unique=True)
     permisos = relationship( "Permiso", secondary='roles_permisos',lazy='subquery', backref=db.backref('roles',lazy='subquery'))
+
+
+    @classmethod
+    def roles():
+        return db.session.query(Rol).all()
+
+    @classmethod
+    def roles(rol_id):
+        return db.session.query(Rol).get(rol_id)
 
 class Permiso(db.Model):
     """Define una entidad de tipo Permiso que se corresponde con el table permisos"""

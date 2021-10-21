@@ -13,3 +13,21 @@ class Colores(db.Model):
     def __init__(self, publica=None, privada=None ):
         self.publico = publica
         self.privado = privada
+    
+    @classmethod
+    def get_color_privado(self):
+        colores = Colores.query.first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.privado
+        return color
+    
+    @classmethod
+    def get_color_publico(self):
+        colores = Colores.query.first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.publico
+        return color

@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Usuarios{% endblock %}
+{% block title %}Puntos de encuentro{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
@@ -21,7 +21,7 @@
     <p>
         <label>Estado<label></br>
         <select name='estado' >
-            {% if puntoEncuentro.estado_id==1 %}
+            {% if puntoEncuentro.estado==1 %}
             <option value=1 selected>Publicado</option>
             <option value=0>Despublicado</option>
             {% else %}

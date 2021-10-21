@@ -15,3 +15,10 @@ class Ordenacion(db.Model):
     def __init__(self, orderBy=None, lista = None):
         self.orderBy = orderBy
         self.lista = lista
+
+    @classmethod
+    def get_ordenacion_puntos(self):
+        orden =  Ordenacion.query.filter_by(lista='puntos').first()
+        if not orden:
+            orden = Ordenacion('nombre','puntos')
+        return orden

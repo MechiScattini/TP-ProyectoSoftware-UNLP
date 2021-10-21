@@ -13,3 +13,12 @@ class Elementos(db.Model):
 
     def __init__(self, cant=None):
         self.cant = cant
+
+    @classmethod
+    def get_elementos(self):
+        elem = Elementos.query.first()
+        if elem:
+            cant_paginas = elem.cant 
+        else: #si no hay nada cargado en la db asigna 4 por defecto
+            cant_paginas = 4
+        return cant_paginas

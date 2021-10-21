@@ -23,3 +23,11 @@ class Elementos(db.Model):
             elem = Elementos(4)
         db.session.commit()
  
+    @classmethod
+    def get_elementos(self):
+        elem = Elementos.query.first()
+        if elem:
+            cant_paginas = elem.cant 
+        else: #si no hay nada cargado en la db asigna 4 por defecto
+            cant_paginas = 4
+        return cant_paginas

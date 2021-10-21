@@ -41,7 +41,11 @@
     {% endblock %}
 
   </head>
-  <body class = "{{color}}">
+  {% if is_authenticated(session) %}
+  <body class = {{get_color_privado()}} >
+  {% else %}
+  <body class = {{get_color_publico()}} >
+  {% endif %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Logotipo</a>

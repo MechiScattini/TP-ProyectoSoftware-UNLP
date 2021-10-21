@@ -73,3 +73,23 @@ class PuntoEncuentro(db.Model):
         if email and '@' not in email:
             raise ValueError("Ingrese un mail válido")
         return email
+
+    @classmethod
+    def get_punto(self, punto_id):
+        return PuntoEncuentro.query.get(punto_id)
+
+    @classmethod
+    def get_puntos_busqueda(self, q, criterio_orden, pagina, cant_pagina):
+        return PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(criterio_orden).paginate(page=pagina, per_page=cant_pagina)
+
+    @classmethod
+    def get_puntos_ordenados_paginados(self, criterio_orden, pagina, cant_pagina):
+        return PuntoEncuentro.query.order_by(criterio_orden).paginate(page=pagina, per_page=cant_pagina)
+
+    @classmethod
+    def get_puntos_con_filtro(self, filter_option, criterio_orden, pagina, cant_pagina):
+        if filter_option == '1':
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(criterio_orden).paginate(page=pagina, per_page=cant_pagina)
+        else:
+            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(criterio_orden).paginate(page=pagina, per_page=cant_pagina)
+        return puntos

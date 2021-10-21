@@ -23,3 +23,20 @@ class Colores(db.Model):
             col = Colores('rojo','rojo')
             db.session.add(col)
         db.session.commit()
+    @classmethod
+    def get_color_privado(self):
+        colores = Colores.query.first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.privado
+        return color
+    
+    @classmethod
+    def get_color_publico(self):
+        colores = Colores.query.first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.publico
+        return color

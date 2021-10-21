@@ -13,40 +13,33 @@ def index():
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
-    #color
-    color = PuntoEncuentro.colores()
+
     #variables para paginación
-    cantPaginas = PuntoEncuentro.per_page()
+    cant_paginas = Elementos.get_elementos()
+
     page = request.args.get('page', 1, type=int)
     #variable para opción de ordenación
-    ordenacion = PuntoEncuentro.paginacion()
+    ordenacion = Ordenacion.get_ordenacion_puntos()        
+
     #variable para opción de filtrado por estado: publicado o despublicado
     filter_option = request.args.get("filter_option") 
 
     q = request.args.get("q") #query de búsqueda por nombre
     if q:
-        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_busqueda(q, ordenacion.orderBy, page, cant_paginas)
     elif filter_option:
-        if filter_option == '1':
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
-        else:
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_con_filtro(filter_option, ordenacion.orderBy, page, cant_paginas)
     else:
-        puntos = PuntoEncuentro.query.order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_ordenados_paginados(ordenacion.orderBy, page, cant_paginas)
 
-    return render_template("puntoEncuentro/index.html", puntos=puntos, color = color)
+    return render_template("puntoEncuentro/index.html", puntos=puntos)
 
 def new():
     """Controlador para mostrar el formulario para crear puntos de encuentro"""
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_new')
-    #color
-    colores = Colores.query.first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    return render_template("puntoEncuentro/new.html",color = color)
+
+    return render_template("puntoEncuentro/new.html")
 
 def create():
     """Controlador para crear un punto de encuentro"""
@@ -65,12 +58,8 @@ def create():
         new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
         flash(e)
-        colores = Colores.query.first()
-        if colores is None:
-            color = "rojo"
-        else:
-            color = colores.privado
-        return render_template("puntoEncuentro/new.html",color = color)
+        
+        return render_template("puntoEncuentro/new.html")
     else:
         db.session.add(new_punto)
 
@@ -82,6 +71,7 @@ def create():
             flash("Ya existe un punto con esa direccion")
         elif 'nombre' in e.orig.args[1]:
             flash("Ya existe un punto con ese nombre")
+        db.session.rollback()
         return render_template("puntoEncuentro/new.html")
 
     return redirect(url_for("puntoEncuentro_index"))
@@ -91,12 +81,8 @@ def update(id_punto):
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_update')
-    colores = Colores.query.first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    punto = PuntoEncuentro.query.get_or_404(id_punto)
+
+    punto = PuntoEncuentro.get_punto(id_punto)
     if request.method == 'POST':
         punto.coordenadas = request.form['coordenadas']
         punto.estado = int(request.form['estado'])
@@ -119,7 +105,7 @@ def update(id_punto):
             return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto)
         flash("Punto actualizado")
         return redirect(url_for("puntoEncuentro_index")) 
-    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto, color = color)
+    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
 
 def destroy(id_punto):
     """Controlador para eliminar un punto de encuentro"""
@@ -128,7 +114,7 @@ def destroy(id_punto):
     assert_permission(session, 'punto_encuentro_destroy')
     
     #busca y elimina
-    punto = PuntoEncuentro.query.get_or_404(id_punto)
+    punto = PuntoEncuentro.get_punto(id_punto)
     db.session.delete(punto)
     db.session.commit()
     return redirect(url_for("puntoEncuentro_index"))

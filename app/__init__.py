@@ -1,11 +1,10 @@
 from os import path, environ
-from flask import Flask, render_template, g, Blueprint, session
+from flask import Flask, render_template, Blueprint, session
 from flask_session import Session
 from config import config
 
 from app import db
 from app.resources import issue
-from app.models.issue import Issue
 from app.models.colores import Colores
 from app.resources import user
 from app.resources import puntoEncuentro
@@ -16,6 +15,7 @@ from app.resources import auth
 from app.resources.api.issue import issue_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
+from app.models.colores import Colores
 
 
 
@@ -47,6 +47,8 @@ def create_app(environment="development"):
     # Funciones que se exportan al contexto de Jinja2
     app.jinja_env.globals.update(is_authenticated=helper_auth.authenticated)
     app.jinja_env.globals.update(has_permission=helper_auth.check_permission)
+    app.jinja_env.globals.update(get_color_privado=Colores.get_color_privado)
+    app.jinja_env.globals.update(get_color_publico=Colores.get_color_publico)
 
     # Autenticación
     app.add_url_rule("/iniciar_sesion", "auth_login", auth.login)

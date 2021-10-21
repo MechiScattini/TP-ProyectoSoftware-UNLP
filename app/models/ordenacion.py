@@ -35,3 +35,9 @@ class Ordenacion(db.Model):
             db.session.add(ordenP)
         db.session.commit()    
         return ordenP    
+    @classmethod
+    def get_ordenacion_puntos(self):
+        orden =  Ordenacion.query.filter_by(lista='puntos').first()
+        if not orden:
+            orden = Ordenacion('nombre','puntos')
+        return orden

@@ -16,8 +16,8 @@ def index():
 
     #variables para paginación
     cant_paginas = Elementos.get_elementos()
-
     page = request.args.get('page', 1, type=int)
+
     #variable para opción de ordenación
     ordenacion = Ordenacion.get_ordenacion_puntos()        
 

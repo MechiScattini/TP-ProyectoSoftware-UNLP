@@ -4,7 +4,7 @@ body {
   background-color: #4B7399;
   font-family: 'Montserrat', Helvetica, sans-serif;
   font-size: 14px;
-  background-image:  url("../img/La-Plata.jpg");
+  /* background-image:  url("../static/img/La-Plata.jpg"); */
   background-repeat:no-repeat;
   background-position-x:center;
   background-position-y:center;

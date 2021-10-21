@@ -25,7 +25,6 @@ class Ordenacion(db.Model):
             db.session.add(ordenU)
         db.session.commit()
 
-   
     def configurarOrdenPuntos(ordenPuntos):
         ordenP = Ordenacion.query.filter_by(lista = 'puntos').first()
         if ordenP is not None: 
@@ -33,7 +32,8 @@ class Ordenacion(db.Model):
         else:
             ordenP = Ordenacion('nombre','puntos')
             db.session.add(ordenP)
-        db.session.commit()      
+        db.session.commit()
+
     @classmethod
     def get_ordenacion_puntos(self):
         orden =  Ordenacion.query.filter_by(lista='puntos').first()

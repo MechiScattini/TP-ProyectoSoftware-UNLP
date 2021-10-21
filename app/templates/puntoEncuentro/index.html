@@ -30,6 +30,7 @@
                   <th>Coordenadas</th>
                   <th>Telefono</th>
                   <th>Email</th>
+                  <th>Estado</th>
                   <th>Acciones</th>
               </tr>
           </thead>
@@ -42,6 +43,11 @@
                   <td>{{ punto.coordenadas }}</td>
                   <td>{{ punto.telefono }}</td>
                   <td>{{ punto.email }}</td>
+                  {% if punto.estado==1 %}
+                  <td>Publicado</td>
+                  {% else %}
+                  <td>Despublicado</td>
+                  {% endif %}
                   <td>
                     {% if has_permission(session["user2"].id, "punto_encuentro_update") %}
                     <a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="link" >Editar</a>

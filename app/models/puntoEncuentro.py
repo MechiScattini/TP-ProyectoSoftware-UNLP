@@ -22,7 +22,7 @@ class PuntoEncuentro(db.Model):
         self.nombre = nombre
         self.direccion = direccion
         self.coordenadas = coordenadas
-        self.estado_id = estado
+        self.estado = estado
         self.telefono = telefono
         self.email = email
         

@@ -18,10 +18,9 @@ def index():
     per_page = User.per_page()
     page  = int(request.args.get('page', 1,type=int))
     users = User.paginacion(per_page,page)
-    color = User.colores()
+    color = User.color()
     if request.method == "GET":
         return render_template("user/index.html", users=users,color = color)
-
     if request.method == "POST":
         q = request.form["q"]
         users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page,per_page,error_out=False)

@@ -12,28 +12,18 @@ from sqlalchemy import select
 
 def conf():
     #return a la vista
-    elem = Elementos.query.first()
-    ordenPuntos = Ordenacion.query.filter_by(lista = 'puntos').first()
-    ordenUsuarios = Ordenacion.query.filter_by(lista = 'usuarios').first()
-    colores = Colores.query.first()
-    if colores is None:
-        color = "rojo"
-        colores = Colores('rojo','rojo')
-    else:
-        color = colores.privado
-    if not elem:
-        elem = Elementos(4)
-    if not ordenPuntos:
-        ordenPuntos = Ordenacion('nombre','puntos')
-    if not ordenUsuarios:
-        ordenUsuarios = Ordenacion('nombre','ususarios')
-    return render_template("config.html", cant = elem.cant, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico, color = color)
+    elem = Elementos.get_elementos()
+    ordenPuntos = Ordenacion.get_ordenacion_puntos()
+    ordenUsuarios = Ordenacion.get_ordenacion_usuarios()
+    colores = Colores.get_colores()
+    color = colores.privado
+    return render_template("config.html", cant = elem, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico, color = color)
 
 
 def configurado():
     #Acá actualizo en la bd los nuevos valores ingresados
     Colores.configurar(request.form.get('colorPri'),request.form.get('colorPub'))
-    ordenU = Ordenacion.ordenUsuarios(request.form.get('orden_usuarios'))
-    ordenP = Ordenacion.ordenPuntos(request.form.get('orden_puntos'))    
+    Ordenacion.configurarOrdenUsuarios(request.form.get('orden_usuarios'))
+    Ordenacion.configurarOrdenPuntos(request.form.get('orden_puntos'))    
     Elementos.configurar(request.form.get('numero'))
     return redirect(url_for("home"))     

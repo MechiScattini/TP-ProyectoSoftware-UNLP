@@ -16,7 +16,7 @@ class Ordenacion(db.Model):
         self.orderBy = orderBy
         self.lista = lista
 
-    def ordenUsuarios(ordenUsers):
+    def configurarOrdenUsuarios(ordenUsers):
         ordenU = Ordenacion.query.filter_by(lista = 'usuarios').first()
         if ordenU is not None: 
             ordenU.orderBy = ordenUsers
@@ -24,20 +24,25 @@ class Ordenacion(db.Model):
             ordenU = Ordenacion('nombre','usuarios')
             db.session.add(ordenU)
         db.session.commit()
-        return ordenU  
 
-    def ordenPuntos(ordenPuntos):
+   
+    def configurarOrdenPuntos(ordenPuntos):
         ordenP = Ordenacion.query.filter_by(lista = 'puntos').first()
         if ordenP is not None: 
             ordenP.orderBy = ordenPuntos
         else:
             ordenP = Ordenacion('nombre','puntos')
             db.session.add(ordenP)
-        db.session.commit()    
-        return ordenP    
+        db.session.commit()      
     @classmethod
     def get_ordenacion_puntos(self):
         orden =  Ordenacion.query.filter_by(lista='puntos').first()
         if not orden:
             orden = Ordenacion('nombre','puntos')
         return orden
+    @classmethod
+    def get_ordenacion_usuarios(self):
+        orden =  Ordenacion.query.filter_by(lista='usuarios').first()
+        if not orden:
+            orden = Ordenacion('nombre','puntos')
+        return orden    

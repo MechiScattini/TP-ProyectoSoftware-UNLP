@@ -56,6 +56,7 @@ class User(db.Model):
 
         return permission in nombres_permisos
 
+    
     def per_page():
         elem = Elementos.query.first()
         if elem is not None:
@@ -64,13 +65,16 @@ class User(db.Model):
             per_page = 2
         return per_page
 
+    
     def paginacion(per_page,page):
         orden = Ordenacion.query.filter_by(lista='usuarios').first()
         #chequeo si habia un orden creado
         if orden is None:
             orden = Ordenacion("email","usuarios")
         return db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-    def colores ():
+
+       
+    def color ():
         #aca agarro el color 
         colores = Colores.query.filter_by(id=1).first()
         if colores is None:

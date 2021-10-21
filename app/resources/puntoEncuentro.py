@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for, session, flash
+from flask import redirect, render_template, request, url_for, session
 from sqlalchemy import exc
 
 from app.models.ordenacion import Ordenacion
@@ -49,18 +49,16 @@ def create():
     assert_permission(session, 'punto_encuentro_create')
 
     #catchea todos los errores que levantan los validadores de campos
+    coordenadas = request.form['coordenadas']
+    estado = int(request.form['estado'])
+    telefono = request.form['telefono']
+    nombre = request.form['nombre']
+    direccion = request.form['direccion']
+    email = request.form['email']
     try:
-        nombre = request.form['nombre']
-        direccion = request.form['direccion']
-        coordenadas = request.form['coordenadas']
-        estado = int(request.form['estado'])
-        telefono = request.form['telefono']
-        email = request.form['email']
         new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
-        flash(e)
-        
-        return render_template("puntoEncuentro/new.html")
+        return render_template("puntoEncuentro/new.html", error_message=e)
     else:
         db.session.add(new_punto)
 
@@ -69,11 +67,11 @@ def create():
         db.session.commit()
     except exc.IntegrityError as e:
         if 'direccion' in e.orig.args[1]:
-            flash("Ya existe un punto con esa direccion")
+            error = "Ya existe un punto con esa direccion"
         elif 'nombre' in e.orig.args[1]:
-            flash("Ya existe un punto con ese nombre")
+            error = "Ya existe un punto con ese nombre"
         db.session.rollback()
-        return render_template("puntoEncuentro/new.html")
+        return render_template("puntoEncuentro/new.html", error_message=error)
 
     return redirect(url_for("puntoEncuentro_index"))
 
@@ -95,16 +93,14 @@ def update(id_punto):
             db.session.commit()
         except exc.IntegrityError as e: #maneja las excepciones de datos ya ingresados en db
             if 'direccion' in e.orig.args[1]:
-                flash("Ya existe un punto con esa direccion")
+                error = "Ya existe un punto con esa direccion"
             elif 'nombre' in e.orig.args[1]:
-                flash("Ya existe un punto con ese nombre")
+                error = "Ya existe un punto con ese nombre"
             db.session.rollback()
-            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto) 
+            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto, error_message=error) 
         except ValueError as e: #maneja la validación de los campos
-            flash(e)
             db.session.rollback()
-            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto)
-        flash("Punto actualizado")
+            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto, error_message=e)
         return redirect(url_for("puntoEncuentro_index")) 
     return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
 

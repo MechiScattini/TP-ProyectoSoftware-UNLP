@@ -1,8 +1,7 @@
-from flask import redirect, render_template, request, url_for, session, flash
+from flask import redirect, render_template, request, url_for, session
 from sqlalchemy import exc
 
 from app.models.ordenacion import Ordenacion
-from app.models.colores import Colores
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
 from app.db import db
@@ -13,53 +12,33 @@ def index():
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_index')
-    #color
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
+
     #variables para paginación
-    elem = Elementos.query.first()
-    if elem:
-        cantPaginas = elem.cant 
-    else: #si no hay nada cargado en la db asigna 4 por defecto
-        cantPaginas = 4
+    cant_paginas = Elementos.get_elementos()
     page = request.args.get('page', 1, type=int)
 
     #variable para opción de ordenación
-    ordenacion = Ordenacion.query.filter_by(lista='puntos').first()
-    if not ordenacion:
-        #si no hay nada en la db pone por defecto ordenar por nombre
-        ordenacion = Ordenacion('nombre','puntos')
+    ordenacion = Ordenacion.get_ordenacion_puntos()
 
     #variable para opción de filtrado por estado: publicado o despublicado
-    filter_option = request.args.get("filter_option") 
+    filter_option = request.args.get("filter_option")
 
     q = request.args.get("q") #query de búsqueda por nombre
     if q:
-        puntos = PuntoEncuentro.query.filter(PuntoEncuentro.nombre.contains(q)).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_busqueda(q, ordenacion.orderBy, page, cant_paginas)
     elif filter_option:
-        if filter_option == '1':
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == True).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
-        else:
-            puntos = PuntoEncuentro.query.filter(PuntoEncuentro.estado == False).order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_con_filtro(filter_option, ordenacion.orderBy, page, cant_paginas)
     else:
-        puntos = PuntoEncuentro.query.order_by(ordenacion.orderBy).paginate(page=page, per_page=cantPaginas)
+        puntos = PuntoEncuentro.get_puntos_ordenados_paginados(ordenacion.orderBy, page, cant_paginas)
 
-    return render_template("puntoEncuentro/index.html", puntos=puntos, color = color)
+    return render_template("puntoEncuentro/index.html", puntos=puntos)
 
 def new():
     """Controlador para mostrar el formulario para crear puntos de encuentro"""
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_new')
-    #color
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    return render_template("puntoEncuentro/new.html",color = color)
+
+    return render_template("puntoEncuentro/new.html")
 
 def create():
     """Controlador para crear un punto de encuentro"""
@@ -68,22 +47,16 @@ def create():
     assert_permission(session, 'punto_encuentro_create')
 
     #catchea todos los errores que levantan los validadores de campos
+    coordenadas = request.form['coordenadas']
+    estado = int(request.form['estado'])
+    telefono = request.form['telefono']
+    nombre = request.form['nombre']
+    direccion = request.form['direccion']
+    email = request.form['email']
     try:
-        nombre = request.form['nombre']
-        direccion = request.form['direccion']
-        coordenadas = request.form['coordenadas']
-        estado = int(request.form['estado'])
-        telefono = request.form['telefono']
-        email = request.form['email']
         new_punto = PuntoEncuentro(nombre, direccion, coordenadas, estado, telefono, email)
     except ValueError as e:
-        flash(e)
-        colores = Colores.query.filter_by(id=1).first()
-        if colores is None:
-            color = "rojo"
-        else:
-            color = colores.privado
-        return render_template("puntoEncuentro/new.html",color = color)
+        return render_template("puntoEncuentro/new.html", error_message=e)
     else:
         db.session.add(new_punto)
 
@@ -92,10 +65,11 @@ def create():
         db.session.commit()
     except exc.IntegrityError as e:
         if 'direccion' in e.orig.args[1]:
-            flash("Ya existe un punto con esa direccion")
+            error = "Ya existe un punto con esa direccion"
         elif 'nombre' in e.orig.args[1]:
-            flash("Ya existe un punto con ese nombre")
-        return render_template("puntoEncuentro/new.html")
+            error = "Ya existe un punto con ese nombre"
+        db.session.rollback()
+        return render_template("puntoEncuentro/new.html", error_message=error)
 
     return redirect(url_for("puntoEncuentro_index"))
 
@@ -104,12 +78,8 @@ def update(id_punto):
 
     #Chequea autenticación y permisos
     assert_permission(session, 'punto_encuentro_update')
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    punto = PuntoEncuentro.query.get_or_404(id_punto)
+
+    punto = PuntoEncuentro.get_punto(id_punto)
     if request.method == 'POST':
         punto.coordenadas = request.form['coordenadas']
         punto.estado = int(request.form['estado'])
@@ -121,18 +91,16 @@ def update(id_punto):
             db.session.commit()
         except exc.IntegrityError as e: #maneja las excepciones de datos ya ingresados en db
             if 'direccion' in e.orig.args[1]:
-                flash("Ya existe un punto con esa direccion")
+                error = "Ya existe un punto con esa direccion"
             elif 'nombre' in e.orig.args[1]:
-                flash("Ya existe un punto con ese nombre")
+                error = "Ya existe un punto con ese nombre"
             db.session.rollback()
-            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto) 
+            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto, error_message=error) 
         except ValueError as e: #maneja la validación de los campos
-            flash(e)
             db.session.rollback()
-            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto)
-        flash("Punto actualizado")
+            return render_template("puntoEncuentro/edit.html", puntoEncuentro=punto, error_message=e)
         return redirect(url_for("puntoEncuentro_index")) 
-    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto, color = color)
+    return render_template('puntoEncuentro/edit.html', puntoEncuentro=punto)
 
 def destroy(id_punto):
     """Controlador para eliminar un punto de encuentro"""
@@ -141,7 +109,7 @@ def destroy(id_punto):
     assert_permission(session, 'punto_encuentro_destroy')
     
     #busca y elimina
-    punto = PuntoEncuentro.query.get_or_404(id_punto)
+    punto = PuntoEncuentro.get_punto(id_punto)
     db.session.delete(punto)
     db.session.commit()
     return redirect(url_for("puntoEncuentro_index"))

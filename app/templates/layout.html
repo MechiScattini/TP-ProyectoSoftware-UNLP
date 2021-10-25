@@ -41,7 +41,11 @@
     {% endblock %}
 
   </head>
-  <body class = "{{color}}">
+  {% if is_authenticated(session) %}
+  <body class = {{get_color_privado()}} >
+  {% else %}
+  <body class = {{get_color_publico()}} >
+  {% endif %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Logotipo</a>
@@ -101,11 +105,10 @@
       {% block content %}
       {% endblock %}
     </div>
-    <div id="footer">
+    </body>
       {% block footer %}
       <footer class="nb-footer">
-        <div class="container">
-        <div class="row">
+      <div id="footer">
         
         <div class="col-md-3 col-sm-6">
         <div class="footer-info-single">
@@ -144,9 +147,8 @@
         </div>
         </div>
         </section>
+        </div>
         </footer>
   {% endblock %}
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
-  </body>
 </html>

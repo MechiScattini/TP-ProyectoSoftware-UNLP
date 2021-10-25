@@ -1,12 +1,10 @@
-from flask import redirect, render_template, request, url_for, session
+from flask import redirect, render_template, request, url_for
 
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
 from app.models.issue import Issue
 from app.db import db
-from sqlalchemy import update
-from sqlalchemy import select
 # Public resources
 def index():
         color = "default"

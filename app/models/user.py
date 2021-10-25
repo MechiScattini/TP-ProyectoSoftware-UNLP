@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.selectable import subquery
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy import Column, Integer, ForeignKey
+from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
+from app.models.colores import Colores
 
 from app.db import db
 
@@ -61,6 +64,33 @@ class User(db.Model):
     def get_username(self, username):
         return User.query.filter(User.username == username).first()
         
+    
+    def per_page():
+        elem = Elementos.query.first()
+        if elem is not None:
+            per_page = int(elem.cant)
+        else:
+            per_page = 2
+        return per_page
+
+    
+    def paginacion(per_page,page):
+        orden = Ordenacion.query.filter_by(lista='usuarios').first()
+        #chequeo si habia un orden creado
+        if orden is None:
+            orden = Ordenacion("email","usuarios")
+        return db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+
+       
+    def color ():
+        #aca agarro el color 
+        colores = Colores.query.filter_by(id=1).first()
+        if colores is None:
+            color = "rojo"
+        else:
+            color = colores.privado
+        return color
+                
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""
 

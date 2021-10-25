@@ -1,12 +1,11 @@
-from flask import redirect, render_template, request, url_for, session, abort
+from flask import redirect, render_template, request, url_for, session
 from flask.helpers import flash
 from sqlalchemy import exc
-from sqlalchemy.sql.expression import false
-from app.models.user import Rol, User, users_roles,Rol
+from app.models.user import Rol, User,Rol
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
-from app.helpers.auth import assert_permission, authenticated, check_permission
+from app.helpers.auth import assert_permission
 from app.db import db
 from werkzeug.security import generate_password_hash
 
@@ -14,36 +13,17 @@ from werkzeug.security import generate_password_hash
 def index():
     """ Muestra los usuarios del sistema """
     assert_permission(session,'user_index')
-
-    orden = Ordenacion.query.filter_by(lista='usuarios').first()
-    #chequeo si habia un orden creado
-    if orden is None:
-        orden = Ordenacion("email","usuarios")
-    
     #paginacion
-    elem = Elementos.query.first()
-    if elem is not None:
-        per_page = int(elem.cant)
-    else:
-        per_page = 2
+    per_page = User.per_page()
     page  = int(request.args.get('page', 1,type=int))
-    
-
+    users = User.paginacion(per_page,page)
+    color = User.color()
     if request.method == "GET":
-        users = db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-        
-        #aca agarro el color 
-        colores = Colores.query.filter_by(id=1).first()
-        if colores is None:
-            color = "rojo"
-        else:
-            color = colores.privado
         return render_template("user/index.html", users=users,color = color)
-
     if request.method == "POST":
         q = request.form["q"]
         users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-        return render_template("user/index.html", users=users_con_nombre)
+        return render_template("user/index.html", users=users_con_nombre, color = color)
 
 def bloqueados():
     """ Muestra los usuarios bloqueados """

@@ -6,6 +6,7 @@
 {% block content %}
 <h1>Crear un punto de encuentro</h1>
 <form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST">
+    <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <p>
         <label>Nombre<label></br>
         <input name="nombre" placeholder="Nombre"/>

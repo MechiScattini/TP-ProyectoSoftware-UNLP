@@ -14,18 +14,18 @@
       <label>Criterio de ordenación Usuarios <label></br>
       <select name='orden_usuarios' >
         {% if ordenU=='first_name' %}
-          <option value='first_name'> nombre</option>
+          <option value='first_name' selected> nombre</option>
           <option value='last_name'> apellido</option>
           <option value='email'> email</option>
         {% else %}
               {% if ordenU=='email' %}
-                <option value='email'> email</option>
-                <option value='first_name'> nombre</option>
+                <option value='first_name' > nombre</option>
                 <option value='last_name'> apellido</option>
+                <option value='email' selected> email</option>
               {% else %}
-                <option value='last_name'> apellido</option>
+                <option value='first_name' > nombre</option>
+                <option value='last_name' selected> apellido</option>
                 <option value='email'> email</option>
-                <option value='first_name'> nombre</option>
               {% endif %}
         {% endif %}
       </select>
@@ -33,19 +33,19 @@
     <p>
       <label>Criterio de ordenación Puntos de Encuentro <label></br>
       <select name='orden_puntos'>
-        {% if ordenU=='nombre' %}
-          <option value='nombre'> nombre</option>
+        {% if ordenP=='nombre' %}
+          <option value='nombre' selected> nombre</option>
           <option value='direccion'> direccion</option>
           <option value='email'> email</option>
         {% else %}
-              {% if ordenU=='email' %}
-                <option value='email'> email</option>
-                <option value='first_name'> nombre</option>
-                <option value='last_name'> dirección</option>
+              {% if ordenP=='email' %}
+                <option value='nombre' > nombre</option>
+                <option value='direccion'> direccion</option>
+                <option value='email' selected> email</option>
               {% else %}
-                <option value='direccion'> dirección</option>
+                <option value='nombre' > nombre</option>
+                <option value='direccion' selected> direccion</option>
                 <option value='email'> email</option>
-                <option value='first_name'> nombre</option>
               {% endif %}
         {% endif %}
       </select>

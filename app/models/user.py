@@ -53,14 +53,14 @@ class User(db.Model):
 
         return permission in nombres_permisos
 
+    @classmethod
+    def get_email(self,email):
+        return User.query.filter(User.email == email).first()
 
     @classmethod
-    def email(email):
-        return db.session.query(User).filter(User.email== email).first()
-
-    @classmethod
-    def username(username):
-        return db.session.query(User).filter(User.username== username).first()
+    def get_username(self, username):
+        return User.query.filter(User.username == username).first()
+        
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""
 
@@ -71,12 +71,12 @@ class Rol(db.Model):
 
 
     @classmethod
-    def roles():
-        return db.session.query(Rol).all()
+    def get_roles(self):
+        return Rol.query.all()
 
     @classmethod
-    def roles(rol_id):
-        return db.session.query(Rol).get(rol_id)
+    def get_rol(self,rol_id):
+        return Rol.query.get(rol_id)
 
 class Permiso(db.Model):
     """Define una entidad de tipo Permiso que se corresponde con el table permisos"""

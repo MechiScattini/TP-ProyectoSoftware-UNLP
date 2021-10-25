@@ -178,18 +178,16 @@ def edit(user_id):
 def create():
     """ Creacion de usuarios """
     assert_permission(session,'user_create')
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
+
     if request.method == "GET":
-        roles= db.session.query(Rol).all()
-        return render_template("user/new.html", roles= roles, color = color)
+        roles= Rol.get_roles()
+        return render_template("user/new.html", roles= roles)
 
     if request.method == "POST":
         params = request.form   
         error = None
+
+        #chequeo que los campos requeridos no esten vacios
         if not params["username"]:
             error = 'Nombre de usuario es requerido'
         if not params["email"]:
@@ -199,31 +197,31 @@ def create():
         elif '@' not in params["email"]:
             error = 'ingrese un email valido' 
     
-    #Chequeos de uusername y email unicos 
-        email_en_db = db.session.query(User).filter(User.email==params["email"]).first()
-        username_en_db= db.session.query(User).filter(User.username==params["username"]).first()
-        if email_en_db is not None:
-            error = 'Email {} se encuentra registrado.'.format(params["email"])
-        if username_en_db is not None:
-            error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
-
+        #Chequeos de uusername y email unicos 
         if error is None:
-            new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
-            new_user.password = generate_password_hash(params["password"])
+            email_en_db = User.get_email(params["email"])
+            username_en_db= User.get_username(params["username"])
+            if email_en_db is not None:
+                error = 'Email {} se encuentra registrado.'.format(params["email"])
+            if username_en_db is not None:
+                error = 'nombre de usuario {} se encuentra registrado.'.format(params["username"])
+
+            #agrego user a base de datos
+            if error is None:
+                new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
             
-            lista_roles= request.form["roles[]"]
-            if lista_roles is not None:
-                for rol_id in lista_roles:
-                    rol_obj= db.session.query(Rol).get(rol_id)
-                    new_user.roles.append(rol_obj)
-                db.session.add(new_user)
-                db.session.commit()
-                flash("Usuario agregado con exito")
-                return redirect(url_for("user_create"))
-        else:
-            flash(error)
-            roles= db.session.query(Rol).all()
-            return redirect(url_for("user_create", roles = roles))
+                lista_roles= request.form["roles[]"]
+                if lista_roles is not None:
+                    for rol_id in lista_roles:
+                        rol_obj= Rol.get_rol(rol_id)
+                        new_user.roles.append(rol_obj)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    flash("Usuario agregado con exito")
+                    return redirect(url_for("user_create"))                  
+        flash(error)
+        roles= Rol.get_roles()
+        return redirect(url_for("user_create", roles = roles))
 
 def delete(user_id):
     assert_permission(session,'user_index')

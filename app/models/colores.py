@@ -14,7 +14,6 @@ class Colores(db.Model):
         self.publico = publica
         self.privado = privada
 
-
     def configurar(privado,publico):
         col = Colores.query.first()
         if col is not None: 
@@ -24,6 +23,7 @@ class Colores(db.Model):
             col = Colores('rojo','rojo')
             db.session.add(col)
         db.session.commit()
+
     @classmethod
     def get_color_privado(self):
         colores = Colores.query.first()

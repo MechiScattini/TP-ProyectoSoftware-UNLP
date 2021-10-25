@@ -27,6 +27,11 @@ Para salir del entorno virutal, ejecutar:
 $ deactivate
 ```
 
+## Login
+- admin: `admin:123123`
+- operador: `op:123`
+https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/
+
 ## Estructura de carpetas del proyecto
 
 ```bash

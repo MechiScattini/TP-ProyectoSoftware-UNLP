@@ -1,12 +1,11 @@
-from flask import redirect, render_template, request, url_for, session, abort
+from flask import redirect, render_template, request, url_for, session
 from flask.helpers import flash
 from sqlalchemy import exc
-from sqlalchemy.sql.expression import false
-from app.models.user import Rol, User, users_roles,Rol
+from app.models.user import Rol, User,Rol
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
-from app.helpers.auth import assert_permission, authenticated, check_permission
+from app.helpers.auth import assert_permission
 from app.db import db
 from werkzeug.security import generate_password_hash
 

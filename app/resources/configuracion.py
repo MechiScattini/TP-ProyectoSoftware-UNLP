@@ -1,16 +1,13 @@
-from typing import OrderedDict
 from flask import redirect, render_template, request, url_for, session
 
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
 from app.models.colores import Colores
-from app.models.issue import Issue
-from app.db import db
-from sqlalchemy import update
-from sqlalchemy import select
+from app.helpers.auth import assert_permission
 # Public resources
 
 def conf():
+    assert_permission(session,'configuracion_index')
     #return a la vista
     elem = Elementos.get_elementos()
     ordenPuntos = Ordenacion.get_ordenacion_puntos()
@@ -21,6 +18,7 @@ def conf():
 
 
 def configurado():
+    assert_permission(session,'configuracion_update')
     #Acá actualizo en la bd los nuevos valores ingresados
     Colores.configurar(request.form.get('colorPri'),request.form.get('colorPub'))
     Ordenacion.configurarOrdenUsuarios(request.form.get('orden_usuarios'))

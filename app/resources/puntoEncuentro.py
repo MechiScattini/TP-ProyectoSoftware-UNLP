@@ -2,7 +2,6 @@ from flask import redirect, render_template, request, url_for, session
 from sqlalchemy import exc
 
 from app.models.ordenacion import Ordenacion
-from app.models.colores import Colores
 from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
 from app.db import db
@@ -19,10 +18,10 @@ def index():
     page = request.args.get('page', 1, type=int)
 
     #variable para opción de ordenación
-    ordenacion = Ordenacion.get_ordenacion_puntos()        
+    ordenacion = Ordenacion.get_ordenacion_puntos()
 
     #variable para opción de filtrado por estado: publicado o despublicado
-    filter_option = request.args.get("filter_option") 
+    filter_option = request.args.get("filter_option")
 
     q = request.args.get("q") #query de búsqueda por nombre
     if q:

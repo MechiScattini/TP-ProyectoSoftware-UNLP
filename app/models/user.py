@@ -64,32 +64,15 @@ class User(db.Model):
     def get_username(self, username):
         return User.query.filter(User.username == username).first()
         
-    
-    def per_page():
-        elem = Elementos.query.first()
-        if elem is not None:
-            per_page = int(elem.cant)
-        else:
-            per_page = 2
-        return per_page
+    @classmethod
+    def users_por_busqueda(self, q, orden, pagina, cant_paginas):
+        return User.query.filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)  
 
-    
-    def paginacion(per_page,page):
-        orden = Ordenacion.query.filter_by(lista='usuarios').first()
-        #chequeo si habia un orden creado
-        if orden is None:
-            orden = Ordenacion("email","usuarios")
-        return db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+    @classmethod
+    def paginacion(self,orden,pagina,cant_paginas):
+        return User.query.order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
        
-    def color ():
-        #aca agarro el color 
-        colores = Colores.query.filter_by(id=1).first()
-        if colores is None:
-            color = "rojo"
-        else:
-            color = colores.privado
-        return color
                 
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""

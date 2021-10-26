@@ -13,18 +13,25 @@ from werkzeug.security import generate_password_hash
 def index():
     """ Muestra los usuarios del sistema """
     assert_permission(session,'user_index')
-    #paginacion
-    per_page = User.per_page()
-    page  = int(request.args.get('page', 1,type=int))
-    users = User.paginacion(per_page,page)
-    color = User.color()
-    if request.method == "GET":
-        return render_template("user/index.html", users=users,color = color)
-    if request.method == "POST":
-        q = request.form["q"]
-        users_con_nombre = db.session.query(User).filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-        return render_template("user/index.html", users=users_con_nombre, color = color)
 
+    #paginacion
+    page  = int(request.args.get('page', 1,type=int))
+
+    cant_paginas = Elementos.get_elementos()
+
+    #variable para opción de ordenación
+    ordenacion = Ordenacion.get_ordenacion_usuarios()
+
+    #color de la vista
+    color = Colores.get_color_privado()
+
+    if request.method == "GET":
+        q = request.args.get("q")
+        if q:
+            users= User.users_por_busqueda(q,ordenacion ,page,cant_paginas)
+        else:
+            users = User.paginacion(ordenacion, page, cant_paginas)
+        return render_template("user/index.html", users=users,color = color)
 def bloqueados():
     """ Muestra los usuarios bloqueados """
     assert_permission(session,'user_index') 
@@ -188,7 +195,7 @@ def create():
 
             #agrego user a base de datos
             if error is None:
-                new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=params["password"])
+                new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=generate_password_hash(params["password"]))
             
                 lista_roles= request.form["roles[]"]
                 if lista_roles is not None:

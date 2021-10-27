@@ -43,8 +43,8 @@ class User(db.Model):
         self.bloqueado = False
         self.username = username
     
-
-    def has_permission(user_id, permission):
+    @classmethod
+    def has_permission(self,user_id, permission):
         user = User.query.filter(User.id==user_id).first()
         permisos = []
         nombres_permisos = []
@@ -57,12 +57,21 @@ class User(db.Model):
         return permission in nombres_permisos
 
     @classmethod
+    def esta_bloqueado(self, user_id):
+        user= User.query.filter(User.id == user_id).first()
+        return user.bloqueado
+
+    @classmethod
     def get_email(self,email):
         return User.query.filter(User.email == email).first()
 
     @classmethod
     def get_username(self, username):
         return User.query.filter(User.username == username).first()
+    
+    @classmethod
+    def get_user_de_id(self, user_id):
+        return User.query.filter(User.id == user_id).first()
         
     @classmethod
     def users_por_busqueda(self, q, orden, pagina, cant_paginas):
@@ -71,6 +80,14 @@ class User(db.Model):
     @classmethod
     def paginacion(self,orden,pagina,cant_paginas):
         return User.query.order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
+
+    @classmethod
+    def get_users_bloqueados(self,orden,pagina,cant_paginas):
+        return User.query.filter(User.bloqueado== True).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
+
+    @classmethod
+    def get_users_no_bloqueados(self,orden,pagina,cant_paginas):
+        return User.query.filter(User.bloqueado== False).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
        
                 
@@ -90,6 +107,10 @@ class Rol(db.Model):
     @classmethod
     def get_rol(self,rol_id):
         return Rol.query.get(rol_id)
+
+    @classmethod
+    def get_rol_admin(self):
+        return Rol.query.filter(Rol.name =="administrador").first()
 
 class Permiso(db.Model):
     """Define una entidad de tipo Permiso que se corresponde con el table permisos"""

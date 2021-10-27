@@ -25,6 +25,7 @@
                 <th>Username</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Bloqueado</th>
                 <th>Accion</th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
+                <td>{{ user.bloqueado }}</td>
                 {% if has_permission(session["user2"].id, "user_update") %}
                 <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}

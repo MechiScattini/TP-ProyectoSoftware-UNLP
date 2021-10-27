@@ -12,3 +12,5 @@ def assert_permission(session, permission):
         abort(401)
     if not check_permission(session["user2"].id, permission):
         abort(401)
+    if  User.esta_bloqueado(session["user2"].id):
+        abort(401)

@@ -33,7 +33,8 @@ def authenticate():
     if not check_password_hash(user.password, params["password"]):
         error= "Usuario y/o clave incorrecto."
         flash(error)
-        return redirect(url_for("auth_login"))       
+        return redirect(url_for("auth_login"))  
+             
     if user.bloqueado == True:
         error= "Usuario bloqueado no puede iniciar sesion"
         flash(error)

@@ -1,3 +1,4 @@
+from re import U
 from flask import redirect, render_template, request, url_for, session
 from flask.helpers import flash
 from sqlalchemy import exc
@@ -22,8 +23,7 @@ def index():
     #variable para opción de ordenación
     ordenacion = Ordenacion.get_ordenacion_usuarios()
 
-    #color de la vista
-    color = Colores.get_color_privado()
+
 
     if request.method == "GET":
         q = request.args.get("q")
@@ -31,66 +31,48 @@ def index():
             users= User.users_por_busqueda(q,ordenacion ,page,cant_paginas)
         else:
             users = User.paginacion(ordenacion, page, cant_paginas)
-        return render_template("user/index.html", users=users,color = color)
+        return render_template("user/index.html", users=users)
+
 def bloqueados():
     """ Muestra los usuarios bloqueados """
     assert_permission(session,'user_index') 
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    #chequeo si habia un orden creado
-    orden = Ordenacion.query.filter_by(lista = 'usuarios').first()
-    if orden is None:
-        orden = Ordenacion("email","orden_usuarios")
-    elem = Elementos.query.first()
-    elem = Elementos.query.first()
-    if elem is not None:
-        per_page = int(elem.cant)
-    else:
-        per_page = 2
-    page  = int(request.args.get('page', 1,type=int))
 
-    users =  db.session.query(User).filter(User.bloqueado == True).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-    return render_template("user/index.html", users=users, color = color)
+    #chequeo si habia un orden creado
+    ordenacion = Ordenacion.get_ordenacion_usuarios()
+
+    cant_paginas = Elementos.query.first()
+
+    page  = int(request.args.get('page', 1,type=int))
+    q = request.args.get("q")
+    if q:
+        users= User.users_por_busqueda(q,ordenacion ,page,cant_paginas)
+    else:
+        users =  User.get_users_bloqueados(ordenacion, page, cant_paginas)
+    return render_template("user/index.html", users=users)
 
 def no_bloqueados():
     """ Muestra los usuarios no bloqueados """
-    assert_permission(session,'user_index')
-    orden = Ordenacion.query.filter_by(lista='usuarios').first()
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
+    assert_permission(session,'user_index') 
+    color = Colores.get_color_privado()
+
     #chequeo si habia un orden creado
-    if orden is None:
-        orden = Ordenacion("email","orden_usuarios")
-    elem = Elementos.query.first()
-    if elem is not None:
-        per_page = int(elem.cant)
-    else:
-        per_page = 2
+    ordenacion = Ordenacion.get_ordenacion_usuarios()
+
+    cant_paginas = Elementos.query.first()
+
     page  = int(request.args.get('page', 1,type=int))
-    
-    users =  db.session.query(User).filter(User.bloqueado == False).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
-    return render_template("user/index.html", users=users, color = color)
+    q = request.args.get("q")
+    if q:
+        users= User.users_por_busqueda(q,ordenacion ,page,cant_paginas)
+    else:
+        users =  User.get_users_no_bloqueados(ordenacion, page, cant_paginas)
+    return render_template("user/index.html", users=users)
+
 
 def edit(user_id):
     """ Edicion de usuarios """
     assert_permission(session,'user_index')
-    orden = Ordenacion.query.filter_by(lista='usuarios').first()
-    colores = Colores.query.filter_by(id=1).first()
-    if colores is None:
-        color = "rojo"
-    else:
-        color = colores.privado
-    #chequeo si habia un orden creado
-    if orden is None:
-        orden = Ordenacion("email","orden_usuarios")
-    elem = Elementos.query.first()
-    user = db.session.query(User).get(user_id)
+    user = User.get_user_de_id(user_id)
 
     if request.method == 'POST':
         params = request.form   
@@ -117,7 +99,7 @@ def edit(user_id):
                 cheackbox = params.get("bloqueado")
                 if cheackbox is not None:
                         if user.bloqueado == False:
-                            rol_admin = db.session.query(Rol).filter(Rol.name =="administrador").first()
+                            rol_admin = Rol.get_rol_admin()
                             roles = []
                             for rol in user.roles:
                                 roles.append(rol.id)
@@ -126,7 +108,7 @@ def edit(user_id):
                             else:
                                 error="no puede bloquear a un administrador"
                                 flash(error)
-                                roles= db.session.query(Rol).all()
+                                roles= Rol.get_roles()
                                 return render_template("user/edit.html", user=user, roles=roles)
                         else:
                             user.bloqueado= False
@@ -134,7 +116,7 @@ def edit(user_id):
                 user.roles.clear()
                 lista_roles= request.form["roles[]"]
                 for rol_id in lista_roles:
-                    rol_obj= db.session.query(Rol).get(rol_id)
+                    rol_obj= Rol.get_rol(rol_id)
                     user.roles.append(rol_obj)
                 db.session.commit()    
 
@@ -156,10 +138,10 @@ def edit(user_id):
             return redirect(url_for("user_index"))
         else:
             flash(error)
-            roles= db.session.query(Rol).all()
+            roles= Rol.get_roles()
             return render_template("user/edit.html", user=user, roles=roles)
     roles= db.session.query(Rol).all()
-    return render_template('user/edit.html', user= user, roles=roles, color = color)
+    return render_template('user/edit.html', user= user, roles=roles)
 
 
 def create():
@@ -212,7 +194,7 @@ def create():
 
 def delete(user_id):
     assert_permission(session,'user_index')
-    user = db.session.query(User).get(user_id)
+    user = User.get_user_de_id(user_id)
     db.session.delete(user)
     db.session.commit()
     flash("Usuario eliminado")

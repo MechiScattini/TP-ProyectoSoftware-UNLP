@@ -114,7 +114,7 @@ def edit(user_id):
                             user.bloqueado= False
                 #actualizo roles seleccionados
                 user.roles.clear()
-                lista_roles= request.form["roles[]"]
+                lista_roles= request.form.get("roles[]")
                 for rol_id in lista_roles:
                     if rol_id != "":
                         rol_obj= Rol.get_rol(rol_id)
@@ -135,14 +135,15 @@ def edit(user_id):
                 db.session.rollback()
                 roles= db.session.query(Rol).all()
                 return render_template("user/edit.html", user=user,roles=roles)
-            flash("Usuario actualizado")
+            flash("usuario actualizado")
             return redirect(url_for("user_index"))
         else:
             flash(error)
             roles= Rol.get_roles()
             return render_template("user/edit.html", user=user, roles=roles)
+    es_admin = User.es_admin(user_id)    
     roles= db.session.query(Rol).all()
-    return render_template('user/edit.html', user= user, roles=roles)
+    return render_template('user/edit.html', user= user, roles=roles,es_admin=es_admin)
 
 
 def create():

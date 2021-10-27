@@ -28,7 +28,9 @@
       <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
         {% if rol in user.roles %}
-          <option selected value={{rol.id}} >{{rol.name}}</option>
+          {% if rol.name != "administrador" and not es_admin %}
+            <option selected value={{rol.id}} >{{rol.name}}</option>
+          {% endif %}
         {% else %}
           <option value={{rol.id}} >{{rol.name}}</option>
         {% endif %}

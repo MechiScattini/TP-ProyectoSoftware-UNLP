@@ -24,8 +24,8 @@
     </p>
     <p>
     <label>Roles<label></br>
-    <input type="hidden" name="roles[]"/>
-    <select type="roles" name="roles[]" size="2" multiple>
+    <select name="roles[]" size="2" multiple>
+      <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
         {% if rol in user.roles %}
           <option selected value={{rol.id}} >{{rol.name}}</option>

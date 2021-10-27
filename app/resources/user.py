@@ -116,8 +116,9 @@ def edit(user_id):
                 user.roles.clear()
                 lista_roles= request.form["roles[]"]
                 for rol_id in lista_roles:
-                    rol_obj= Rol.get_rol(rol_id)
-                    user.roles.append(rol_obj)
+                    if rol_id != "":
+                        rol_obj= Rol.get_rol(rol_id)
+                        user.roles.append(rol_obj)
                 db.session.commit()    
 
             except exc.IntegrityError as e:
@@ -180,14 +181,15 @@ def create():
                 new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=generate_password_hash(params["password"]))
             
                 lista_roles= request.form["roles[]"]
-                if lista_roles is not None:
+                if lista_roles:
                     for rol_id in lista_roles:
-                        rol_obj= Rol.get_rol(rol_id)
-                        new_user.roles.append(rol_obj)
-                    db.session.add(new_user)
-                    db.session.commit()
-                    flash("Usuario agregado con exito")
-                    return redirect(url_for("user_create"))                  
+                        if rol_id != "":
+                            rol_obj= Rol.get_rol(rol_id)
+                            new_user.roles.append(rol_obj)
+                db.session.add(new_user)
+                db.session.commit()
+                flash("Usuario agregado con exito")
+                return redirect(url_for("user_create"))                  
         flash(error)
         roles= Rol.get_roles()
         return redirect(url_for("user_create", roles = roles))

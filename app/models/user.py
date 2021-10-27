@@ -43,8 +43,8 @@ class User(db.Model):
         self.bloqueado = False
         self.username = username
     
-
-    def has_permission(user_id, permission):
+    @classmethod
+    def has_permission(self,user_id, permission):
         user = User.query.filter(User.id==user_id).first()
         permisos = []
         nombres_permisos = []
@@ -56,32 +56,40 @@ class User(db.Model):
 
         return permission in nombres_permisos
 
-    
-    def per_page():
-        elem = Elementos.query.first()
-        if elem is not None:
-            per_page = int(elem.cant)
-        else:
-            per_page = 2
-        return per_page
+    @classmethod
+    def esta_bloqueado(self, user_id):
+        user= User.query.filter(User.id == user_id).first()
+        return user.bloqueado
 
+    @classmethod
+    def get_email(self,email):
+        return User.query.filter(User.email == email).first()
+
+    @classmethod
+    def get_username(self, username):
+        return User.query.filter(User.username == username).first()
     
-    def paginacion(per_page,page):
-        orden = Ordenacion.query.filter_by(lista='usuarios').first()
-        #chequeo si habia un orden creado
-        if orden is None:
-            orden = Ordenacion("email","usuarios")
-        return db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
+    @classmethod
+    def get_user_de_id(self, user_id):
+        return User.query.filter(User.id == user_id).first()
+        
+    @classmethod
+    def users_por_busqueda(self, q, orden, pagina, cant_paginas):
+        return User.query.filter(User.username.contains(q)).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)  
+
+    @classmethod
+    def paginacion(self,orden,pagina,cant_paginas):
+        return User.query.order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
+
+    @classmethod
+    def get_users_bloqueados(self,orden,pagina,cant_paginas):
+        return User.query.filter(User.bloqueado== True).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
+
+    @classmethod
+    def get_users_no_bloqueados(self,orden,pagina,cant_paginas):
+        return User.query.filter(User.bloqueado== False).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
        
-    def color ():
-        #aca agarro el color 
-        colores = Colores.query.filter_by(id=1).first()
-        if colores is None:
-            color = "rojo"
-        else:
-            color = colores.privado
-        return color
                 
 class Rol(db.Model):
     """Define una entidad de tipo Rol que se corresponde con el table roles"""
@@ -90,6 +98,19 @@ class Rol(db.Model):
     id = Column(SmallInteger, primary_key=True)
     name = Column(String(30), unique=True)
     permisos = relationship( "Permiso", secondary='roles_permisos',lazy='subquery', backref=db.backref('roles',lazy='subquery'))
+
+
+    @classmethod
+    def get_roles(self):
+        return Rol.query.all()
+
+    @classmethod
+    def get_rol(self,rol_id):
+        return Rol.query.get(rol_id)
+
+    @classmethod
+    def get_rol_admin(self):
+        return Rol.query.filter(Rol.name =="administrador").first()
 
 class Permiso(db.Model):
     """Define una entidad de tipo Permiso que se corresponde con el table permisos"""

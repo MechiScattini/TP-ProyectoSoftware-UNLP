@@ -12,9 +12,10 @@ def conf():
     elem = Elementos.get_elementos()
     ordenPuntos = Ordenacion.get_ordenacion_puntos()
     ordenUsuarios = Ordenacion.get_ordenacion_usuarios()
+    ordenDenuncias = Ordenacion.get_ordenacion_denuncias()
     colores = Colores.get_colores()
     color = colores.privado
-    return render_template("config.html", cant = elem, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico, color = color)
+    return render_template("config.html", cant = elem, ordenP = ordenPuntos.orderBy, ordenU = ordenUsuarios.orderBy, ordenD = ordenDenuncias.orderBy, coloresPriv = colores.privado, coloresPub = colores.publico, color = color)
 
 
 def configurado():
@@ -23,5 +24,6 @@ def configurado():
     Colores.configurar(request.form.get('colorPri'),request.form.get('colorPub'))
     Ordenacion.configurarOrdenUsuarios(request.form.get('orden_usuarios'))
     Ordenacion.configurarOrdenPuntos(request.form.get('orden_puntos'))    
+    Ordenacion.configurarOrdenDenuncias(request.form.get('orden_denuncias'))
     Elementos.configurar(request.form.get('numero'))
     return redirect(url_for("home"))     

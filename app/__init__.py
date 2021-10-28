@@ -9,6 +9,7 @@ from app.models.colores import Colores
 from app.resources import user
 from app.resources import puntoEncuentro
 from app.resources import configuracion
+from app.resources import denuncia
 import logging
 
 from app.resources import auth
@@ -67,6 +68,14 @@ def create_app(environment="development"):
     app.add_url_rule("/Configuracion", "config_index", configuracion.conf)
     app.add_url_rule("/Configurado", "configurado", configuracion.configurado, methods=["POST"])
     
+    # Rutas de Denuncia
+    app.add_url_rule("/denuncias", "denuncia_index", denuncia.index, methods=["POST", "GET"])
+    app.add_url_rule("/denuncias/enCurso", "denuncia_enCurso", denuncia.enCurso, methods=["GET"])
+    app.add_url_rule("/denuncias/resuelta", "denuncia_resuelta", denuncia.reuelta, methods=["GET"])
+    app.add_url_rule("/denuncias/cerrada", "denuncia_cerrada", denuncia.cerrada, methods=["GET"])
+    app.add_url_rule("/denuncias/nuevo", "denuncia_create", denuncia.create, methods=["POST", "GET"])
+    app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_delete", denuncia.destroy, methods=["POST","GET"])
+    app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])

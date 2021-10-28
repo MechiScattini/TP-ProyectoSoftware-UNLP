@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <form class="form-denuncia"action="{{ url_for('denuncia_create') }}" method="POST">
+    <h2 style="display: flex; justify-content: center;">Crear una denuncia</h2>
+    <p>
+      <label>Titulo<label></br>
+      <input type="text" name="titulo"required placeholder="Titulo"/>
+    </p>
+    <p>
+      <label>Clave<label></br>
+      <input type="password" required name="password" placeholder="Clave"/>
+    </p>
+    <p>
+      <label>Descripcion<label></br>
+      <input type="text" name="descripcion" required placeholder="Descripcion"/>
+    </p>
+    <p>
+      <label>Coordenadas<label></br>
+      <input type="text" name="coordenadas" required placeholder="Coordenadas"/>
+    </p>
+    <p>
+      <label>Apellido Denunciante<label></br>
+      <input type="text" name="apellido_denunciante" required placeholder="Apellido denunciante"/>
+    </p>
+    <p>
+      <label>Nombre Denunciante<label></br>
+      <input type="text" name="nombre_denunciante" required placeholder="Nombre denunciante"/>
+    </p>
+    <p>
+      <label>Telefono Denunciante<label></br>
+      <input type="number" name="telefono_denunciante" required placeholder="Telefono denunciante"/>
+    </p>
+    <p>
+      <label>Email Denunciante<label></br>
+      <input type="email" name="email_denunciante" required placeholder="Email denunciante"/>
+    </p>
+    <p>
+    <input type="hidden" name="categorias[]"/>
+    <label>Categoria<label></br>
+    <select type="categorias" name="categorias[]" size="3" multiple>
+      {% for categoria in categorias %}
+        <option value={{categoria.id}} >{{categoria.name}}</option>
+      {% endfor %}
+    </select>
+    </p>
+    <p>
+    <input type="hidden" name="users[]"/>
+    <label>Asignar a<label></br>
+    <select type="users" name="users[]" size="" multiple>
+      {% for user in users %}
+        <option value={{user.id}} >{{user.email}}</option>
+      {% endfor %}
+    </select>
+    </p>
+    <p>
+      <input type="submit" value="Crear">
+      <button type="reset">Limpiar</button>
+    </p>
+  </form>
+  <a href="{{ url_for('denuncia_index') }}" class="link">Volver</a>
+{% endblock %}

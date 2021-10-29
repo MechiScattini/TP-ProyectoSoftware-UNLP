@@ -1,10 +1,7 @@
 from flask import redirect, render_template, request, url_for, session
-from sqlalchemy import exc
 
 from app.models.ordenacion import Ordenacion
-from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
-from app.db import db
 from app.models.elementos import Elementos
 from app.models.zona_inundable import ZonaInundable
 
@@ -30,7 +27,6 @@ def index():
         zonas = ZonaInundable.get_zonas_con_filtro(filter_option, ordenacion.orderBy, page, cant_paginas)
     else:
         zonas = ZonaInundable.get_zonas_ordenados_paginados(ordenacion.orderBy, page, cant_paginas)
-    print(zonas)
     return render_template("zona_inundable/index.html", zonas=zonas)
 
 def show(id_zona):
@@ -46,7 +42,6 @@ def destroy(id_zona):
     assert_permission(session, 'zona_inundable_destroy')
 
     #busca y elimina
-    zona = ZonaInundable.get_zona(id_zona)
-    db.session.delete(zona)
-    db.session.commit()
+    ZonaInundable.delete_zona(id_zona)
+
     return redirect(url_for("zonaInundable_index"))

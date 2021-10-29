@@ -68,3 +68,9 @@ class ZonaInundable(db.Model):
             .order_by(criterio_orden)\
             .paginate(page=pagina, per_page=cant_pagina)
         return zonas
+
+    @classmethod
+    def delete_zona(self, id_zona):
+        zona = ZonaInundable.get_zona(id_zona)
+        db.session.delete(zona)
+        db.session.commit()

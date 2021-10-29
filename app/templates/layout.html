@@ -58,7 +58,7 @@
               <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Denuncias</a>
+              <a class="nav-link" href="{{ url_for('denuncia_index') }}">Denuncias</a>
             </li>
             {% if is_authenticated(session) %}
             <li class="nav-item">

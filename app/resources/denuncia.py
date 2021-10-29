@@ -27,7 +27,7 @@ def index():
             denuncias= Denuncia.denuncias_por_busqueda(q,ordenacion ,page,cant_paginas)
         else:
             denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
-        return render_template("user/index.html", denuncias=denuncias)
+        return render_template("denuncia/index.html", denuncias=denuncias)
 
 
 def enCurso():

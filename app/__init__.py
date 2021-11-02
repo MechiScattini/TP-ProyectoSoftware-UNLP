@@ -8,6 +8,7 @@ from app.resources import issue
 from app.models.colores import Colores
 from app.resources import user
 from app.resources import puntoEncuentro
+from app.resources import recorrido
 from app.resources import configuracion
 import logging
 
@@ -82,6 +83,13 @@ def create_app(environment="development"):
     app.add_url_rule("/puntosEncuentro/nuevo", "puntoEncuentro_new", puntoEncuentro.new)
     app.add_url_rule("/puntosEncuentro/editar/<int:id_punto>", "puntoEncuentro_update", puntoEncuentro.update, methods=["POST","GET"])
     app.add_url_rule("/puntosEncuentro/eliminar/<int:id_punto>", "puntoEncuentro_destroy", puntoEncuentro.destroy, methods=["POST", "GET"])
+
+    # Rutas de Recorridos
+    app.add_url_rule("/recorrido", "recorrido_index", recorrido.index)
+    app.add_url_rule("/recorrido", "recorrido_create", recorrido.create, methods=["POST"])
+    app.add_url_rule("/recorrido/nuevo", "recorrido_new", recorrido.new)
+    app.add_url_rule("/recorrido/editar/<int:id_recorrido>", "recorrido_update", recorrido.update, methods=["POST","GET"])
+    app.add_url_rule("/recorrido/eliminar/<int:id_recorrido>", "recorrido_destroy", recorrido.destroy, methods=["POST", "GET"])
 
     # Ruta para el Home (usando decorator)
     @app.route("/")

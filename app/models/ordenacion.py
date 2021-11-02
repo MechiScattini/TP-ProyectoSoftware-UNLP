@@ -46,3 +46,9 @@ class Ordenacion(db.Model):
         if not orden:
             orden = Ordenacion('nombre','puntos')
         return orden    
+    @classmethod
+    def get_ordenacion_recorridos(self):
+        orden =  Ordenacion.query.filter_by(lista='recorridos').first()
+        if not orden:
+            orden = Ordenacion('nombre','puntos')
+        return orden

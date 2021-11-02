@@ -30,9 +30,27 @@ def index():
         return render_template("denuncia/index.html", denuncias=denuncias)
 
 
+def sinConfirmar():
+    """ Muestra las denuncias sin confirmar """
+    assert_permission(session,'denuncia_sinConfirmar') 
+
+    #chequeo si habia un orden creado
+    ordenacion = Ordenacion.get_ordenacion_denuncias()
+
+    cant_paginas = Elementos.query.first()
+
+    page  = int(request.args.get('page', 1,type=int))
+    q = request.args.get("q")
+    if q:
+        denuncias= Denuncia.users_por_busqueda(q,ordenacion ,page,cant_paginas)
+    else:
+        denuncias = Denuncia.get_denuncias_sinConfirmar(ordenacion, page, cant_paginas)
+    return render_template("denuncia/index.html", denuncias=denuncias)
+
+
 def enCurso():
     """ Muestra las denuncias en curso """
-    assert_permission(session,'denuncias_index') 
+    assert_permission(session,'denuncia_index') 
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
@@ -49,7 +67,7 @@ def enCurso():
 
 def resuelta():
     """ Muestra las denuncias resueltas """
-    assert_permission(session,'denuncias_index') 
+    assert_permission(session,'denuncia_index') 
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
@@ -66,7 +84,7 @@ def resuelta():
 
 def cerrada():
     """ Muestra las denuncias cerradas """
-    assert_permission(session,'denuncias_index') 
+    assert_permission(session,'denuncia_index') 
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
@@ -129,4 +147,40 @@ def destroy(id_denuncia):
     denuncia = Denuncia.get_denuncia(id_denuncia)
     db.session.delete(denuncia)
     db.session.commit()
+    return redirect(url_for("denuncia_index"))
+
+
+def confirmar(denuncia_id):
+    """Controlador para confirmar una denuncia"""
+    #Chequea autenticación y permisos
+    assert_permission(session, 'denuncia_confirmar')
+    #busca y confirma
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    denuncia.estado_id=4
+    denuncia.asignado_a=session["user2"].id
+    db.session.commit()
+    return redirect(url_for("denuncia_index"))
+
+def cerrar(denuncia_id):
+    """Controlador para cerrar una denuncia"""
+    #Chequea autenticación y permisos
+    assert_permission(session, 'denuncia_cerrar')
+    #busca y confirma
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    if denuncia.estado_id != 3 :
+        if denuncia.asignado_a == session["user2"].id :
+            denuncia.estado_id=6
+            db.session.commit()
+    else:
+        denuncia.estado_id=6
+        db.session.commit()
+    return redirect(url_for("denuncia_index"))
+
+def resolver(denuncia_id):
+    """Controlador para resolver una denuncia"""
+    #Chequea que el user sea el que esta a cargo
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    if denuncia.asignado_a == session["user2"].id :
+        denuncia.estado_id=5
+        db.session.commit()
     return redirect(url_for("denuncia_index"))

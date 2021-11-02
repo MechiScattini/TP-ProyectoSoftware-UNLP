@@ -6,11 +6,12 @@
 {% block content %}
   <h2 style="display: flex; justify-content: center; ">Denuncias</h2>
   <form style="display: flex; justify-content: center;" method="POST" action="{{ url_for('denuncia_index') }}" target="_blank">
-    <input type="search" name="q" placeholder="ingrese titulo" autofocus required>
+    <input type="search" name="q" placeholder="Ingrese titulo" autofocus required>
     <input type="submit" value= "Buscar"> 
   </form>
   <div>
   <a href="{{ url_for('denuncia_index') }}" class="link" method="GET">Todos</a>
+  <a href="{{ url_for('denuncia_sinConfirmar') }}" class="link" method="GET">Sin confirmar</a>
   <a href="{{ url_for('denuncia_enCurso') }}" class="link" method="GET">En curso</a>
   <a href="{{ url_for('denuncia_resuelta') }}" class="link"  method="GET">Resuelta</a>
   <a href="{{ url_for('denuncia_cerrada') }}" class="link"  method="GET">Cerrada</a>
@@ -22,14 +23,12 @@
             <tr>
                 <th>#</th>
                 <th>Titulo</th>
-                <th>Descripcion</th>
-                <th>Fecha creacion</th>
-                <th>Fecha cierre</th>
+                <th>Fecha y hora creacion</th>
                 <th>Categoria</th>
-                <th>Coordenadas</th>
                 <th>Estado</th>
                 <th>Asignado a</th>
                 <th>Email denunciante</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -37,19 +36,24 @@
             <tr>
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ denuncia.titulo }}</td>
-                <td>{{ denuncia.descripcion }}</td>
                 <td>{{ denuncia.fecha_creacion }}</td>
-                <td>{{ denuncia.fecha_cierre }}</td>
-                <td>{{ denuncia.categoria }}</td>
-                <td>{{ denuncia.coordenadas }}</td>
-                <td>{{ denuncia.estado }}</td>
+                <td>{{ denuncia.categoria_id }}</td>
+                <td>{{ denuncia.estado_id }}</td>
                 <td>{{ denuncia.asignado_a}}</td>
                 <td>{{ denuncia.email_denunciante }}</td>
                 {% if has_permission(session["user2"].id, "denuncia_update") %}
-                <td><a href="{{ url_for('denuncia_edit', denuncia_id= denuncia.id ) }}" method="POST" class="link"> Denuncia </a>
+                <td><a href="{{ url_for('denuncia_edit', denuncia_id= denuncia.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}
+                {% if denuncia.estado_id==3 %}
+                  <a href="{{ url_for('denuncia_confirmar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Confirmar denuncia de titulo {{denuncia.titulo}}')"> Confirmar</a>
+                  <a href="{{ url_for('denuncia_cerrar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Cerrar denuncia de titulo {{denuncia.titulo}}')"> Cerrar</a>
+                {% endif %}
+                {% if denuncia.estado_id==4 %}
+                  <a href="{{ url_for('denuncia_resolver', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Resolver denuncia de titulo {{denuncia.titulo}}')"> Resolver</a>
+                  <a href="{{ url_for('denuncia_cerrar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Cerrar denuncia de titulo {{denuncia.titulo}}')"> Cerrar</a>
+                  {% endif %}
                 {% if has_permission(session["user2"].id, "denuncia_destroy") %}
-                  <a href="{{ url_for('denuncia_delete', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar denuncia de titulo {{denuncia.titulo}}')"> Eliminar</a>  </li></td>
+                  <a href="{{ url_for('denuncia_destroy', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar denuncia de titulo {{denuncia.titulo}}')"> Eliminar</a>  </li></td>
                 {% endif %}
             </tr>
             {% endfor %}

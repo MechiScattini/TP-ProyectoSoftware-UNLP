@@ -72,9 +72,13 @@ def create_app(environment="development"):
     app.add_url_rule("/denuncias", "denuncia_index", denuncia.index, methods=["POST", "GET"])
     app.add_url_rule("/denuncias/enCurso", "denuncia_enCurso", denuncia.enCurso, methods=["GET"])
     app.add_url_rule("/denuncias/resuelta", "denuncia_resuelta", denuncia.resuelta, methods=["GET"])
+    app.add_url_rule("/denuncias/sinConfirmar", "denuncia_sinConfirmar", denuncia.sinConfirmar, methods=["GET"])
     app.add_url_rule("/denuncias/cerrada", "denuncia_cerrada", denuncia.cerrada, methods=["GET"])
     app.add_url_rule("/denuncias/nuevo", "denuncia_create", denuncia.create, methods=["POST", "GET"])
-    app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_delete", denuncia.destroy, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/confirmar/<int:denuncia_id>", "denuncia_confirmar", denuncia.confirmar, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/cerrar/<int:denuncia_id>", "denuncia_cerrar", denuncia.cerrar, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/resolver/<int:denuncia_id>", "denuncia_resolver", denuncia.resolver, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_destroy", denuncia.destroy, methods=["POST","GET"])
     app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
 
     # Rutas de Usuarios

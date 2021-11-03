@@ -1,5 +1,6 @@
 
 def codificar(coordenadas):
+    #Recibe string con formato [ [a,b], [c,d] ] y devuelve string con formato a#b@c#d
     st = []
     if isinstance(eval(coordenadas),list):
         lista_coord = eval(coordenadas)
@@ -11,6 +12,7 @@ def codificar(coordenadas):
     return ''.join(st)
 
 def decodificar(coordenadas):
+    #Recibe string con formato a#b@c#d y devuelve una lista [ [a,b], [c,d] ]
     list = []
     for coord in coordenadas.split('@'):
         lat,long = coord.split('#')

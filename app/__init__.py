@@ -82,8 +82,12 @@ def create_app(environment="development"):
     # Rutas de zonas inundables
     app.add_url_rule("/zonasInundables", "zonaInundable_index", zonaInundable.index)
     app.add_url_rule("/zonasInundables/ver/<int:id_zona>", "zonaInundable_show", zonaInundable.show)
-    app.add_url_rule("/zonasInundables", "zonaInundable_importar", zonaInundable.importar, methods=["POST"])
+    app.add_url_rule("/zonasInundables/importar", "zonaInundable_importar", zonaInundable.importar, methods=["POST","GET"])
     app.add_url_rule("/zonasInundables/eliminar/<int:id_zona>", "zonaInundable_destroy", zonaInundable.destroy, methods=["POST", "GET"])
+
+    # variables para archivos
+    UPLOAD_FOLDER = 'app/static/files'
+    app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
 
     # Ruta para el Home (usando decorator)
     @app.route("/")
@@ -106,6 +110,7 @@ def create_app(environment="development"):
     app.register_error_handler(404, handler.not_found_error)
     app.register_error_handler(401, handler.unauthorized_error)
     # Implementar lo mismo para el error 500
+    app.register_error_handler(500, handler.server_error)
 
     # Retornar la instancia de app configurada
     return app

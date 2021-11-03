@@ -18,7 +18,7 @@ class Denuncia(db.Model):
     __tablename__ = "denuncias"
     id = Column(SmallInteger, primary_key=True)
     titulo = Column(String(40), unique=True, nullable=False)
-    fecha_creacion = Column(DateTime, default=datetime.now())
+    fecha_creacion = Column(DateTime, default=datetime.utcnow)
     fecha_cierre = Column(DateTime)
     descripcion = Column(String(80), nullable=False)
     coordenadas = Column(String(200), nullable=False)
@@ -49,6 +49,7 @@ class Denuncia(db.Model):
         self.descripcion = descripcion
         self.coordenadas = coordenadas
         self.categoria_id = categoria_id
+        self.estado_id = 3
         self.asignado_a = asignado_a
         self.apellido_denunciante = apellido_denunciante
         self.nombre_denunciante = nombre_denunciante

@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `denuncias` (
   KEY `estado_id` (`estado_id`),
   CONSTRAINT `denuncias_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `denuncias_ibfk_2` FOREIGN KEY (`estado_id`) REFERENCES `statuses` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table proyecto.denuncias: ~2 rows (approximately)
 /*!40000 ALTER TABLE `denuncias` DISABLE KEYS */;
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `ordenacion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.ordenacion: ~1 rows (approximately)
+-- Dumping data for table proyecto.ordenacion: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ordenacion` DISABLE KEYS */;
 INSERT INTO `ordenacion` (`id`, `orderBy`, `lista`) VALUES
 	(1, 'titulo', 'denuncias');
@@ -126,14 +126,16 @@ CREATE TABLE IF NOT EXISTS `permisos` (
   `name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.permisos: ~10 rows (approximately)
+-- Dumping data for table proyecto.permisos: ~9 rows (approximately)
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
 INSERT INTO `permisos` (`id`, `name`) VALUES
 	(10, 'denuncia_confirmar'),
+	(11, 'denuncia_create'),
 	(4, 'denuncia_destroy'),
 	(1, 'denuncia_index'),
+	(12, 'denuncia_new'),
 	(3, 'denuncia_resuelta'),
 	(5, 'denuncia_sinConfirmar'),
 	(2, 'denuncia_update'),
@@ -206,9 +208,9 @@ CREATE TABLE IF NOT EXISTS `roles_permisos` (
   KEY `permiso_id` (`permiso_id`),
   CONSTRAINT `roles_permisos_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `roles_permisos_ibfk_2` FOREIGN KEY (`permiso_id`) REFERENCES `permisos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.roles_permisos: ~10 rows (approximately)
+-- Dumping data for table proyecto.roles_permisos: ~9 rows (approximately)
 /*!40000 ALTER TABLE `roles_permisos` DISABLE KEYS */;
 INSERT INTO `roles_permisos` (`id`, `rol_id`, `permiso_id`) VALUES
 	(1, 1, 1),
@@ -220,7 +222,9 @@ INSERT INTO `roles_permisos` (`id`, `rol_id`, `permiso_id`) VALUES
 	(7, 1, 7),
 	(8, 1, 8),
 	(9, 1, 9),
-	(10, 1, 10);
+	(10, 1, 10),
+	(11, 1, 11),
+	(12, 1, 12);
 /*!40000 ALTER TABLE `roles_permisos` ENABLE KEYS */;
 
 -- Dumping structure for table proyecto.seguimientos
@@ -287,9 +291,9 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   KEY `rol_id` (`rol_id`),
   CONSTRAINT `users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.users_roles: ~1 rows (approximately)
+-- Dumping data for table proyecto.users_roles: ~0 rows (approximately)
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
 INSERT INTO `users_roles` (`id`, `user_id`, `rol_id`) VALUES
 	(1, 1, 1),

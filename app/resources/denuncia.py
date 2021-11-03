@@ -1,12 +1,15 @@
+from datetime import datetime
 from flask import redirect, render_template, request, url_for, session
 from sqlalchemy import exc
 from flask.helpers import flash
+from app.models.category import Category
 
 from app.models.ordenacion import Ordenacion
 from app.models.denuncia import Denuncia
 from app.helpers.auth import assert_permission
 from app.db import db
 from app.models.elementos import Elementos
+from app.models.colores import Colores
 
 
 def index():
@@ -102,19 +105,13 @@ def cerrada():
 
 
 
-def new():
-    """Controlador para mostrar el formulario para crear denuncias"""
-    #Chequea autenticación y permisos
-    assert_permission(session, 'denuncia_new')
-
-    return render_template("denuncia/new.html")
-
-
 def create():
     """Controlador para crear una denuncia"""
 
     #Chequea autenticación y permisos
     assert_permission(session, 'denuncia_create')
+    if request.method == "GET":
+        return render_template("denuncia/new.html")
 
     #catchea todos los errores que levantan los validadores de campos
     if request.method == "POST":
@@ -132,19 +129,72 @@ def create():
             error = 'Nombre del denunciante es requerido'
         elif not params["telefono_denunciante"]:
             error = 'Telefono del denunciante es requerido'
+        elif not params["categoria"]:
+            error = 'Categoria de la denuncia es requerido'
         elif '@' not in params["email_denunciante"]:
             error = 'Ingrese un email valido'
-            
 
-def update():
-    pass
+        if error is None:
+            category=int(params["categoria"])
+            new_denuncia = Denuncia(titulo=params["titulo"],descripcion=params["descripcion"], coordenadas=params["coordenadas"], categoria_id=category, apellido_denunciante=params["apellido_denunciante"], nombre_denunciante=params["nombre_denunciante"], telefono_denunciante=params["telefono_denunciante"], email_denunciante=params["email_denunciante"] )    
+            db.session.add(new_denuncia)
+            db.session.commit()
+            flash("Denuncia agregada con exito")
+            return redirect(url_for("denuncia_create"))
+        else:
+            flash(error)
+            return redirect(url_for("denuncia_create"))
 
-def destroy(id_denuncia):
+def update(denuncia_id):
+    """Controlador para editar una denuncia"""
+
+    #Chequea autenticación y permisos
+    assert_permission(session, 'denuncia_update')
+
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    if request.method == 'POST':
+        params = request.form   
+        error = None
+        if not params["titulo"]:
+            error = 'Titulo es requerido'
+        if not params["descripcion"]:
+            error = 'Descripcion es requerido'
+        elif not params["coordenadas"]:
+            error = 'Coordenadas es requerido' 
+        elif not params["apellido_denunciante"]:
+            error = 'Apellido del denunciante es requerido'
+        elif not params["nombre_denunciante"]:
+            error = 'Nombre del denunciante es requerido'
+        elif not params["telefono_denunciante"]:
+            error = 'Telefono del denunciante es requerido'
+        elif not params["categoria"]:
+            error = 'Categoria de la denuncia es requerido'
+        elif '@' not in params["email_denunciante"]:
+            error = 'Ingrese un email valido'
+
+        if error is None:
+            category=int(params["categoria"])
+            denuncia.titulo = params["titulo"]
+            denuncia.descripcion = params["descripcion"]
+            denuncia.coordenadas = params["coordenadas"]
+            denuncia.apellido_denunciante = params["apellido_denunciante"]
+            denuncia.nombre_denunciante = params["nombre_denunciante"]
+            denuncia.email_denunciante = params["email_denunciante"]
+            denuncia.telefono_denunciante = params["telefono_denunciante"]
+            denuncia.categoria_id = category
+            db.session.commit()
+        else:
+            flash(error)
+            return redirect(url_for("denuncia_edit", denuncia_id=denuncia_id))   
+        return redirect(url_for("denuncia_index"))
+    return render_template('denuncia/edit.html', denuncia=denuncia)
+
+def destroy(denuncia_id):
     """Controlador para eliminar una denuncia"""
     #Chequea autenticación y permisos
     assert_permission(session, 'denuncia_destroy')
     #busca y elimina
-    denuncia = Denuncia.get_denuncia(id_denuncia)
+    denuncia = Denuncia.get_denuncia(denuncia_id)
     db.session.delete(denuncia)
     db.session.commit()
     return redirect(url_for("denuncia_index"))
@@ -170,6 +220,7 @@ def cerrar(denuncia_id):
     if denuncia.estado_id != 3 :
         if denuncia.asignado_a == session["user2"].id :
             denuncia.estado_id=6
+            denuncia.fecha_cierre=datetime.utcnow
             db.session.commit()
     else:
         denuncia.estado_id=6
@@ -182,5 +233,6 @@ def resolver(denuncia_id):
     denuncia = Denuncia.get_denuncia(denuncia_id)
     if denuncia.asignado_a == session["user2"].id :
         denuncia.estado_id=5
+        denuncia.fecha_cierre=datetime.utcnow
         db.session.commit()
     return redirect(url_for("denuncia_index"))

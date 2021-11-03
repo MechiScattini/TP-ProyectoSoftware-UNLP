@@ -11,12 +11,8 @@
       <input type="text" name="titulo"required placeholder="Titulo"/>
     </p>
     <p>
-      <label>Clave<label></br>
-      <input type="password" required name="password" placeholder="Clave"/>
-    </p>
-    <p>
       <label>Descripcion<label></br>
-      <input type="text" name="descripcion" required placeholder="Descripcion"/>
+      <input type="text" required name="descripcion" placeholder="Descripcion"/>
     </p>
     <p>
       <label>Coordenadas<label></br>
@@ -39,23 +35,14 @@
       <input type="email" name="email_denunciante" required placeholder="Email denunciante"/>
     </p>
     <p>
-    <input type="hidden" name="categorias[]"/>
     <label>Categoria<label></br>
-    <select type="categorias" name="categorias[]" size="3" multiple>
-      {% for categoria in categorias %}
-        <option value={{categoria.id}} >{{categoria.name}}</option>
-      {% endfor %}
+    <select name="categoria">
+      <option value=1>Urgente</option>
+      <option value=2>Advertencia</option>
+      <option value=3>Poco probable</option>
     </select>
     </p>
-    <p>
-    <input type="hidden" name="users[]"/>
-    <label>Asignar a<label></br>
-    <select type="users" name="users[]" size="" multiple>
-      {% for user in users %}
-        <option value={{user.id}} >{{user.email}}</option>
-      {% endfor %}
-    </select>
-    </p>
+    <br>
     <p>
       <input type="submit" value="Crear">
       <button type="reset">Limpiar</button>

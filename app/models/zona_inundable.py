@@ -82,7 +82,7 @@ class ZonaInundable(db.Model):
 
     @classmethod
     def check_codigo(self, cod):
-        """Chequea si existe o no una zona con el codigo=cod"""
+        """Devuelve false si ya existe una zona con el codigo=cod"""
         if ZonaInundable.query.filter_by(codigo=cod).first():
             return False
         else:
@@ -90,14 +90,14 @@ class ZonaInundable(db.Model):
 
     @classmethod
     def check_zona(self, nombre):
-        """Chequea si existe o no una zona con el nombre=nombre"""
+        """Devuelve False si ya existe una zona con el nombre=nombre"""
         if ZonaInundable.query.filter_by(nombre=nombre).first():
             return False
         else:
             return True
 
     @classmethod
-    def create_zona(self, codigo=None, nombre=None, coordenadas=None, estado=None, color=None):
+    def create_zona(self, codigo=None, nombre=None, coordenadas=None, estado=0, color=None):
         """Crea una zona"""
         new_zona = ZonaInundable(codigo, nombre, coordenadas, estado, color)
         db.session.add(new_zona)
@@ -111,21 +111,22 @@ class ZonaInundable(db.Model):
     def update_zona(self, codigo=None, nombre=None, coordenadas=None, estado=None, color=None):
         """Actualiza la zona con nombre=nombre"""
         zona = ZonaInundable.query.filter_by(nombre=nombre).first()
-        if codigo:
-            zona.codigo = codigo
-        if nombre:
-            zona.nombre = nombre
-        if coordenadas:
-            zona.coordenadas = coordenadas
-        if estado:
-            zona.estado = estado
-        if color:
-            zona.color = color
-        try:
-            db.session.commit()
-        except exc.IntegrityError as e:
-            db.session.rollback()
-            return e
+        if zona:
+            if codigo:
+                zona.codigo = codigo
+            if nombre:
+                zona.nombre = nombre
+            if coordenadas:
+                zona.coordenadas = coordenadas
+            if estado:
+                zona.estado = estado
+            if color:
+                zona.color = color
+            try:
+                db.session.commit()
+            except exc.IntegrityError as e:
+                db.session.rollback()
+                return e
 
     @classmethod
     def delete_zona(self, id_zona):

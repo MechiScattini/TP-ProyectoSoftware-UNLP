@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, url_for, session
+from flask import redirect, render_template, request, url_for, session, abort
 import os
 import string
 import random
@@ -40,6 +40,24 @@ def index():
 def show(id_zona):
     return render_template("zona_inundable/show.html")
 
+def update(id_zona):
+    #Chequea autenticación y permisos
+    assert_permission(session,'zona_inundable_update')
+    error=''
+    zona = ZonaInundable.get_zona(id_zona)
+    if not zona:
+        abort(404)
+    else:
+        if request.method=="POST":
+            e = ZonaInundable.update_zona(nombre=zona.nombre,codigo=request.form['codigo'],estado=int(request.form['estado']), color=request.form['color'])
+            if e:
+                if 'codigo' in e.orig.args[1]:
+                    error = "Ya existe una zona con ese codigo"
+                return render_template("zona_inundable/update.html", zona=zona, error_message=error)
+            else:
+                return redirect(url_for("zonaInundable_index"))
+        return render_template("zona_inundable/update.html", zona=zona)
+
 def importar():
     """Controlador para importar archivo csv de zonas"""
 
@@ -47,35 +65,35 @@ def importar():
     assert_permission(session,'zona_inundable_importar')
 
     form = ImportForm()
-    if form.validate_on_submit():
-        file = form.file.data
-        filename = secure_filename(file.filename)
-        file_path = os.path.join('app/static/files', filename).replace("\\","/")
-        file.save(file_path)
+    if request.method=="POST":
+        if form.validate_on_submit():
+            file = form.file.data #splitlines csv reader python
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('app/static/files', filename).replace("\\","/")
+            file.save(file_path)
 
-        # CVS nombres de columnas
-        col_names = ['nombre','area']
-        # Uso panda para parsear el csv
-        csvData = pd.read_csv(file_path,names=col_names, header=None)
+            # CVS nombres de columnas
+            col_names = ['nombre','area']
+            # Uso panda para parsear el csv
+            csvData = pd.read_csv(file_path,names=col_names, header=None)
 
-        S = 10  # cantidad de caracteres del codigo.  
+            S = 10  # cantidad de caracteres del codigo.  
 
-        # Recorre las filas
-        for i,row in csvData.iterrows():
-            #saltea primer fila: nombre, area
-            if i > 0:
-                #genera código random que no se encuentre ya en la db
-                ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
-                while not ZonaInundable.check_codigo(ran):
-                    ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+            # Recorre las filas
+            for i,row in csvData.iterrows():
+                #saltea primer fila: nombre, area
+                if i > 0:
+                    #agrega la zona si no se encuentra ya cargada
+                    if ZonaInundable.check_zona(row['nombre']):
+                        #genera código random que no se encuentre ya en la db
+                        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+                        while not ZonaInundable.check_codigo(ran):
+                            ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
+                        ZonaInundable.create_zona(codigo=ran, nombre=row['nombre'],coordenadas=codificar(row['area']))
+                    else:
+                        ZonaInundable.update_zona(nombre=row['nombre'],coordenadas=codificar(row['area']))
 
-                #agrega la zona si no se encuentra ya cargada
-                if ZonaInundable.check_zona(row['nombre']):
-                    ZonaInundable.create_zona(codigo=ran, nombre=row['nombre'],coordenadas=codificar(row['area']))
-                else:
-                    ZonaInundable.update_zona(nombre=row['nombre'],coordenadas=codificar(row['area']))
-
-        return redirect(url_for('zonaInundable_index'))
+            return redirect(url_for('zonaInundable_index'))
     return render_template("zona_inundable/import.html", form=form)
 
 def destroy(id_zona):

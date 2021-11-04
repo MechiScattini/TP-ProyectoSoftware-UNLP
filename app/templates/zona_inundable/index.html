@@ -46,6 +46,9 @@
                     {% if has_permission(session["user2"].id, "zona_inundable_show") %}
                     <a href="{{ url_for('zonaInundable_show', id_zona=zona.id) }}" class="link">Ver</a>
                     {% endif %}
+                    {% if has_permission(session["user2"].id, "zona_inundable_update") %}
+                    <a href="{{ url_for('zonaInundable_update', id_zona=zona.id) }}" class="link">Editar</a>
+                    {% endif %}
                     {% if has_permission(session["user2"].id, "zona_inundable_destroy") %}
                     <a href="{{ url_for('zonaInundable_destroy', id_zona=zona.id) }}" class="link" onclick="return confirm('Eliminar {{zona.nombre}}')">Eliminar</a>
                     {% endif %}

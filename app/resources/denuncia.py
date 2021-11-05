@@ -1,8 +1,11 @@
-from datetime import datetime
+from datetime import datetime, date
+from re import U
 from flask import redirect, render_template, request, url_for, session
 from sqlalchemy import exc
 from flask.helpers import flash
+from sqlalchemy.sql.functions import user
 from app.models.category import Category
+from app.models.user import User
 
 from app.models.ordenacion import Ordenacion
 from app.models.denuncia import Denuncia
@@ -23,14 +26,27 @@ def index():
 
     #variable para opción de ordenación
     ordenacion = Ordenacion.get_ordenacion_denuncias()
-
-    if request.method == "GET":
-        q = request.args.get("q")
-        if q:
-            denuncias= Denuncia.denuncias_por_busqueda(q,ordenacion ,page,cant_paginas)
-        else:
+    users = User.allUsers()
+    fecha1 = request.args.get("date1")
+    fecha2 = request.args.get("date2")
+    q = request.args.get("q")
+    if q:
+        denuncias= Denuncia.denuncias_por_busqueda(q,ordenacion ,page,cant_paginas)
+    elif fecha1 and fecha2:
+        if fecha1>fecha2:    #Esta fallando la comparacion de fechas
+            flash("ENTRO")
             denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
-        return render_template("denuncia/index.html", denuncias=denuncias)
+        #denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
+    else:
+        denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
+
+
+def info(denuncia_id):
+    """ Muestra la informacion adicional de la denuncia"""
+    assert_permission(session,'denuncia_index')
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    return render_template("denuncia/masInfo.html", denuncia=denuncia)
 
 
 def sinConfirmar():
@@ -39,7 +55,7 @@ def sinConfirmar():
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
-
+    users = User.allUsers()
     cant_paginas = Elementos.query.first()
 
     page  = int(request.args.get('page', 1,type=int))
@@ -48,7 +64,7 @@ def sinConfirmar():
         denuncias= Denuncia.users_por_busqueda(q,ordenacion ,page,cant_paginas)
     else:
         denuncias = Denuncia.get_denuncias_sinConfirmar(ordenacion, page, cant_paginas)
-    return render_template("denuncia/index.html", denuncias=denuncias)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
 
 
 def enCurso():
@@ -57,7 +73,7 @@ def enCurso():
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
-
+    users = User.allUsers()
     cant_paginas = Elementos.query.first()
 
     page  = int(request.args.get('page', 1,type=int))
@@ -66,7 +82,7 @@ def enCurso():
         denuncias= Denuncia.users_por_busqueda(q,ordenacion ,page,cant_paginas)
     else:
         denuncias = Denuncia.get_denuncias_enCurso(ordenacion, page, cant_paginas)
-    return render_template("denuncia/index.html", denuncias=denuncias)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
 
 def resuelta():
     """ Muestra las denuncias resueltas """
@@ -74,7 +90,7 @@ def resuelta():
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
-
+    users = User.allUsers()
     cant_paginas = Elementos.query.first()
 
     page  = int(request.args.get('page', 1,type=int))
@@ -83,7 +99,7 @@ def resuelta():
         denuncias= Denuncia.users_por_busqueda(q,ordenacion ,page,cant_paginas)
     else:
         denuncias = Denuncia.get_denuncias_resuelta(ordenacion, page, cant_paginas)
-    return render_template("denuncia/index.html", denuncias=denuncias)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
 
 def cerrada():
     """ Muestra las denuncias cerradas """
@@ -91,7 +107,7 @@ def cerrada():
 
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
-
+    users = User.allUsers()
     cant_paginas = Elementos.query.first()
 
     page  = int(request.args.get('page', 1,type=int))
@@ -100,7 +116,7 @@ def cerrada():
         denuncias= Denuncia.users_por_busqueda(q,ordenacion ,page,cant_paginas)
     else:
         denuncias = Denuncia.get_denuncias_cerrada(ordenacion, page, cant_paginas)
-    return render_template("denuncia/index.html", denuncias=denuncias)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
 
 
 
@@ -220,7 +236,7 @@ def cerrar(denuncia_id):
     if denuncia.estado_id != 3 :
         if denuncia.asignado_a == session["user2"].id :
             denuncia.estado_id=6
-            denuncia.fecha_cierre=datetime.utcnow
+            denuncia.fecha_cierre=datetime.now()
             db.session.commit()
     else:
         denuncia.estado_id=6
@@ -233,6 +249,6 @@ def resolver(denuncia_id):
     denuncia = Denuncia.get_denuncia(denuncia_id)
     if denuncia.asignado_a == session["user2"].id :
         denuncia.estado_id=5
-        denuncia.fecha_cierre=datetime.utcnow
+        denuncia.fecha_cierre=datetime.now()
         db.session.commit()
     return redirect(url_for("denuncia_index"))

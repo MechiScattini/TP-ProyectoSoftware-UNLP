@@ -66,6 +66,10 @@ class Denuncia(db.Model):
         return Denuncia.query.filter(Denuncia.titulo.contains(q)).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)  
 
     @classmethod
+    def denuncias_por_fechas(self, fecha1, fecha2, orden, pagina, cant_paginas):
+        return Denuncia.query.filter(Denuncia.fecha_creacion>=fecha1 and Denuncia.fecha_creacion<=fecha2).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)
+
+    @classmethod
     def paginacion(self,orden,pagina,cant_paginas):
         return Denuncia.query.order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 

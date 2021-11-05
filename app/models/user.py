@@ -73,6 +73,10 @@ class User(db.Model):
             orden = Ordenacion("email","usuarios")
         return db.session.query(User).order_by(orden.orderBy).paginate(page,per_page,error_out=False)
 
+
+    def allUsers():
+        return db.session.query(User).all()
+
        
     def color ():
         #aca agarro el color 

@@ -70,6 +70,7 @@ def create_app(environment="development"):
     
     # Rutas de Denuncia
     app.add_url_rule("/denuncias", "denuncia_index", denuncia.index, methods=["POST", "GET"])
+    app.add_url_rule("/denuncias/info<int:denuncia_id>", "denuncia_info", denuncia.info, methods=["GET"])
     app.add_url_rule("/denuncias/enCurso", "denuncia_enCurso", denuncia.enCurso, methods=["GET"])
     app.add_url_rule("/denuncias/resuelta", "denuncia_resuelta", denuncia.resuelta, methods=["GET"])
     app.add_url_rule("/denuncias/sinConfirmar", "denuncia_sinConfirmar", denuncia.sinConfirmar, methods=["GET"])

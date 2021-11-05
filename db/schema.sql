@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `denuncias` (
   `coordenadas` varchar(200) NOT NULL,
   `categoria_id` int(11) DEFAULT NULL,
   `estado_id` int(11) DEFAULT NULL,
-  `asignado_a` varchar(30) DEFAULT NULL,
+  `asignado_a` int(11) DEFAULT NULL,
   `apellido_denunciante` varchar(20) NOT NULL,
   `nombre_denunciante` varchar(20) NOT NULL,
   `telefono_denunciante` int(11) NOT NULL,
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS `denuncias` (
 -- Dumping data for table proyecto.denuncias: ~2 rows (approximately)
 /*!40000 ALTER TABLE `denuncias` DISABLE KEYS */;
 INSERT INTO `denuncias` (`id`, `titulo`, `fecha_creacion`, `fecha_cierre`, `descripcion`, `coordenadas`, `categoria_id`, `estado_id`, `asignado_a`, `apellido_denunciante`, `nombre_denunciante`, `telefono_denunciante`, `email_denunciante`) VALUES
-	(2, 'Alcantarilla tapada', '2021-10-29 15:37:39', NULL, 'La alcantarilla de la esquina esta tapada por hojas', '324,423.432,432', 3, 4, '1', 'Fulanito', 'Jorge', 2147483647, 'jorge@gmail.com'),
-	(3, 'Cloaca', '2021-11-02 15:50:45', NULL, 'Cloaca con hojas', '345,763.23,65', 2, 4, '1', 'Perez', 'Luis', 324324234, 'Luis@gmail.com');
+	(2, 'Alcantarilla tapada', '2021-10-29 15:37:39', NULL, 'La alcantarilla de la esquina esta tapada por hojas', '324,423.432,432', 3, 4, 1, 'Fulanito', 'Jorge', 2147483647, 'jorge@gmail.com'),
+	(3, 'Cloaca', '2021-11-02 15:50:45', NULL, 'Cloaca con hojas', '345,763.23,65', 2, 4, 1, 'Perez', 'Luis', 324324234, 'Luis@gmail.com');
 /*!40000 ALTER TABLE `denuncias` ENABLE KEYS */;
 
 -- Dumping structure for table proyecto.elementos
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `ordenacion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.ordenacion: ~0 rows (approximately)
+-- Dumping data for table proyecto.ordenacion: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ordenacion` DISABLE KEYS */;
 INSERT INTO `ordenacion` (`id`, `orderBy`, `lista`) VALUES
 	(1, 'titulo', 'denuncias');
@@ -126,11 +126,12 @@ CREATE TABLE IF NOT EXISTS `permisos` (
   `name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.permisos: ~9 rows (approximately)
+-- Dumping data for table proyecto.permisos: ~13 rows (approximately)
 /*!40000 ALTER TABLE `permisos` DISABLE KEYS */;
 INSERT INTO `permisos` (`id`, `name`) VALUES
+	(13, 'denuncia_cerrar'),
 	(10, 'denuncia_confirmar'),
 	(11, 'denuncia_create'),
 	(4, 'denuncia_destroy'),
@@ -208,9 +209,9 @@ CREATE TABLE IF NOT EXISTS `roles_permisos` (
   KEY `permiso_id` (`permiso_id`),
   CONSTRAINT `roles_permisos_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `roles_permisos_ibfk_2` FOREIGN KEY (`permiso_id`) REFERENCES `permisos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.roles_permisos: ~9 rows (approximately)
+-- Dumping data for table proyecto.roles_permisos: ~13 rows (approximately)
 /*!40000 ALTER TABLE `roles_permisos` DISABLE KEYS */;
 INSERT INTO `roles_permisos` (`id`, `rol_id`, `permiso_id`) VALUES
 	(1, 1, 1),
@@ -224,7 +225,8 @@ INSERT INTO `roles_permisos` (`id`, `rol_id`, `permiso_id`) VALUES
 	(9, 1, 9),
 	(10, 1, 10),
 	(11, 1, 11),
-	(12, 1, 12);
+	(12, 1, 12),
+	(13, 1, 13);
 /*!40000 ALTER TABLE `roles_permisos` ENABLE KEYS */;
 
 -- Dumping structure for table proyecto.seguimientos
@@ -293,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`rol_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.users_roles: ~0 rows (approximately)
+-- Dumping data for table proyecto.users_roles: ~2 rows (approximately)
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
 INSERT INTO `users_roles` (`id`, `user_id`, `rol_id`) VALUES
 	(1, 1, 1),

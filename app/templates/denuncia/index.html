@@ -5,9 +5,15 @@
 {% endblock %}
 {% block content %}
   <h2 style="display: flex; justify-content: center; ">Denuncias</h2>
-  <form style="display: flex; justify-content: center;" method="POST" action="{{ url_for('denuncia_index') }}" target="_blank">
-    <input type="search" name="q" placeholder="Ingrese titulo" autofocus required>
-    <input type="submit" value= "Buscar"> 
+  <form action="" method="GET">
+    <input type="search" placeholder="Buscar por titulo" name="q">
+    <button type="submit">Buscar</button>
+  </form>
+  <br>
+  <form action="" method="GET">
+    <input type="date" placeholder="Primera fecha" name="date1">
+    <input type="date" placeholder="Segunda fecha" name="date2">
+    <button type="submit">Buscar</button>
   </form>
   <div>
   <a href="{{ url_for('denuncia_index') }}" class="link" method="GET">Todos</a>
@@ -27,7 +33,6 @@
                 <th>Categoria</th>
                 <th>Estado</th>
                 <th>Asignado a</th>
-                <th>Email denunciante</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -37,12 +42,34 @@
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ denuncia.titulo }}</td>
                 <td>{{ denuncia.fecha_creacion }}</td>
-                <td>{{ denuncia.categoria_id }}</td>
-                <td>{{ denuncia.estado_id }}</td>
-                <td>{{ denuncia.asignado_a}}</td>
-                <td>{{ denuncia.email_denunciante }}</td>
+                {% if denuncia.categoria_id == 1 %}
+                <td>Urgente</td>
+                {% elif denuncia.categoria_id == 2 %}
+                <td>Advertencia</td>
+                {% elif denuncia.categoria_id == 3 %}
+                <td>Poco probable</td>
+                {% endif %}
+                {% if denuncia.estado_id == 3 %}
+                <td>Sin confirmar</td>
+                {% elif denuncia.estado_id == 4 %}
+                <td>En curso</td>
+                {% elif denuncia.estado_id == 5 %}
+                <td>Resuelta</td>
+                {% elif denuncia.estado_id == 6 %}
+                <td>Cerrada</td>
+                {% endif %}
+                {% if denuncia.asignado_a == None %}
+                  <td>None</td>
+                {% else %}
+                  {% for user in users %}
+                    {% if user.id == denuncia.asignado_a %}
+                      <td>{{user.email}}</td>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+                <td><a href="{{ url_for('denuncia_info', denuncia_id= denuncia.id ) }}" method="GET" class="link"> Mas info </a>
                 {% if has_permission(session["user2"].id, "denuncia_update") %}
-                <td><a href="{{ url_for('denuncia_edit', denuncia_id= denuncia.id ) }}" method="POST" class="link"> Editar </a>
+                <a href="{{ url_for('denuncia_edit', denuncia_id= denuncia.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}
                 {% if denuncia.estado_id==3 %}
                   <a href="{{ url_for('denuncia_confirmar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Confirmar denuncia de titulo {{denuncia.titulo}}')"> Confirmar</a>
@@ -53,8 +80,9 @@
                   <a href="{{ url_for('denuncia_cerrar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Cerrar denuncia de titulo {{denuncia.titulo}}')"> Cerrar</a>
                   {% endif %}
                 {% if has_permission(session["user2"].id, "denuncia_destroy") %}
-                  <a href="{{ url_for('denuncia_destroy', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar denuncia de titulo {{denuncia.titulo}}')"> Eliminar</a>  </li></td>
+                  <a href="{{ url_for('denuncia_destroy', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar denuncia de titulo {{denuncia.titulo}}')"> Eliminar</a>  </li>
                 {% endif %}
+              </td>
             </tr>
             {% endfor %}
         </tbody>

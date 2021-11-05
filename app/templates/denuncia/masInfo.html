@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+{% if denuncia %}
+  <h4>Descripcion: {{ denuncia.descripcion }}</h4>
+  <h4>Fecha cierre: {{ denuncia.fecha_cierre }}</h4>
+  <h4>Coordenadas: {{ denuncia.coordenadas }}</h4>
+  <h4>Apellido denunicante: {{ denuncia.apellido_denunciante }}</h4>
+  <h4>Nombre denunicante: {{ denuncia.nombre_denunciante }}</h4>
+  <h4>Email denunicante: {{ denuncia.email_denunciante }}</h4>
+  <h4>Telefono denunicante: {{ denuncia.telefono_denunciante }}</h4>
+  <h3>Seguimientos:</h3>
+{% endif %}
+  <a href="{{ url_for('denuncia_index') }}" class="link">Volver</a>
+{% endblock %}

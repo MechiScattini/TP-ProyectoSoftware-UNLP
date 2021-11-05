@@ -5,9 +5,9 @@
 {% endblock %}
 {% block content %}
   <h2 style="display: flex; justify-content: center; ">Usuarios</h2>
-  <form style="display: flex; justify-content: center;" method="POST" action="{{ url_for('user_index') }}" target="_blank">
-    <input type="search" name="q" placeholder="ingrese username" autofocus required>
-    <input type="submit" value= "Buscar"> 
+  <form action="" method="GET">
+    <input type="search" placeholder="Buscar por username" name="q">
+    <button type="submit">Buscar</button>
   </form>
   <div>
   <a href="{{ url_for('user_index') }}" class="link" method="GET">Todos</a>
@@ -25,6 +25,7 @@
                 <th>Username</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Bloqueado</th>
                 <th>Accion</th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@
                 <td>{{ user.username }}</td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
+                <td>{{ user.bloqueado }}</td>
                 {% if has_permission(session["user2"].id, "user_update") %}
                 <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}

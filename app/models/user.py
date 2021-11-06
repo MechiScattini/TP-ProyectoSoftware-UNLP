@@ -1,11 +1,7 @@
 from sqlalchemy import Column, Integer, String, SmallInteger
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.selectable import subquery
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy import Column, Integer, ForeignKey
-from app.models.elementos import Elementos
-from app.models.ordenacion import Ordenacion
-from app.models.colores import Colores
 
 from app.db import db
 

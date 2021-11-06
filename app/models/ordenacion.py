@@ -56,14 +56,12 @@ class Ordenacion(db.Model):
         if not orden:
             orden = Ordenacion('nombre','puntos','denuncias')
         return orden    
-<<<<<<< HEAD
     @classmethod
     def get_ordenacion_denuncias(self):
         orden =  Ordenacion.query.filter_by(lista='denuncias').first()
         if not orden:
             orden = Ordenacion('nombre','puntos','denuncias')
         return orden
-=======
 
     @classmethod
     def get_ordenacion_zonas(self):
@@ -71,4 +69,3 @@ class Ordenacion(db.Model):
         if not orden:
             orden = Ordenacion('nombre','zonas')
         return orden
->>>>>>> development2

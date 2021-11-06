@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, String, SmallInteger, Boolean
 from sqlalchemy.orm import validates, relationship
 from sqlalchemy.sql.expression import desc, select
-from sqlalchemy.sql.sqltypes import Date, DateTime, Integer
+from sqlalchemy.sql.sqltypes import SMALLINT, Date, DateTime, Integer
 from sqlalchemy import Column, Integer, ForeignKey
 from app.db import db
 from app.models.category import Category
@@ -16,15 +16,15 @@ class Denuncia(db.Model):
     """Define una entidad de tipo Denuncia"""
 
     __tablename__ = "denuncias"
-    id = Column(SmallInteger, primary_key=True)
+    id = Column(SMALLINT, primary_key=True)
     titulo = Column(String(40), unique=True, nullable=False)
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
     fecha_cierre = Column(DateTime)
     descripcion = Column(String(80), nullable=False)
     coordenadas = Column(String(200), nullable=False)
-    categoria_id = Column(Integer, ForeignKey("categories.id"))
-    estado_id = Column(Integer, ForeignKey("statuses.id"))
-    asignado_a = Column(Integer, ForeignKey("users.id"))
+    categoria_id = Column(SMALLINT, ForeignKey("categories.id"))
+    estado_id = Column(SMALLINT, ForeignKey("statuses.id"))
+    asignado_a = Column(SMALLINT, ForeignKey("users.id"))
     apellido_denunciante = Column(String(20), nullable=False)
     nombre_denunciante = Column(String(20), nullable=False)
     telefono_denunciante = Column(Integer, nullable=False)
@@ -95,10 +95,10 @@ class Seguimiento(db.Model):
     """Define una entidad de tipo Seguimiento"""
 
     __tablename__ = 'seguimientos'
-    id = Column(SmallInteger, primary_key=True)
-    denuncia_id = Column(Integer, ForeignKey('denuncias.id'))
+    id = Column(SMALLINT, primary_key=True)
+    denuncia_id = Column(SMALLINT, ForeignKey('denuncias.id'))
     descripcion = Column(String(80))
-    autor = Column(Integer, ForeignKey("users.id"))
+    autor = Column(SMALLINT, ForeignKey("users.id"))
     fecha = Column(Date)
 
 

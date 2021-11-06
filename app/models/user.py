@@ -1,11 +1,7 @@
 from sqlalchemy import Column, Integer, String, SmallInteger
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.selectable import subquery
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy import Column, Integer, ForeignKey
-from app.models.elementos import Elementos
-from app.models.ordenacion import Ordenacion
-from app.models.colores import Colores
 
 from app.db import db
 
@@ -68,6 +64,14 @@ class User(db.Model):
     @classmethod
     def get_username(self, username):
         return User.query.filter(User.username == username).first()
+
+    @classmethod
+    def es_admin(self,user_id):
+        user= User.get_user_de_id(user_id)
+        for rol in user.roles:
+            if rol.name == "administrador":
+                return True
+        return False
     
     @classmethod
     def get_user_de_id(self, user_id):

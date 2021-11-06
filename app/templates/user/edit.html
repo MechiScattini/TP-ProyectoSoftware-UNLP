@@ -28,9 +28,7 @@
       <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
         {% if rol in user.roles %}
-          {% if rol.name != "administrador" and not es_admin %}
             <option selected value={{rol.id}} >{{rol.name}}</option>
-          {% endif %}
         {% else %}
           <option value={{rol.id}} >{{rol.name}}</option>
         {% endif %}
@@ -41,9 +39,13 @@
       {% if user.bloqueado == True %}
         <label>Usuario Bloqueado, (presione para desbloquearlo) <label>
       {% else %}
-        <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
+        {% if not es_admin %}
+          <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
+        {% endif %}
       {% endif %}
+      {% if not es_admin %}
         <input type="checkbox"  value="True" name="bloqueado"/>
+      {% endif %}
     </p>
     <p>
       <input type="submit" value="Actualizar">

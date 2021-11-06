@@ -112,9 +112,18 @@ def edit(user_id):
                                 return render_template("user/edit.html", user=user, roles=roles)
                         else:
                             user.bloqueado= False
+
+                lista_roles= request.form.getlist("roles[]")
+
+                #acutalizo roles deseleccionados
+                for rol in user.roles:
+                    if rol.id not in lista_roles:
+                        if rol.name != "administrador":
+                            user.roles.remove(rol)
+                        else:
+                            flash("no puede cambiar el rol de administrador")
+                            
                 #actualizo roles seleccionados
-                user.roles.clear()
-                lista_roles= request.form.get("roles[]")
                 for rol_id in lista_roles:
                     if rol_id != "":
                         rol_obj= Rol.get_rol(rol_id)
@@ -181,12 +190,12 @@ def create():
             if error is None:
                 new_user = User(username=params["username"],first_name=params["first_name"], last_name=params["last_name"], email=params["email"], password=generate_password_hash(params["password"]))
             
-                lista_roles= request.form["roles[]"]
+                lista_roles= request.form.getlist("roles[]")
                 if lista_roles:
                     for rol_id in lista_roles:
                         if rol_id != "":
-                            rol_obj= Rol.get_rol(rol_id)
-                            new_user.roles.append(rol_obj)
+                            rol= Rol.get_rol(rol_id)
+                            new_user.roles.append(rol)
                 db.session.add(new_user)
                 db.session.commit()
                 flash("Usuario agregado con exito")

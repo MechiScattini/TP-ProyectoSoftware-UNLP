@@ -24,11 +24,11 @@
     </p>
     <p>
     <label>Roles<label></br>
-    <input type="hidden" name="roles[]"/>
-    <select type="roles" name="roles[]" size="2" multiple>
+    <select name="roles[]" size="2" multiple>
+      <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
         {% if rol in user.roles %}
-          <option selected value={{rol.id}} >{{rol.name}}</option>
+            <option selected value={{rol.id}} >{{rol.name}}</option>
         {% else %}
           <option value={{rol.id}} >{{rol.name}}</option>
         {% endif %}
@@ -39,9 +39,13 @@
       {% if user.bloqueado == True %}
         <label>Usuario Bloqueado, (presione para desbloquearlo) <label>
       {% else %}
-        <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
+        {% if not es_admin %}
+          <label>Usuario no Bloqueado, (presione para bloquearlo) <label>
+        {% endif %}
       {% endif %}
+      {% if not es_admin %}
         <input type="checkbox"  value="True" name="bloqueado"/>
+      {% endif %}
     </p>
     <p>
       <input type="submit" value="Actualizar">

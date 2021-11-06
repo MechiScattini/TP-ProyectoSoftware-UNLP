@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from app.db import db
+from sqlalchemy.orm import validates, relationship
+from sqlalchemy.sql.expression import desc, select
 
 class Status(db.Model):
     """Define una entidad de tipo Status que se corresponde con el table statuses"""

@@ -12,3 +12,12 @@ class Category(db.Model):
 
     def __init__(self, name=None):
         self.name = name
+
+
+    @classmethod
+    def get_all(self):
+        return Category.query.all()
+
+    @classmethod
+    def get_categoria(self,categoria_name):
+        return Category.query.filter(Category.name == categoria_name).first()

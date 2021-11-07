@@ -12,3 +12,8 @@ class Status(db.Model):
 
     def __init__(self, name=None):
         self.name = name
+
+
+    @classmethod
+    def get_all(self):
+        return Status.query.all()

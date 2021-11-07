@@ -28,6 +28,8 @@ def index():
     #variable para opción de ordenación
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
+    categorias = Category.get_all()
+    estados = Status.get_all()
     fecha1 = request.args.get("date1")
     fecha2 = request.args.get("date2")
     q = request.args.get("q")
@@ -40,8 +42,6 @@ def index():
         #denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
     else:
         denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
-        categorias = Category.get_all()
-        estados = Status.get_all()
     return render_template("denuncia/index.html", denuncias=denuncias, users=users, categorias=categorias, estados=estados)
 
 

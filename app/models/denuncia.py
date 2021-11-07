@@ -49,7 +49,7 @@ class Denuncia(db.Model):
         self.descripcion = descripcion
         self.coordenadas = coordenadas
         self.categoria_id = categoria_id
-        self.estado_id = 1
+        self.estado_id = 3
         self.asignado_a = asignado_a
         self.apellido_denunciante = apellido_denunciante
         self.nombre_denunciante = nombre_denunciante

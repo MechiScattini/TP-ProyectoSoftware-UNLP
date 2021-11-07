@@ -38,17 +38,17 @@
         <label>Categoria<label></br>
         <select name='categoria' >
             {% if denuncia.categoria_id==1 %}
-            <option value=1 selected>Urgente</option>
-            <option value=2>Advertencia</option>
-            <option value=3>Poco probable</option>
+            <option value="Urgente" selected>Urgente</option>
+            <option value="Advertencia">Advertencia</option>
+            <option value="Poco probable">Poco probable</option>
             {% elif denuncia.categoria_id==2 %}
-            <option value=1>Urgente</option>
-            <option value=2 selected>Advertencia</option>
-            <option value=3>Poco probable</option>
+            <option value="Urgente" >Urgente</option>
+            <option value="Advertencia" selected>Advertencia</option>
+            <option value="Poco probable">Poco probable</option>
             {% else %}
-            <option value=1>Urgente</option>
-            <option value=2>Advertencia</option>
-            <option value=3 selected>Poco probable</option>
+            <option value="Urgente">Urgente</option>
+            <option value="Advertencia">Advertencia</option>
+            <option value="Poco probable" selected>Poco probable</option>
             {% endif %}
         </select>
     </p>

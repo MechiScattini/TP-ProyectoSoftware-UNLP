@@ -192,7 +192,7 @@ def update(denuncia_id):
             error = 'Ingrese un email valido'
 
         if error is None:
-            category=int(params["categoria"])
+            category= Category.get_categoria(params["categoria"])
             denuncia.titulo = params["titulo"]
             denuncia.descripcion = params["descripcion"]
             denuncia.coordenadas = params["coordenadas"]
@@ -200,7 +200,7 @@ def update(denuncia_id):
             denuncia.nombre_denunciante = params["nombre_denunciante"]
             denuncia.email_denunciante = params["email_denunciante"]
             denuncia.telefono_denunciante = params["telefono_denunciante"]
-            denuncia.categoria_id = category
+            denuncia.categoria_id = category.id
             db.session.commit()
         else:
             flash(error)

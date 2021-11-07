@@ -51,6 +51,26 @@
       </select>
     </p>
     <p>
+      <label>Criterio de ordenación Denuncias <label></br>
+      <select name='orden_denuncias'>
+        {% if ordenP=='titulo' %}
+          <option value='nombre' selected> Titulo</option>
+          <option value='direccion'> direccion</option>
+          <option value='email'> email</option>
+        {% else %}
+              {% if ordenP=='fecha' %}
+                <option value='titulo' >Titulo</option>
+                <option value='fecha_creacion'>Fecha creacion</option>
+                <option value='fecha_cierre' selected>Fecha cierre</option>
+              {% else %}
+                <option value='titulo'>Titulo</option>
+                <option value='fecha_creacion' selected> Fecha creacion</option>
+                <option value='fecha_cierre'>Fecha cierre</option>
+              {% endif %}
+        {% endif %}
+      </select>
+    </p>
+    <p>
       <label>Paleta de color privada <label></br>
       <select name='colorPri'>
         {% if coloresPriv=='naranja' %}

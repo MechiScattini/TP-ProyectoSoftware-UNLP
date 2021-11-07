@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<form class="form-seguimiento"action="{{ url_for('denuncia_seguimiento', denuncia_id=denuncia.id) }}" method="POST">
+    <h2 style="display: flex; justify-content: center;">Realizar un seguimiento</h2>
+    <p>
+      <label>Descripcion<label></br>
+      <input type="text" style="WIDTH: 228px; HEIGHT: 98px" size=32 required name="descripcion" placeholder="Descripcion"/>
+    </p>
+    <br>
+    <p>
+      <input type="submit" value="Crear">
+      <button type="reset">Limpiar</button>
+    </p>
+  </form>
+<a href="{{ url_for('denuncia_index') }}" class="link">Volver</a>
+{% endblock %}

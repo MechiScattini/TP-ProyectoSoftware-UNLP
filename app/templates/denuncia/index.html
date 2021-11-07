@@ -11,8 +11,8 @@
   </form>
   <br>
   <form action="" method="GET">
-    <input type="date" placeholder="Primera fecha" name="date1">
-    <input type="date" placeholder="Segunda fecha" name="date2">
+    <input type="datetime-local" placeholder="Primera fecha" name="date1">
+    <input type="datetime-local" placeholder="Segunda fecha" name="date2">
     <button type="submit">Buscar</button>
   </form>
   <div>
@@ -72,6 +72,7 @@
                 {% if denuncia.estado_id==4 %}
                   <a href="{{ url_for('denuncia_resolver', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Resolver denuncia de titulo {{denuncia.titulo}}')"> Resolver</a>
                   <a href="{{ url_for('denuncia_cerrar', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Cerrar denuncia de titulo {{denuncia.titulo}}')"> Cerrar</a>
+                  <a href="{{ url_for('denuncia_seguimiento', denuncia_id= denuncia.id ) }}" method="POST" class="link"> Seguimiento </a>
                   {% endif %}
                 {% if has_permission(session["user2"].id, "denuncia_destroy") %}
                   <a href="{{ url_for('denuncia_destroy', denuncia_id= denuncia.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar denuncia de titulo {{denuncia.titulo}}')"> Eliminar</a>  </li>

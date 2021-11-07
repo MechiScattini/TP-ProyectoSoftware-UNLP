@@ -78,6 +78,7 @@ def create_app(environment="development"):
     app.add_url_rule("/denuncia/resolver/<int:denuncia_id>", "denuncia_resolver", denuncia.resolver, methods=["POST","GET"])
     app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_destroy", denuncia.destroy, methods=["POST","GET"])
     app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
+    app.add_url_rule("/denuncias/seguimiento<int:denuncia_id>", "denuncia_seguimiento", denuncia.seguimiento, methods=["POST","GET"])
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])

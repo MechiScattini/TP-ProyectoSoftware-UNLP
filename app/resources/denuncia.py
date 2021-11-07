@@ -9,7 +9,7 @@ from app.models.status import Status
 from app.models.user import User
 
 from app.models.ordenacion import Ordenacion
-from app.models.denuncia import Denuncia
+from app.models.denuncia import Denuncia, Seguimiento
 from app.helpers.auth import assert_permission
 from app.db import db
 from app.models.elementos import Elementos
@@ -36,10 +36,8 @@ def index():
     if q:
         denuncias= Denuncia.denuncias_por_busqueda(q,ordenacion ,page,cant_paginas)
     elif fecha1 and fecha2:
-        if fecha1>fecha2:    #Esta fallando la comparacion de fechas
-            flash("ENTRO")
-            denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
-        #denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
+        if fecha1 < fecha2:
+            denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
     else:
         denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
     return render_template("denuncia/index.html", denuncias=denuncias, users=users, categorias=categorias, estados=estados)
@@ -49,7 +47,8 @@ def info(denuncia_id):
     """ Muestra la informacion adicional de la denuncia"""
     assert_permission(session,'denuncia_index')
     denuncia = Denuncia.get_denuncia(denuncia_id)
-    return render_template("denuncia/masInfo.html", denuncia=denuncia)
+    seguimientos = Seguimiento.get_seguimientos(denuncia_id)
+    return render_template("denuncia/masInfo.html", denuncia=denuncia, seguimientos=seguimientos)
 
 
 def sinConfirmar():
@@ -255,3 +254,22 @@ def resolver(denuncia_id):
         denuncia.fecha_cierre=datetime.now()
         db.session.commit()
     return redirect(url_for("denuncia_index"))
+
+def seguimiento(denuncia_id):
+    """Controlador para realizar un seguimiento"""
+    denuncia = Denuncia.get_denuncia(denuncia_id)
+    if request.method == 'POST':
+        params = request.form   
+        error = None
+        if not params["descripcion"]:
+            error = 'Descripcion es requerido'
+        if error is None:
+            new_seguimiento = Seguimiento(descripcion=params["descripcion"], denuncia_id=denuncia_id, autor=session["user2"].id)    
+            db.session.add(new_seguimiento)
+            db.session.commit()
+            flash("Seguimiento realizado con exito")
+            return redirect(url_for("denuncia_index"))
+        else:
+            flash(error)
+            return redirect(url_for("denuncia_index"))
+    return render_template('denuncia/seguimiento.html', denuncia=denuncia)

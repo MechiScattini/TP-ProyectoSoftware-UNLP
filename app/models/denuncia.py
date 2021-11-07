@@ -29,7 +29,6 @@ class Denuncia(db.Model):
     nombre_denunciante = Column(String(20), nullable=False)
     telefono_denunciante = Column(Integer, nullable=False)
     email_denunciante = Column(String(30), nullable=False)
-    seguimientos = relationship('Seguimiento')
 
 
     def __init__(
@@ -67,7 +66,7 @@ class Denuncia(db.Model):
 
     @classmethod
     def denuncias_por_fechas(self, fecha1, fecha2, orden, pagina, cant_paginas):
-        return Denuncia.query.filter(Denuncia.fecha_creacion>=fecha1 and Denuncia.fecha_creacion<=fecha2).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)
+        return Denuncia.query.filter(Denuncia.fecha_creacion.between(fecha1, fecha2)).order_by(orden.orderBy).paginate(page=pagina,per_page=cant_paginas,error_out=False)
 
     @classmethod
     def paginacion(self,orden,pagina,cant_paginas):
@@ -96,9 +95,21 @@ class Seguimiento(db.Model):
 
     __tablename__ = 'seguimientos'
     id = Column(SMALLINT, primary_key=True)
-    denuncia_id = Column(SMALLINT, ForeignKey('denuncias.id'))
+    denuncia_id = Column(SMALLINT, ForeignKey('denuncias.id', ondelete='CASCADE'))
     descripcion = Column(String(80))
     autor = Column(SMALLINT, ForeignKey("users.id"))
-    fecha = Column(Date)
+    fecha = Column(DateTime, default=datetime.utcnow)
 
+    def __init__(
+        self, descripcion=None,
+        denuncia_id=None,
+        autor=None,
+        ):
+        self.descripcion = descripcion
+        self.denuncia_id = denuncia_id
+        self.autor = autor
 
+    @classmethod
+    def get_seguimientos(self, denuncia_id):
+        return Seguimiento.query.filter(Seguimiento.denuncia_id==denuncia_id)
+        

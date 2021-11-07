@@ -12,7 +12,12 @@
   <h4>Nombre denunicante: {{ denuncia.nombre_denunciante }}</h4>
   <h4>Email denunicante: {{ denuncia.email_denunciante }}</h4>
   <h4>Telefono denunicante: {{ denuncia.telefono_denunciante }}</h4>
-  <h3>Seguimientos:</h3>
+  <h3 style="color:black">Seguimientos:</h3>
+  {% for seguimiento in seguimientos %}
+    <h4>Autor: {{ seguimiento.autor }}</h4>
+    <h4>Fecha: {{ seguimiento.fecha }}</h4>
+    <h4>Descripcion: {{ seguimiento.descripcion }}</h4>
+  {% endfor %}
 {% endif %}
   <a href="{{ url_for('denuncia_index') }}" class="link">Volver</a>
 {% endblock %}

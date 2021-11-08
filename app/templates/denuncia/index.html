@@ -42,22 +42,16 @@
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ denuncia.titulo }}</td>
                 <td>{{ denuncia.fecha_creacion }}</td>
-                {% if denuncia.categoria_id == 1 %}
-                <td>Urgente</td>
-                {% elif denuncia.categoria_id == 2 %}
-                <td>Advertencia</td>
-                {% elif denuncia.categoria_id == 3 %}
-                <td>Poco probable</td>
-                {% endif %}
-                {% if denuncia.estado_id == 3 %}
-                <td>Sin confirmar</td>
-                {% elif denuncia.estado_id == 4 %}
-                <td>En curso</td>
-                {% elif denuncia.estado_id == 5 %}
-                <td>Resuelta</td>
-                {% elif denuncia.estado_id == 6 %}
-                <td>Cerrada</td>
-                {% endif %}
+                {% for categoria in categorias %}
+                  {% if categoria.id == denuncia.categoria_id %}
+                    <td>{{categoria.name}}</td>
+                  {% endif %}
+                {% endfor %}
+                {% for estado in estados %}
+                  {% if estado.id == denuncia.estado_id %}
+                    <td>{{estado.name}}</td>
+                  {% endif %}
+                {% endfor %}
                 {% if denuncia.asignado_a == None %}
                   <td>None</td>
                 {% else %}

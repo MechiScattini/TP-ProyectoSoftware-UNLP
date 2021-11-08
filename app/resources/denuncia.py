@@ -5,6 +5,7 @@ from sqlalchemy import exc
 from flask.helpers import flash
 from sqlalchemy.sql.functions import user
 from app.models.category import Category
+from app.models.status import Status
 from app.models.user import User
 
 from app.models.ordenacion import Ordenacion
@@ -27,6 +28,8 @@ def index():
     #variable para opción de ordenación
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
+    categorias = Category.get_all()
+    estados = Status.get_all()
     fecha1 = request.args.get("date1")
     fecha2 = request.args.get("date2")
     q = request.args.get("q")
@@ -39,7 +42,7 @@ def index():
         #denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
     else:
         denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
-    return render_template("denuncia/index.html", denuncias=denuncias, users=users)
+    return render_template("denuncia/index.html", denuncias=denuncias, users=users, categorias=categorias, estados=estados)
 
 
 def info(denuncia_id):
@@ -151,8 +154,8 @@ def create():
             error = 'Ingrese un email valido'
 
         if error is None:
-            category=int(params["categoria"])
-            new_denuncia = Denuncia(titulo=params["titulo"],descripcion=params["descripcion"], coordenadas=params["coordenadas"], categoria_id=category, apellido_denunciante=params["apellido_denunciante"], nombre_denunciante=params["nombre_denunciante"], telefono_denunciante=params["telefono_denunciante"], email_denunciante=params["email_denunciante"] )    
+            category= Category.get_categoria(params["categoria"])
+            new_denuncia = Denuncia(titulo=params["titulo"],descripcion=params["descripcion"], coordenadas=params["coordenadas"], categoria_id=category.id, apellido_denunciante=params["apellido_denunciante"], nombre_denunciante=params["nombre_denunciante"], telefono_denunciante=params["telefono_denunciante"], email_denunciante=params["email_denunciante"] )    
             db.session.add(new_denuncia)
             db.session.commit()
             flash("Denuncia agregada con exito")
@@ -189,7 +192,7 @@ def update(denuncia_id):
             error = 'Ingrese un email valido'
 
         if error is None:
-            category=int(params["categoria"])
+            category= Category.get_categoria(params["categoria"])
             denuncia.titulo = params["titulo"]
             denuncia.descripcion = params["descripcion"]
             denuncia.coordenadas = params["coordenadas"]
@@ -197,7 +200,7 @@ def update(denuncia_id):
             denuncia.nombre_denunciante = params["nombre_denunciante"]
             denuncia.email_denunciante = params["email_denunciante"]
             denuncia.telefono_denunciante = params["telefono_denunciante"]
-            denuncia.categoria_id = category
+            denuncia.categoria_id = category.id
             db.session.commit()
         else:
             flash(error)

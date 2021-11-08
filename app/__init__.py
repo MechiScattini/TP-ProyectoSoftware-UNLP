@@ -101,10 +101,6 @@ def create_app(environment="development"):
     app.add_url_rule("/zonasInundables/eliminar/<int:id_zona>", "zonaInundable_destroy", zonaInundable.destroy, methods=["POST", "GET"])
     app.add_url_rule("/zonasInundables/editar/<int:id_zona>", "zonaInundable_update", zonaInundable.update, methods=["POST", "GET"])
 
-    # variables para archivos
-    UPLOAD_FOLDER = 'app/static/files'
-    app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
-
     # Ruta para el Home (usando decorator)
     @app.route("/")
     def home():

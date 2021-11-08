@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for, session, abort
 import os
 import string
 import random
+import csv
 
 import pandas as pd
 from werkzeug.utils import secure_filename
@@ -67,15 +68,10 @@ def importar():
     form = ImportForm()
     if request.method=="POST":
         if form.validate_on_submit():
-            file = form.file.data #splitlines csv reader python
-            filename = secure_filename(file.filename)
-            file_path = os.path.join('app/static/files', filename).replace("\\","/")
-            file.save(file_path)
 
-            # CVS nombres de columnas
-            col_names = ['nombre','area']
-            # Uso panda para parsear el csv
-            csvData = pd.read_csv(file_path,names=col_names, header=None)
+            filestream =  form.file.data 
+            filestream.seek(0)
+            csvData = pd.read_csv( filestream  )
 
             S = 10  # cantidad de caracteres del codigo.  
 
@@ -84,14 +80,15 @@ def importar():
                 #saltea primer fila: nombre, area
                 if i > 0:
                     #agrega la zona si no se encuentra ya cargada
-                    if ZonaInundable.check_zona(row['nombre']):
+                    if ZonaInundable.check_zona(row['name']):
                         #genera código random que no se encuentre ya en la db
                         ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
                         while not ZonaInundable.check_codigo(ran):
                             ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = S))
-                        ZonaInundable.create_zona(codigo=ran, nombre=row['nombre'],coordenadas=codificar(row['area']))
+                        ZonaInundable.create_zona(codigo=ran, nombre=row['name'],coordenadas=codificar(row['area']))
                     else:
-                        ZonaInundable.update_zona(nombre=row['nombre'],coordenadas=codificar(row['area']))
+                        #si ya está cargada, actualiza el nombre y el area
+                        ZonaInundable.update_zona(nombre=row['name'],coordenadas=codificar(row['area']))
 
             return redirect(url_for('zonaInundable_index'))
     return render_template("zona_inundable/import.html", form=form)

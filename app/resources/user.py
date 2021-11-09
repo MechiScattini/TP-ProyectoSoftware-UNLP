@@ -40,7 +40,7 @@ def bloqueados():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_usuarios()
 
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")
@@ -58,7 +58,7 @@ def no_bloqueados():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_usuarios()
 
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")

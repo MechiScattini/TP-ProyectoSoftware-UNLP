@@ -59,7 +59,7 @@ def sinConfirmar():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")
@@ -77,7 +77,7 @@ def enCurso():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")
@@ -94,7 +94,7 @@ def resuelta():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")
@@ -111,7 +111,7 @@ def cerrada():
     #chequeo si habia un orden creado
     ordenacion = Ordenacion.get_ordenacion_denuncias()
     users = User.allUsers()
-    cant_paginas = Elementos.query.first()
+    cant_paginas = Elementos.get_elementos()
 
     page  = int(request.args.get('page', 1,type=int))
     q = request.args.get("q")

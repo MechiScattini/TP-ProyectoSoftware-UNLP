@@ -6,7 +6,7 @@ from config import config
 from app import db
 from app.models.colores import Colores
 
-from app.resources import user, puntoEncuentro, configuracion, zonaInundable, issue, denuncia
+from app.resources import user, puntoEncuentro, configuracion, zonaInundable, issue, denuncia, recorrido
 
 import logging
 
@@ -79,6 +79,7 @@ def create_app(environment="development"):
     app.add_url_rule("/denuncia/resolver/<int:denuncia_id>", "denuncia_resolver", denuncia.resolver, methods=["POST","GET"])
     app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_destroy", denuncia.destroy, methods=["POST","GET"])
     app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
+    app.add_url_rule("/denuncias/seguimiento<int:denuncia_id>", "denuncia_seguimiento", denuncia.seguimiento, methods=["POST","GET"])
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
@@ -95,6 +96,12 @@ def create_app(environment="development"):
     app.add_url_rule("/puntosEncuentro/editar/<int:id_punto>", "puntoEncuentro_update", puntoEncuentro.update, methods=["POST","GET"])
     app.add_url_rule("/puntosEncuentro/eliminar/<int:id_punto>", "puntoEncuentro_destroy", puntoEncuentro.destroy, methods=["POST", "GET"])
 
+    # Rutas de Recorridos
+    app.add_url_rule("/recorrido", "recorrido_index", recorrido.index)
+    app.add_url_rule("/recorrido", "recorrido_create", recorrido.create, methods=["POST"])
+    app.add_url_rule("/recorrido/nuevo", "recorrido_new", recorrido.new)
+    app.add_url_rule("/recorrido/editar/<int:id_recorrido>", "recorrido_update", recorrido.update, methods=["POST","GET"])
+    app.add_url_rule("/recorrido/eliminar/<int:id_recorrido>", "recorrido_destroy", recorrido.destroy, methods=["POST", "GET"])
     # Rutas de zonas inundables
     app.add_url_rule("/zonasInundables", "zonaInundable_index", zonaInundable.index)
     app.add_url_rule("/zonasInundables/ver/<int:id_zona>", "zonaInundable_show", zonaInundable.show)

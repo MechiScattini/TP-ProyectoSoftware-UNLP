@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>Modificar denuncia</h1>
+<form class="form-user" action="{{ url_for('denuncia_edit', denuncia_id=denuncia.id) }}" method="POST">
+    <p>
+        <label>Titulo<label></br>
+        <input name="titulo" placeholder="Titulo" value="{{denuncia.titulo}}" />
+    </p>
+    <p>
+        <label>Descripcion<label></br>
+        <input name="descripcion" placeholder="Descripcion" value="{{denuncia.descripcion}}" />
+    </p>
+    <p>
+        <label>Coordenadas<label></br>
+        <input name="coordenadas" placeholder="Coordenadas" value="{{denuncia.coordenadas}}" />
+    </p>
+    <p>
+        <label>Apellido denunciante<label></br>
+        <input name="apellido_denunciante" placeholder="Apellido_denunciante" value="{{denuncia.apellido_denunciante}}" />
+    </p>
+    <p>
+        <label>Nombre denunciante<label></br>
+        <input name="nombre_denunciante" placeholder="Nombre_denunciante" value="{{denuncia.nombre_denunciante}}" />
+    </p>
+    <p>
+        <label>Email denunciante<label></br>
+        <input name="email_denunciante" placeholder="Email_denunciante" value="{{denuncia.email_denunciante}}" />
+    </p>
+    <p>
+        <label>Telefono denunciante<label></br>
+        <input name="telefono_denunciante" placeholder="Telefono_denunciante" value="{{denuncia.telefono_denunciante}}" />
+    </p>
+    <p>
+        <label>Categoria<label></br>
+        <select name='categoria' >
+            {% if denuncia.categoria_id==1 %}
+            <option value="Urgente" selected>Urgente</option>
+            <option value="Advertencia">Advertencia</option>
+            <option value="Poco probable">Poco probable</option>
+            {% elif denuncia.categoria_id==2 %}
+            <option value="Urgente" >Urgente</option>
+            <option value="Advertencia" selected>Advertencia</option>
+            <option value="Poco probable">Poco probable</option>
+            {% else %}
+            <option value="Urgente">Urgente</option>
+            <option value="Advertencia">Advertencia</option>
+            <option value="Poco probable" selected>Poco probable</option>
+            {% endif %}
+        </select>
+    </p>
+    <p>
+    <input type="submit" value="Guardar">
+    </p>
+</form>
+<a href="{{ url_for('denuncia_index') }}" class="btn btn-outline-dark" style="width: 100px;
+height: 50px;">Volver</a>
+{% endblock %}

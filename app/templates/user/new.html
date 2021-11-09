@@ -27,11 +27,11 @@
       <input type="text" name="last_name" required placeholder="Apellido"/>
     </p>
     <p>
-    <input type="hidden" name="roles[]"/>
     <label>Roles<label></br>
-    <select type="roles" name="roles[]" size="2" multiple>
+    <select name="roles[]" size="2" multiple>
+      <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
-        <option value={{rol.id}} >{{rol.name}}</option>
+        <option value={{rol.id}}>{{rol.name}}</option>
       {% endfor %}
     </select>
     

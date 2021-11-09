@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, SMALLINT
 from sqlalchemy.orm import relationship
 
 from app.db import db
@@ -9,9 +9,9 @@ class Issue(db.Model):
     id = Column(Integer, primary_key=True)
     email = Column(String(30), unique=True)
     description = Column(String(30), unique=True)
-    category_id = Column(Integer, ForeignKey("categories.id"))
+    category_id = Column(SMALLINT, ForeignKey("categories.id"))
     category = relationship(Category)
-    status_id = Column(Integer, ForeignKey("statuses.id"))
+    status_id = Column(SMALLINT, ForeignKey("statuses.id"))
     status = relationship(Status)
 
     def __init__(self, email=None, description=None, status_id=None, category_id=None): 

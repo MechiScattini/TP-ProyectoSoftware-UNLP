@@ -4,20 +4,17 @@ from flask_session import Session
 from config import config
 
 from app import db
-from app.resources import issue
 from app.models.colores import Colores
-from app.resources import user
-from app.resources import puntoEncuentro
-from app.resources import recorrido
-from app.resources import configuracion
+
+from app.resources import user, puntoEncuentro, configuracion, zonaInundable, issue, denuncia, recorrido
+
 import logging
 
 from app.resources import auth
 from app.resources.api.issue import issue_api
+from app.resources.api.zonaInundable import zona_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
-from app.models.colores import Colores
-
 
 
 logging.basicConfig()
@@ -63,11 +60,24 @@ def create_app(environment="development"):
     app.add_url_rule("/consultas", "issue_index", issue.index, methods=["GET"])
     app.add_url_rule("/consultas", "issue_create", issue.create, methods=["POST"])
     app.add_url_rule("/consultas/nueva", "issue_new", issue.new)
- 
+
     # Rutas de Admin
     app.add_url_rule("/Configuracion", "config_index", configuracion.conf)
     app.add_url_rule("/Configurado", "configurado", configuracion.configurado, methods=["POST"])
     
+    # Rutas de Denuncia
+    app.add_url_rule("/denuncias", "denuncia_index", denuncia.index, methods=["POST", "GET"])
+    app.add_url_rule("/denuncias/info<int:denuncia_id>", "denuncia_info", denuncia.info, methods=["GET"])
+    app.add_url_rule("/denuncias/enCurso", "denuncia_enCurso", denuncia.enCurso, methods=["GET"])
+    app.add_url_rule("/denuncias/resuelta", "denuncia_resuelta", denuncia.resuelta, methods=["GET"])
+    app.add_url_rule("/denuncias/sinConfirmar", "denuncia_sinConfirmar", denuncia.sinConfirmar, methods=["GET"])
+    app.add_url_rule("/denuncias/cerrada", "denuncia_cerrada", denuncia.cerrada, methods=["GET"])
+    app.add_url_rule("/denuncias/nuevo", "denuncia_create", denuncia.create, methods=["POST", "GET"])
+    app.add_url_rule("/denuncia/confirmar/<int:denuncia_id>", "denuncia_confirmar", denuncia.confirmar, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/cerrar/<int:denuncia_id>", "denuncia_cerrar", denuncia.cerrar, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/resolver/<int:denuncia_id>", "denuncia_resolver", denuncia.resolver, methods=["POST","GET"])
+    app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_destroy", denuncia.destroy, methods=["POST","GET"])
+    app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
@@ -90,6 +100,12 @@ def create_app(environment="development"):
     app.add_url_rule("/recorrido/nuevo", "recorrido_new", recorrido.new)
     app.add_url_rule("/recorrido/editar/<int:id_recorrido>", "recorrido_update", recorrido.update, methods=["POST","GET"])
     app.add_url_rule("/recorrido/eliminar/<int:id_recorrido>", "recorrido_destroy", recorrido.destroy, methods=["POST", "GET"])
+    # Rutas de zonas inundables
+    app.add_url_rule("/zonasInundables", "zonaInundable_index", zonaInundable.index)
+    app.add_url_rule("/zonasInundables/ver/<int:id_zona>", "zonaInundable_show", zonaInundable.show)
+    app.add_url_rule("/zonasInundables/importar", "zonaInundable_importar", zonaInundable.importar, methods=["POST","GET"])
+    app.add_url_rule("/zonasInundables/eliminar/<int:id_zona>", "zonaInundable_destroy", zonaInundable.destroy, methods=["POST", "GET"])
+    app.add_url_rule("/zonasInundables/editar/<int:id_zona>", "zonaInundable_update", zonaInundable.update, methods=["POST", "GET"])
 
     # Ruta para el Home (usando decorator)
     @app.route("/")
@@ -104,6 +120,7 @@ def create_app(environment="development"):
     # Rutas de API-REST (usando Blueprints)
     api = Blueprint("api", __name__, url_prefix="/api")
     api.register_blueprint(issue_api)
+    api.register_blueprint(zona_api)
 
     app.register_blueprint(api)
 
@@ -111,6 +128,7 @@ def create_app(environment="development"):
     app.register_error_handler(404, handler.not_found_error)
     app.register_error_handler(401, handler.unauthorized_error)
     # Implementar lo mismo para el error 500
+    app.register_error_handler(500, handler.server_error)
 
     # Retornar la instancia de app configurada
     return app

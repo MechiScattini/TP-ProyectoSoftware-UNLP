@@ -21,7 +21,7 @@ class Ordenacion(db.Model):
         if ordenU is not None: 
             ordenU.orderBy = ordenUsers
         else:
-            ordenU = Ordenacion('nombre','usuarios')
+            ordenU = Ordenacion('first_name','usuarios')
             db.session.add(ordenU)
         db.session.commit()
 
@@ -34,21 +34,44 @@ class Ordenacion(db.Model):
             db.session.add(ordenP)
         db.session.commit()
 
+    def configurarOrdenDenuncias(ordenDenuncias):
+        ordenD = Ordenacion.query.filter_by(lista = 'denuncias').first()
+        if ordenD is not None: 
+            ordenD.orderBy = ordenDenuncias
+        else:
+            ordenD = Ordenacion('titulo','denuncias')
+            db.session.add(ordenD)
+        db.session.commit()    
+
     @classmethod
     def get_ordenacion_puntos(self):
         orden =  Ordenacion.query.filter_by(lista='puntos').first()
         if not orden:
             orden = Ordenacion('nombre','puntos')
         return orden
+
     @classmethod
     def get_ordenacion_usuarios(self):
         orden =  Ordenacion.query.filter_by(lista='usuarios').first()
         if not orden:
-            orden = Ordenacion('nombre','puntos')
+            orden = Ordenacion('first_name','usuarios')
         return orden    
     @classmethod
     def get_ordenacion_recorridos(self):
         orden =  Ordenacion.query.filter_by(lista='recorridos').first()
         if not orden:
             orden = Ordenacion('nombre','puntos')
+        return orden
+    @classmethod    
+    def get_ordenacion_denuncias(self):
+        orden =  Ordenacion.query.filter_by(lista='denuncias').first()
+        if not orden:
+            orden = Ordenacion('titulo','denuncias')
+        return orden
+
+    @classmethod
+    def get_ordenacion_zonas(self):
+        orden =  Ordenacion.query.filter_by(lista='zonas').first()
+        if not orden:
+            orden = Ordenacion('nombre','zonas')
         return orden

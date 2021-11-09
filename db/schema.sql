@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `ordenacion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table proyecto.ordenacion: ~1 rows (approximately)
+-- Dumping data for table proyecto.ordenacion: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ordenacion` DISABLE KEYS */;
 INSERT INTO `ordenacion` (`id`, `orderBy`, `lista`) VALUES
 	(1, 'titulo', 'denuncias');
@@ -235,7 +235,10 @@ CREATE TABLE IF NOT EXISTS `seguimientos` (
   `descripcion` varchar(80) DEFAULT NULL,
   `autor` varchar(20) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `denuncia_id` smallint(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `seguimiento_ibfk_1` (`denuncia_id`),
+  CONSTRAINT `seguimiento_ibfk_1` FOREIGN KEY (`denuncia_id`) REFERENCES `denuncias` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table proyecto.seguimientos: ~0 rows (approximately)
@@ -301,6 +304,23 @@ INSERT INTO `users_roles` (`id`, `user_id`, `rol_id`) VALUES
 	(1, 1, 1),
 	(2, 2, 1);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
+
+-- Dumping structure for table proyecto.zonas_inundables
+CREATE TABLE IF NOT EXISTS `zonas_inundables` (
+  `id` smallint(6) NOT NULL AUTO_INCREMENT,
+  `codigo` varchar(10) NOT NULL,
+  `nombre` varchar(30) NOT NULL,
+  `coordenadas` text NOT NULL,
+  `estado` tinyint(1) DEFAULT NULL,
+  `color` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `codigo` (`codigo`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table proyecto.zonas_inundables: ~0 rows (approximately)
+/*!40000 ALTER TABLE `zonas_inundables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `zonas_inundables` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

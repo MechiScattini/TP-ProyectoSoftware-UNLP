@@ -18,7 +18,7 @@
    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
     <!-- Custom files-->
     <link rel="stylesheet" href="../../static/style.css" />
-    <script type = "module" src="{{url_for('static', filename = 'index.js')}}"></script>
+    <script type = "module" src="../../static/js/recorrido/index.js"></script>
 {% endblock %}
 {% block content %}
 
@@ -56,6 +56,7 @@
 </form>
 <a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>
+<!-- en los siguientes scrips puedo crear mapas cualquieras-->
 <!-- <script type="text/javascript">
 
     // This setup the leafmap object by linking the map() method to the map id (in <div> html element)

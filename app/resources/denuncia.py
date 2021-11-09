@@ -48,7 +48,8 @@ def info(denuncia_id):
     assert_permission(session,'denuncia_index')
     denuncia = Denuncia.get_denuncia(denuncia_id)
     seguimientos = Seguimiento.get_seguimientos(denuncia_id)
-    return render_template("denuncia/masInfo.html", denuncia=denuncia, seguimientos=seguimientos)
+    users = User.allUsers()
+    return render_template("denuncia/masInfo.html", denuncia=denuncia, seguimientos=seguimientos, users=users)
 
 
 def sinConfirmar():
@@ -236,13 +237,13 @@ def cerrar(denuncia_id):
     #busca y confirma
     denuncia = Denuncia.get_denuncia(denuncia_id)
     if denuncia.estado_id != 3 :
-        if denuncia.asignado_a == session["user2"].id :
-            denuncia.estado_id=6
-            denuncia.fecha_cierre=datetime.now()
-            db.session.commit()
-    else:
-        denuncia.estado_id=6
-        db.session.commit()
+        if denuncia.asignado_a != session["user2"].id :
+            return redirect(url_for("denuncia_index"))
+    denuncia.estado_id=6
+    denuncia.fecha_cierre=datetime.now()
+    new_seguimiento = Seguimiento(descripcion="No fue posible contactar al denunciante", denuncia_id=denuncia_id, autor=session["user2"].id)    
+    db.session.add(new_seguimiento)
+    db.session.commit()
     return redirect(url_for("denuncia_index"))
 
 def resolver(denuncia_id):

@@ -23,6 +23,13 @@ def server_error(e):
     }
     return make_response(kwargs, 500)
 
+def created(e):
+    kwargs = {
+        "error_name": "201 Created",
+        "error_description": "El objeto se creó exitosamente",
+    }
+    return make_response(kwargs, 500)
+
 def make_response(data, status):
     if request.path.startswith("/api/"):
         return jsonify(data), status

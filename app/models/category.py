@@ -1,7 +1,5 @@
-from sqlalchemy import Column, Integer, String, SMALLINT
+from sqlalchemy import Column, String, SMALLINT
 from app.db import db
-from sqlalchemy.orm import validates, relationship
-from sqlalchemy.sql.expression import desc, select
 
 class Category(db.Model):
     """Define una entidad de tipo Category que se corresponde con el table categories"""
@@ -21,3 +19,11 @@ class Category(db.Model):
     @classmethod
     def get_categoria(self,categoria_name):
         return Category.query.filter(Category.name == categoria_name).first()
+
+    @classmethod
+    def check_id(self, id):
+        """Devuelve False si existe una categoria con el id=id"""
+        if Category.query.filter_by(id=id).first():
+            return False
+        else:
+            return True

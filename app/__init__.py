@@ -13,6 +13,7 @@ import logging
 from app.resources import auth
 from app.resources.api.issue import issue_api
 from app.resources.api.zonaInundable import zona_api
+from app.resources.api.denuncia import denuncia_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
@@ -115,6 +116,7 @@ def create_app(environment="development"):
     api = Blueprint("api", __name__, url_prefix="/api")
     api.register_blueprint(issue_api)
     api.register_blueprint(zona_api)
+    api.register_blueprint(denuncia_api)
 
     app.register_blueprint(api)
 

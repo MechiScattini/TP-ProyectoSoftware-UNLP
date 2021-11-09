@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, SmallInteger
+from sqlalchemy import Column, String, SmallInteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Boolean
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, ForeignKey
 
 from app.db import db
 

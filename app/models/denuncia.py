@@ -1,15 +1,9 @@
 from datetime import datetime
-from sqlalchemy import Column, String, SmallInteger, Boolean
-from sqlalchemy.orm import validates, relationship
-from sqlalchemy.sql.expression import desc, select
+from sqlalchemy import Column, String, exc
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import SMALLINT, Date, DateTime, Integer
 from sqlalchemy import Column, Integer, ForeignKey
 from app.db import db
-from app.models.category import Category
-from app.models.status import Status
-from app.models.user import User
-
-
 
 
 class Denuncia(db.Model):
@@ -20,14 +14,14 @@ class Denuncia(db.Model):
     titulo = Column(String(40), unique=True, nullable=False)
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
     fecha_cierre = Column(DateTime)
-    descripcion = Column(String(80), nullable=False)
+    descripcion = Column(String(500), nullable=False)
     coordenadas = Column(String(200), nullable=False)
     categoria_id = Column(SMALLINT, ForeignKey("categories.id"))
     estado_id = Column(SMALLINT, ForeignKey("statuses.id"))
     asignado_a = Column(SMALLINT, ForeignKey("users.id"))
     apellido_denunciante = Column(String(20), nullable=False)
     nombre_denunciante = Column(String(20), nullable=False)
-    telefono_denunciante = Column(Integer, nullable=False)
+    telefono_denunciante = Column(String(20), nullable=False)
     email_denunciante = Column(String(30), nullable=False)
     seguimientos = relationship('Seguimiento')
 
@@ -56,6 +50,40 @@ class Denuncia(db.Model):
         self.telefono_denunciante = telefono_denunciante
         self.email_denunciante = email_denunciante
 
+    @classmethod
+    def create_denuncia(self,
+        titulo=None,
+        fecha_cierre=None,
+        descripcion=None,
+        coordenadas=None,
+        categoria_id=None,
+        asignado_a=None,
+        apellido_denunciante=None,
+        nombre_denunciante=None,
+        telcel_denunciante=None,
+        email_denunciante=None
+        ):
+        new_denuncia = Denuncia(titulo,
+            fecha_cierre,
+            descripcion,
+            coordenadas,
+            categoria_id,
+            asignado_a,
+            apellido_denunciante,
+            nombre_denunciante,
+            telcel_denunciante,
+            email_denunciante
+            )
+        db.session.add(new_denuncia)
+        try:
+            db.session.commit()
+        except exc.IntegrityError as e:
+            db.session.rollback()
+            return e
+        return new_denuncia
+
+    def as_dict(self):
+        return {attr.name: getattr(self, attr.name) for attr in self.__table__.columns}
 
     @classmethod
     def get_denuncia(self, denuncia_id):
@@ -89,6 +117,13 @@ class Denuncia(db.Model):
     def get_denuncias_cerrada(self,orden,pagina,cant_paginas):
         return Denuncia.query.filter(Denuncia.estado_id == 6).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
+    @classmethod
+    def check_titulo(self, titulo):
+        """Devuelve False si ya existe una denuncia con el titulo=titulo"""
+        if Denuncia.query.filter_by(titulo=titulo).first():
+            return False
+        else:
+            return True
 
 
 class Seguimiento(db.Model):

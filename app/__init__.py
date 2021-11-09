@@ -6,7 +6,7 @@ from config import config
 from app import db
 from app.models.colores import Colores
 
-from app.resources import user, puntoEncuentro, configuracion, zonaInundable, issue, denuncia
+from app.resources import user, puntoEncuentro, configuracion, zonaInundable, issue, denuncia, recorrido
 
 import logging
 
@@ -95,16 +95,18 @@ def create_app(environment="development"):
     app.add_url_rule("/puntosEncuentro/editar/<int:id_punto>", "puntoEncuentro_update", puntoEncuentro.update, methods=["POST","GET"])
     app.add_url_rule("/puntosEncuentro/eliminar/<int:id_punto>", "puntoEncuentro_destroy", puntoEncuentro.destroy, methods=["POST", "GET"])
 
+    # Rutas de Recorridos
+    app.add_url_rule("/recorrido", "recorrido_index", recorrido.index)
+    app.add_url_rule("/recorrido", "recorrido_create", recorrido.create, methods=["POST"])
+    app.add_url_rule("/recorrido/nuevo", "recorrido_new", recorrido.new)
+    app.add_url_rule("/recorrido/editar/<int:id_recorrido>", "recorrido_update", recorrido.update, methods=["POST","GET"])
+    app.add_url_rule("/recorrido/eliminar/<int:id_recorrido>", "recorrido_destroy", recorrido.destroy, methods=["POST", "GET"])
     # Rutas de zonas inundables
     app.add_url_rule("/zonasInundables", "zonaInundable_index", zonaInundable.index)
     app.add_url_rule("/zonasInundables/ver/<int:id_zona>", "zonaInundable_show", zonaInundable.show)
     app.add_url_rule("/zonasInundables/importar", "zonaInundable_importar", zonaInundable.importar, methods=["POST","GET"])
     app.add_url_rule("/zonasInundables/eliminar/<int:id_zona>", "zonaInundable_destroy", zonaInundable.destroy, methods=["POST", "GET"])
     app.add_url_rule("/zonasInundables/editar/<int:id_zona>", "zonaInundable_update", zonaInundable.update, methods=["POST", "GET"])
-
-    # variables para archivos
-    UPLOAD_FOLDER = 'app/static/files'
-    app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
 
     # Ruta para el Home (usando decorator)
     @app.route("/")

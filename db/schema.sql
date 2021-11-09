@@ -19,7 +19,7 @@ USE `proyecto`;
 
 -- Dumping structure for table proyecto.categories
 CREATE TABLE IF NOT EXISTS `categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` smallint(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)

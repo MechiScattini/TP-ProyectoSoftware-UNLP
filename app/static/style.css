@@ -11,6 +11,16 @@ body {
   background-size: 10rem;
 }
 
+#lat, #lng {
+  display:none;
+}
+
+#map { 
+  width: 100%;
+  height: 580px;
+  box-shadow: 5px 5px 5px #888;
+}
+
 .clear {
   clear: both;
   height: 0;

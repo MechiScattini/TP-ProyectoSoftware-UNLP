@@ -2,10 +2,24 @@
 {% block title %}Usuarios{% endblock %}
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
+    crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    
+   <!-- CSS and JS files for Search Box -->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+
+   <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+    <!-- Custom files-->
+    <link rel="stylesheet" href="../../static/style.css" />
+    <script type = "module" src="../../static/js/punto/indexPunto.js"></script>
 {% endblock %}
 {% block content %}
 <h1>Crear un punto de encuentro</h1>
-<form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST">
+<form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST" id="id-recorrido-form">
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <p>
         <label>Nombre<label></br>
@@ -35,6 +49,12 @@
         <label>Email<label></br>
         <input name="email" placeholder="Email"/>
     </p>
+    <input type="text" name="lat" id = "lat" >
+    <input type="text" name="lng" id = "lng" >
+    
+    <div class="map-container">
+        <div id="mapid"></div>
+    </div>
     <input type="submit" value="Crear">
     <button type="reset">Limpiar</button>
     </p>

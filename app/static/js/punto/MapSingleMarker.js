@@ -18,10 +18,6 @@ export function Map({selector, addSearch}){
     function initializeMap(selector){
         map = L.map(selector).setView([initialLat,initialLng], 13);
         L.tileLayer(mapLayerUrl).addTo(map);
-        
-        
-
-
     };
     function addMarker({lat,lng}){
         if (marker){

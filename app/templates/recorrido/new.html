@@ -2,28 +2,76 @@
 {% block title %}Recorridos{% endblock %}
 {% block head %}
     {{ super() }}
-    <!-- letflet files-->
-    <!-- <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" /> -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
-    crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
-    
-   <!-- CSS and JS files for Search Box -->
-    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
 
-    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=AIzaSyDuLaeLfXME3VxmIr0nP4nj2Pb3WXV7ewU"></script>
+        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=AIzaSyDuLaeLfXME3VxmIr0nP4nj2Pb3WXV7ewU"></script>
+        <script type="text/javascript">
+            window.onload = function() {
 
-   <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
-    <!-- Custom files-->
-    <link rel="stylesheet" href="../../static/style.css" />
-    <script type = "module" src="../../static/js/recorrido/index.js"></script>
+                var map = L.map('mapid', {
+                    layers: MQ.mapLayer(),
+                    center: [40.731701, -73.993411],
+                    zoom: 12
+                });
+
+                var dir = MQ.routing.directions();
+
+                dir.route({
+                    locations: [
+                        'wood-ridge, nj',
+                        'staten island, ny',
+                        'queens, ny'
+                    ]
+                });
+
+                CustomRouteLayer = MQ.Routing.RouteLayer.extend({
+                    createStartMarker: function (location, stopNumber) {
+                        var custom_icon;
+                        var marker;
+
+                        custom_icon = L.icon({
+                            iconUrl: 'https://www.mapquestapi.com/staticmap/geticon?uri=poi-red_1.png',
+                            iconSize: [20, 29],
+                            iconAnchor: [10, 29],
+                            popupAnchor: [0, -29]
+                        });
+
+                        marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
+
+                        return marker;
+                    },
+
+                    createEndMarker: function (location, stopNumber) {
+                        var custom_icon;
+                        var marker;
+
+                        custom_icon = L.icon({
+                            iconUrl: 'https://www.mapquestapi.com/staticmap/geticon?uri=poi-blue_1.png',
+                            iconSize: [20, 29],
+                            iconAnchor: [10, 29],
+                            popupAnchor: [0, -29]
+                        });
+
+                        marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
+
+                        return marker;
+                    }
+                });
+
+                map.addLayer(new CustomRouteLayer({
+                    directions: dir,
+                    fitBounds: true
+                }));
+            }
+        </script>
+        
 {% endblock %}
 {% block content %}
 
 <h1>Crear un recorrido de evacuación</h1>
-<form class="form-user" action="{{ url_for('recorrido_create') }}" method="POST" id = "id-recorrido-form">
+<form class="form-user" action="{{ url_for('recorrido_create') }}" method="POST" id="id-recorrido-form">
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <p>
         <label>Nombre<label></br>
@@ -47,15 +95,14 @@
     <input type="text" name="lat" id = "lat" >
     <input type="text" name="lng" id = "lng" >
     
-    <div class="map-container">
-        <div id="mapid"></div>
-    </div>
+    <div id='mapid' style='width: 100%; height:530px;'></div>
     <input type="submit" value="Crear">
     <button type="reset">Limpiar</button>
     </p>
 </form>
 <a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>
+
 <!-- en los siguientes scrips puedo crear mapas cualquieras-->
 <!-- <script type="text/javascript">
 

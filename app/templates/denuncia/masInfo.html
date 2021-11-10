@@ -5,14 +5,26 @@
 {% endblock %}
 {% block content %}
 {% if denuncia %}
-  <h4>Descripcion: {{ denuncia.descripcion }}</h4>
-  <h4>Fecha cierre: {{ denuncia.fecha_cierre }}</h4>
-  <h4>Coordenadas: {{ denuncia.coordenadas }}</h4>
-  <h4>Apellido denunicante: {{ denuncia.apellido_denunciante }}</h4>
-  <h4>Nombre denunicante: {{ denuncia.nombre_denunciante }}</h4>
-  <h4>Email denunicante: {{ denuncia.email_denunciante }}</h4>
-  <h4>Telefono denunicante: {{ denuncia.telefono_denunciante }}</h4>
-  <h3>Seguimientos:</h3>
+  <div class="create-forms">
+  <h7 style="color:black">Descripcion: </h7> <h7>{{ denuncia.descripcion }} </h7> <br>
+  <h7 style="color:black">Fecha cierre: </h7> <h7>{{ denuncia.fecha_cierre }}</h7> <br>
+  <h7 style="color:black">Coordenadas: </h7> <h7>{{ denuncia.coordenadas }}</h7> <br>
+  <h7 style="color:black">Apellido denunicante: </h7> <h7>{{ denuncia.apellido_denunciante }}</h7> <br>
+  <h7 style="color:black">Nombre denunicante: </h7> <h7>{{ denuncia.nombre_denunciante }}<h7> <br>
+  <h7 style="color:black">Email denunicante: </h7> <h7>{{ denuncia.email_denunciante }}</h7> <br>
+  <h7 style="color:black">Telefono denunicante: </h7> <h7>{{ denuncia.telefono_denunciante }}</h7> <br>
+  <h7 style="color:black">Seguimientos:</h7> <br>
+  {% for seguimiento in seguimientos %}
+    {% for user in users %}
+      {% if user.id == seguimiento.autor %}
+        <h7>Autor: {{ user.email }}</h7> <br>
+      {% endif %}
+    {% endfor %}
+    <h7>Fecha: {{ seguimiento.fecha }}</h7> <br>
+    <h7>Descripcion: {{ seguimiento.descripcion }}</h7> <br>
+    <h6>---------------------------------------------</h6>
+  {% endfor %}
+  <br>
 {% endif %}
   <a href="{{ url_for('denuncia_index') }}" class="link">Volver</a>
 {% endblock %}

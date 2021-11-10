@@ -13,6 +13,7 @@ import logging
 from app.resources import auth
 from app.resources.api.issue import issue_api
 from app.resources.api.zonaInundable import zona_api
+from app.resources.api.denuncia import denuncia_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
@@ -78,6 +79,7 @@ def create_app(environment="development"):
     app.add_url_rule("/denuncia/resolver/<int:denuncia_id>", "denuncia_resolver", denuncia.resolver, methods=["POST","GET"])
     app.add_url_rule("/denuncia/delete<int:denuncia_id>", "denuncia_destroy", denuncia.destroy, methods=["POST","GET"])
     app.add_url_rule("/denuncias/editar<int:denuncia_id>", "denuncia_edit", denuncia.update, methods=["POST","GET"])
+    app.add_url_rule("/denuncias/seguimiento<int:denuncia_id>", "denuncia_seguimiento", denuncia.seguimiento, methods=["POST","GET"])
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
@@ -121,6 +123,7 @@ def create_app(environment="development"):
     api = Blueprint("api", __name__, url_prefix="/api")
     api.register_blueprint(issue_api)
     api.register_blueprint(zona_api)
+    api.register_blueprint(denuncia_api)
 
     app.register_blueprint(api)
 

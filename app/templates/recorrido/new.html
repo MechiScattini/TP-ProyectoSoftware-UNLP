@@ -73,19 +73,19 @@
 <h1>Crear un recorrido de evacuación</h1>
 <form class="form-user" action="{{ url_for('recorrido_create') }}" method="POST" id="id-recorrido-form">
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
-    <p>
+    <div>
         <label>Nombre<label></br>
         <input name="nombre" placeholder="Nombre"/>
-    </p>
-    <p>
+    </div>
+    <div>
         <label>Descripción<label></br>
         <input name="descripcion" placeholder="descripción"/>
-    </p>
-    <p>
+    </div>
+    <div>
         <label>Coordenadas<label></br>
         <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+"/>
-    </p>
-    <p>
+    </div>
+    <div>
         <label>Estado<label></br>
         <select name='estado'>
             <option value=1>Publicado</option>

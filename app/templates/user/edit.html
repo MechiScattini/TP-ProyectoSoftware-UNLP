@@ -4,25 +4,25 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <form class="form-user"action="{{ url_for('user_edit', user_id=user.id) }}" method="POST">
+  <form class="create-forms"action="{{ url_for('user_edit', user_id=user.id) }}" method="POST">
     <h2 style="display: flex; justify-content: center;">Editar un usuario</h2>
-    <p>
+    <div>
       <label>Email <label></br>
       <input type="email" name="email" required value="{{user.email}}"/>
-    </p>
-    <p>
+    </div>
+    <div>
       <label>Nombre de usuario <label></br>
       <input type="text" name="username" required value="{{user.username}}"/>
-    </p>
-    <p>
+    </div>
+    <div>
       <label>Nombre <label></br>
       <input type="text" name="first_name" required value="{{user.first_name}}"/>
-    </p>
-    <p>
+    </div>
+    <div>
       <label>Apellido <label></br>
       <input type="text" name="last_name" required value="{{user.last_name}}"/>
-    </p>
-    <p>
+    </div>
+    <div>
     <label>Roles<label></br>
     <select name="roles[]" size="2" multiple>
       <option selected value=""> -- Elija roles -- </option>
@@ -34,8 +34,8 @@
         {% endif %}
       {% endfor %}
     </select>
-    </p>
-    <p>
+    </div>
+    <div>
       {% if user.bloqueado == True %}
         <label>Usuario Bloqueado, (presione para desbloquearlo) <label>
       {% else %}
@@ -46,11 +46,11 @@
       {% if not es_admin %}
         <input type="checkbox"  value="True" name="bloqueado"/>
       {% endif %}
-    </p>
-    <p>
-      <input type="submit" value="Actualizar">
+    </div>
+    <div>
+      <button type="submit">Actualizar</button>
       <button type="reset">Limpiar</button>
-    </p>
+    </>
   </form>
   <a href="{{ url_for('user_index') }}" class="link">Volver</a>
 {% endblock %}

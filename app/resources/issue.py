@@ -12,7 +12,7 @@ def index():
         if colores is not None:
             color = colores.publico
         orden = Ordenacion.query.filter_by(lista='issues').first()
-        elem = Elementos.query.first()
+        elem = Elementos.get_elementos()
         if elem is not None:
             per_page = int(elem.cant)
         else:

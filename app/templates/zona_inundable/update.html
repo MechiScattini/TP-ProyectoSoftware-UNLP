@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
     <h1>Editar zona</h1>
-    <form class="form-user" action="{{ url_for('zonaInundable_update', id_zona=zona.id) }}" method="POST">
+    <form class="create-forms" action="{{ url_for('zonaInundable_update', id_zona=zona.id) }}" method="POST">
         <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
         <p>
             <label>Código<label></br>

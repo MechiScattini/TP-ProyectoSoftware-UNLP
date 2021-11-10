@@ -18,6 +18,6 @@ window.onload = () => {
         selector: 'mapid',
         addSearch: true
     });
-    const form = document.getElementById('id-recorrido-form');
+    const form = document.getElementById('id-punto-form');
     form.addEventListener('submit',(event) => submitHandler(event,map));
 }

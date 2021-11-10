@@ -4,37 +4,37 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-<h1>Modificar denuncia</h1>
-<form class="form-user" action="{{ url_for('denuncia_edit', denuncia_id=denuncia.id) }}" method="POST">
-    <p>
-        <label>Titulo<label></br>
+<form class="create-forms" action="{{ url_for('denuncia_edit', denuncia_id=denuncia.id) }}" method="POST">
+    <h2>Modificar denuncia</h2>
+    <div>
+        <label>Titulo<label>
         <input name="titulo" placeholder="Titulo" value="{{denuncia.titulo}}" />
-    </p>
-    <p>
-        <label>Descripcion<label></br>
+    </div>
+    <div>
+        <label>Descripcion<label>
         <input name="descripcion" placeholder="Descripcion" value="{{denuncia.descripcion}}" />
-    </p>
-    <p>
-        <label>Coordenadas<label></br>
+    </div>
+    <div>
+        <label>Coordenadas<label>
         <input name="coordenadas" placeholder="Coordenadas" value="{{denuncia.coordenadas}}" />
-    </p>
-    <p>
-        <label>Apellido denunciante<label></br>
+    </div>
+    <div>
+        <label>Apellido denunciante<label>
         <input name="apellido_denunciante" placeholder="Apellido_denunciante" value="{{denuncia.apellido_denunciante}}" />
-    </p>
-    <p>
-        <label>Nombre denunciante<label></br>
+    </div>
+    <div>
+        <label>Nombre denunciante<label>
         <input name="nombre_denunciante" placeholder="Nombre_denunciante" value="{{denuncia.nombre_denunciante}}" />
-    </p>
-    <p>
-        <label>Email denunciante<label></br>
+    </div>
+    <div>
+        <label>Email denunciante<label>
         <input name="email_denunciante" placeholder="Email_denunciante" value="{{denuncia.email_denunciante}}" />
-    </p>
-    <p>
-        <label>Telefono denunciante<label></br>
+    </div>
+    <div>
+        <label>Telefono denunciante<label>
         <input name="telefono_denunciante" placeholder="Telefono_denunciante" value="{{denuncia.telefono_denunciante}}" />
-    </p>
-    <p>
+    </div>
+    <div>
         <label>Categoria<label></br>
         <select name='categoria' >
             {% if denuncia.categoria_id==1 %}
@@ -51,10 +51,11 @@
             <option value="Poco probable" selected>Poco probable</option>
             {% endif %}
         </select>
-    </p>
-    <p>
-    <input type="submit" value="Guardar">
-    </p>
+    </div>
+    <div>
+      <button type="submit">Actualizar</button>
+      <button type="reset">Limpiar</button>
+    </div>
 </form>
 <a href="{{ url_for('denuncia_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>

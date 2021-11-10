@@ -5,30 +5,18 @@
       .naranja {
         background-color: tomato;
         color: white;
-        border: 2px solid black;
-        margin: 20px;
-        padding: 20px;
       }
       .azul {
         background-color: rgb(74, 71, 255);
         color: white;
-        border: 2px solid black;
-        margin: 20px;
-        padding: 20px;
       }
       .rojo {
         background-color: rgb(255, 71, 71);
         color: rgb(255, 255, 255);
-        border: 2px solid black;
-        margin: 20px;
-        padding: 20px;
       }
       .default {
         background-color: rgb(71, 212, 255);
         color: rgb(255, 255, 255);
-        border: 2px solid black;
-        margin: 20px;
-        padding: 20px;
       }
       </style>
     {% block head %}
@@ -109,48 +97,10 @@
     </div>
     </body>
       {% block footer %}
-      <footer class="nb-footer">
-      <div id="footer">
-        
-        <div class="col-md-3 col-sm-6">
-        <div class="footer-info-single">
-          <h2 class="title">Bomberos: 100</h2>
-        </div>
-        </div>
-        
-        <div class="col-md-3 col-sm-6">
-        <div class="footer-info-single">
-          <h2 class="title">Seguridad: 911</h2>
-        </div>
-        </div>
-        
-        <div class="col-md-3 col-sm-6">
-        <div class="footer-info-single">
-          <h2 class="title">Ambulancia: 107</h2>
-        </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6">
-          <div class="footer-info-single">
-            <h2 class="title">Prefectura: 106</h2>
-        </div>
-        </div>
-        
-        <br>
-        <br>
-        <br>
-
-        <section class="copyright">
-        <div class="container">
-        <div class="row">
-        <div class="col-sm-9">
+      <footer>
+        <h4 class="title"> Bomberos: 100 - Seguridad: 911 - Ambulancia: 107 - Prefectura: 106 -</h4>
         <p>Copyright © 2021. LPSoft.</p>
-        </div>
-        </div>
-        </div>
-        </section>
-        </div>
-        </footer>
+      </footer>
   {% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </html>

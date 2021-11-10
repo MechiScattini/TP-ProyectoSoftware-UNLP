@@ -4,42 +4,42 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <form class="form-user"action="{{ url_for('user_create') }}" method="POST">
-    <h2 style="display: flex; justify-content: center;">Crear un usuario</h2>
-    <p>
-      <label>Email<label></br>
+  
+  <form class="create-forms"action="{{ url_for('user_create') }}" method="POST">
+    <h2>Crear un usuario</h2>
+    <div>
+      <label>Email<label>
       <input type="email" name="email"required placeholder="Correo"/>
-    </p>
-    <p>
-      <label>Nombre de usuario<label></br>
+    </div>
+    <div>
+      <label>Nombre de usuario<label>
       <input type="text" name="username"required placeholder="Nombre de usuario"/>
-    </p>
-    <p>
-      <label>Clave<label></br>
+    </div>
+    <div>
+      <label>Clave<label>
       <input type="password" required name="password" placeholder="Clave"/>
-    </p>
-    <p>
-      <label>Nombre<label></br>
+    </div>
+    <div>
+      <label>Nombre<label>
       <input type="text" name="first_name" required placeholder="Nombre"/>
-    </p>
-    <p>
-      <label>Apellido<label></br>
+    </div>
+    <div>
+      <label>Apellido<label>
       <input type="text" name="last_name" required placeholder="Apellido"/>
-    </p>
-    <p>
-    <label>Roles<label></br>
+    </div>
+    <div>
+    <label>Roles<label>
     <select name="roles[]" size="2" multiple>
       <option selected value=""> -- Elija roles -- </option>
       {% for rol in roles%}
         <option value={{rol.id}}>{{rol.name}}</option>
       {% endfor %}
     </select>
-    
-    </p>
-    <p>
-      <input type="submit" value="Crear">
+    </div>
+    <div>
+      <button type="submit">Actualizar</button>
       <button type="reset">Limpiar</button>
-    </p>
+    </div>
   </form>
   <a href="{{ url_for('user_index') }}" class="link">Volver</a>
 {% endblock %}

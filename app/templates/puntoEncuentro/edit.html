@@ -4,23 +4,24 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-<h1>Modificar punto</h1>
+
 <form class="form-user" action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
+    <h2>Modificar punto</h2>
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
-    <p>
-        <label>Nombre<label></br>
+    <div>
+        <label>Nombre<label>
         <input name="nombre" placeholder="Nombre" value="{{puntoEncuentro.nombre}}" />
-    </p>
-    <p>
-        <label>Dirección<label></br>
+    </div>
+    <div>
+        <label>Dirección<label>
         <input name="direccion" placeholder="Direccion" value="{{puntoEncuentro.direccion}}" />
-    </p>
-    <p>
-        <label>Coordenadas<label></br>
+    </div>
+    <div>
+        <label>Coordenadas<label>
         <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+" value="{{puntoEncuentro.coordenadas}}" />
-    </p>
-    <p>
-        <label>Estado<label></br>
+    </div>
+    <div>
+        <label>Estado<label>
         <select name='estado' >
             {% if puntoEncuentro.estado==1 %}
             <option value=1 selected>Publicado</option>
@@ -30,18 +31,18 @@
             <option value=0 selected>Despublicado</option>
             {% endif %}
         </select>
-    </p>
-    <p>
-        <label>Teléfono<label></br>
+    </div>
+    <div>
+        <label>Teléfono<label>
         <input name="telefono" placeholder="Telefono" value="{{puntoEncuentro.telefono}}" />
-    </p>
-    <p>
-    <p>
-        <label>Email<label></br>
+    </div>
+    <div>
+        <label>Email<label>
         <input name="email" placeholder="Email" value="{{puntoEncuentro.email}}" />
-    </p>
-    <input type="submit" value="Guardar">
-    </p>
+    </div>
+      <button type="submit">Actualizar</button>
+      <button type="reset">Limpiar</button>
+    </div>
 </form>
 <a href="{{ url_for('puntoEncuentro_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>

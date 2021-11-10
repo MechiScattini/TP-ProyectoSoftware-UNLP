@@ -4,7 +4,7 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-<form class="form-seguimiento"action="{{ url_for('denuncia_seguimiento', denuncia_id=denuncia.id) }}" method="POST">
+<form class="create-forms"action="{{ url_for('denuncia_seguimiento', denuncia_id=denuncia.id) }}" method="POST">
     <h2 style="display: flex; justify-content: center;">Realizar un seguimiento</h2>
     <p>
       <label>Descripcion<label></br>
@@ -12,7 +12,7 @@
     </p>
     <br>
     <p>
-      <input type="submit" value="Crear">
+      <button type="submit">Actualizar</button>
       <button type="reset">Limpiar</button>
     </p>
   </form>

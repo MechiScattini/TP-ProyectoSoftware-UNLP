@@ -4,8 +4,9 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  <h1>Configuración del sistema</h1>
-  <form action="{{ url_for('configurado') }}" method="POST">
+
+  <form class="conf-form"action="{{ url_for('configurado') }}" method="POST">
+    <h2>Configuración del sistema</h2>
     <p>
       <label>Elementos por página <label></br>
       <input type = "number" name="numero" placeholder= 'numero' value = "{{cant}}" />

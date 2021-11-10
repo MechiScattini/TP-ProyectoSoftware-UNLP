@@ -4,22 +4,23 @@
     {{ super() }}
 {% endblock %}
 {% block content %}
-<h1>Modificar recorrido de evacuación</h1>
-<form class="form-user" action="{{ url_for('recorrido_update', id_recorrido=recorrido.id) }}" method="POST">
-    <p>
-        <label>Nombre<label></br>
+
+<form class="create-forms" action="{{ url_for('recorrido_update', id_recorrido=recorrido.id) }}" method="POST">
+    <h2>Modificar recorrido de evacuación</h2>
+    <div>
+        <label>Nombre</label>
         <input name="nombre" placeholder="Nombre" value="{{recorrido.nombre}}" />
-    </p>
-    <p>
-        <label>Dirección<label></br>
+    </div>
+    <div>
+        <label>Dirección</label>
         <input name="descripcion" placeholder="Descripción" value="{{recorrido.descripcion}}" />
-    </p>
-    <p>
-        <label>Coordenadas<label></br>
+    </div>
+    <div>
+        <label>Coordenadas</label>
         <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+" value="{{recorrido.coordenadas}}" />
-    </p>
-    <p>
-        <label>Estado<label></br>
+    </div>
+    <div>
+        <label>Estado</label>
         <select name='estado' >
             {% if recorrido.estado==1 %}
             <option value=1 selected>Publicado</option>
@@ -29,9 +30,11 @@
             <option value=0 selected>Despublicado</option>
             {% endif %}
         </select>
-    </p>
-    <input type="submit" value="Guardar">
-    </p>
+    </div>
+    <div>
+      <button type="submit">Actualizar</button>
+      <button type="reset">Limpiar</button>
+    </div>
 </form>
 <a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>

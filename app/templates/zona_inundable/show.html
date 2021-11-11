@@ -19,28 +19,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script> 
 
-  <!-- Archivos propios -->
-  <link rel="stylesheet" href="../../static/style.css" />
-
   <!-- Jquery -->
-  <script src="jquery-3.5.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 {% endblock %}
 {% block content %}
   <h1>Zona {{zona.nombre}}</h1>
-  <form class="form-user" action="" method="POST" id="id-punto-form">
-    <input type="text" name="lat" id = "lat" >
-    <input type="text" name="lng" id = "lng" >
-    <div class="map-container">
+  <div class="create-forms" >
+    <h7 style="color:black">Código: </h7> <h7>{{ zona.codigo }}</h7> <br>
+    {% if zona.estado==1 %}
+    <h7 style="color:black">Estado: </h7> <h7>Publicado </h7> <br>
+    {% else %}
+    <h7 style="color:black">Estado: </h7> <h7>Despublicado</h7> <br>
+    {% endif %}
+  
+    <div class="map-container" >
       <div id="mapid"></div>
     </div>
 
-    <input type="submit" value="Crear">
-  </form>
+  <a href="{{ url_for('zonaInundable_index') }}" class="link">Volver</a>
+  </div>
+
   <script>
     let coord = {{zona.coordenadas_tolist()|safe}};
-    //let color = {{zona.color|safe}};
+    let color = "{{zona.color|safe}}";
   </script>
+
+  <!-- Archivos propios -->
   <script type="module" src="../../static/js/zonas/show.js"></script>
 
 

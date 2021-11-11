@@ -24,7 +24,6 @@ class ZonaInundable(db.Model):
     def coordenadas_tolist(self):
         return decodificar(self.coordenadas)
 
-
     @classmethod
     def get_zonas(self):
         """Devuelve una lista de todas las zonas en la db"""
@@ -102,7 +101,7 @@ class ZonaInundable(db.Model):
             return True
 
     @classmethod
-    def create_zona(self, codigo=None, nombre=None, coordenadas=None, estado=0, color=None):
+    def create_zona(self, codigo=None, nombre=None, coordenadas=None, estado=0, color="#fb3715"):
         """Crea una zona"""
         new_zona = ZonaInundable(codigo, nombre, coordenadas, estado, color)
         db.session.add(new_zona)

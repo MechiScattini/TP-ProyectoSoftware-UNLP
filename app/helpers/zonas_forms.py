@@ -11,4 +11,4 @@ class ImportForm(FlaskForm):
 
 class UpdateForm(FlaskForm):
     estado = SelectField(u'Estado', choices=[('1', 'Publicado'), ('0', 'Despublicado')])
-    color = SelectField(u'Color', choices=[(' #34f409', 'Verde'), ('#fb3715', 'Rojo')])
+    color = SelectField(u'Color', choices=[('#34f409', 'Verde'), ('#fb3715', 'Rojo')])

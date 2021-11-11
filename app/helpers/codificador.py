@@ -16,6 +16,6 @@ def decodificar(coordenadas):
     list = []
     for coord in coordenadas.split('@'):
         lat,long = coord.split('#')
-        list.append({'lat':lat,'long':long})
+        list.append([lat,long])
 
     return list

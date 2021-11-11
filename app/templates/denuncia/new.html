@@ -14,11 +14,11 @@
 
    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
     <!-- Custom files-->
-    <link rel="stylesheet" href="../../static/style.css" />
-    <script type = "module" src="../../static/js/denuncia/indexDenuncia.js"></script>
+    <script type = "module" src="../../static/js/punto/indexPunto.js"></script>
+
 {% endblock %}
 {% block content %}
-  <form class="create-forms"action="{{ url_for('denuncia_create') }}" method="POST">
+  <form class="create-forms" action="{{ url_for('denuncia_create') }}" method="POST" id="id-form">
     <h2 style="display: flex; justify-content: center;">Crear una denuncia</h2>
     <div>
       <label>Titulo<label>
@@ -55,9 +55,11 @@
     <br>
     <input type="text" name="lat" id = "lat" >
     <input type="text" name="lng" id = "lng" >
+    <h4>Seleccione un punto en el mapa</h4>
     <div class="map-container">
         <div id="mapid"></div>
     </div>
+    
     <div>
       <button type="submit">Crear</button>
       <button type="reset">Limpiar</button>

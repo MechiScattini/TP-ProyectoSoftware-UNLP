@@ -14,12 +14,12 @@
 
    <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
     <!-- Custom files-->
-    <link rel="stylesheet" href="../../static/style.css" />
     <script type = "module" src="../../static/js/punto/indexPunto.js"></script>
+
 {% endblock %}
 {% block content %}
 <h1>Crear un punto de encuentro</h1>
-<form class="form-user" action="{{ url_for('puntoEncuentro_create') }}" method="POST" id="id-punto-form">
+<form class="create-forms" action="{{ url_for('puntoEncuentro_create') }}" method="POST" id="id-form">
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <div>
         <label>Nombre<label></br>
@@ -48,7 +48,7 @@
     </p>
     <input type="text" name="lat" id = "lat" >
     <input type="text" name="lng" id = "lng" >
-    
+    <h4>Seleccione un punto en el mapa</h4>
     <div class="map-container">
         <div id="mapid"></div>
     </div>

@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Usuarios{% endblock %}
+{% block title %}Crear punto{% endblock %}
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
@@ -30,10 +30,6 @@
         <input name="direccion" placeholder="Direccion"/>
     </div>
     <div>
-        <label>Coordenadas<label></br>
-        <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+"/>
-    </div>
-    <div>
         <label>Estado<label></br>
         <select name='estado'>
             <option value=1>Publicado</option>
@@ -56,6 +52,7 @@
     <div class="map-container">
         <div id="mapid"></div>
     </div>
+    <p>
     <input type="submit" value="Crear">
     <button type="reset">Limpiar</button>
     </p>

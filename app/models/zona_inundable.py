@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, SmallInteger, Boolean, Text
 from sqlalchemy import exc
 from app.db import db
+from app.helpers.codificador import decodificar
 
 class ZonaInundable(db.Model):
     """Define una entidad de zona inundable"""
@@ -19,6 +20,10 @@ class ZonaInundable(db.Model):
         self.coordenadas = coordenadas
         self.estado = estado
         self.color = color
+
+    def coordenadas_tolist(self):
+        return decodificar(self.coordenadas)
+
 
     @classmethod
     def get_zonas(self):

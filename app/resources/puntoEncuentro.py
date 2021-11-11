@@ -6,6 +6,7 @@ from app.models.puntoEncuentro import PuntoEncuentro
 from app.helpers.auth import assert_permission
 from app.db import db
 from app.models.elementos import Elementos
+from app.helpers.codificador import codificar
 
 def index():
     """Controlador para mostrar el listado de puntos de encuentro"""
@@ -47,7 +48,7 @@ def create():
     assert_permission(session, 'punto_encuentro_create')
 
     #catchea todos los errores que levantan los validadores de campos
-    coordenadas = request.form['coordenadas']
+    coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
     estado = int(request.form['estado'])
     telefono = request.form['telefono']
     nombre = request.form['nombre']

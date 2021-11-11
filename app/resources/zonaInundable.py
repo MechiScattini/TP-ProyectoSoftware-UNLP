@@ -39,7 +39,8 @@ def index():
     return render_template("zona_inundable/index.html", zonas=zonas)
 
 def show(id_zona):
-    return render_template("zona_inundable/show.html")
+    zona = ZonaInundable.get_zona(id_zona)
+    return render_template("zona_inundable/show.html",zona=zona)
 
 def update(id_zona):
     #Chequea autenticación y permisos

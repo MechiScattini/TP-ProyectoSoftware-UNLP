@@ -7,7 +7,7 @@ const submitHandler = (event, map) => {
         alert('debes seleccionar una ubicación en el mapa');
     }
     else{
-        latlng = map.marker.getLatLng();
+        let latlng = map.marker.getLatLng();
         document.getElementById('lat').setAttribute('value',latlng.lat);
         document.getElementById('lng').setAttribute('value',latlng.lng);
     }

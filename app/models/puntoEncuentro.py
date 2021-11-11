@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, String, SmallInteger, Boolean
+from sqlalchemy import Column, String, SmallInteger, Boolean, Text
 from sqlalchemy.orm import validates
 from app.db import db
 
@@ -11,7 +11,7 @@ class PuntoEncuentro(db.Model):
     id = Column(SmallInteger, primary_key=True)
     nombre = Column(String(40), unique=True, nullable=False)
     direccion = Column(String(30), unique=True, nullable=False)
-    coordenadas = Column(String(80))
+    coordenadas = Column(Text)
     estado = Column(Boolean)
     telefono = Column(String(30))
     email = Column(String(40))

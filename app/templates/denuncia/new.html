@@ -2,6 +2,20 @@
 {% block title %}Denuncias{% endblock %}
 {% block head %}
   {{ super() }}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
+    crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    
+   <!-- CSS and JS files for Search Box -->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+
+   <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+    <!-- Custom files-->
+    <link rel="stylesheet" href="../../static/style.css" />
+    <script type = "module" src="../../static/js/denuncia/indexDenuncia.js"></script>
 {% endblock %}
 {% block content %}
   <form class="create-forms"action="{{ url_for('denuncia_create') }}" method="POST">
@@ -13,10 +27,6 @@
     <div>
       <label>Descripcion<label>
       <input type="text" required name="descripcion" placeholder="Descripcion"/>
-    </div>
-    <div>
-      <label>Coordenadas<label>
-      <input type="text" name="coordenadas" required placeholder="Coordenadas"/>
     </div>
     <div>
       <label>Apellido Denunciante<label>
@@ -42,8 +52,14 @@
       <option value="Poco probable">Poco probable</option>
     </select>
     </div>
+    <br>
+    <input type="text" name="lat" id = "lat" >
+    <input type="text" name="lng" id = "lng" >
+    <div class="map-container">
+        <div id="mapid"></div>
+    </div>
     <div>
-      <button type="submit">Actualizar</button>
+      <button type="submit">Crear</button>
       <button type="reset">Limpiar</button>
     </div>
   </form>

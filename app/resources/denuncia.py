@@ -7,6 +7,7 @@ from sqlalchemy.sql.functions import user
 from app.models.category import Category
 from app.models.status import Status
 from app.models.user import User
+from app.helpers.codificador import codificar
 
 from app.models.ordenacion import Ordenacion
 from app.models.denuncia import Denuncia, Seguimiento
@@ -140,8 +141,6 @@ def create():
             error = 'Titulo es requerido'
         if not params["descripcion"]:
             error = 'Descripcion es requerido'
-        elif not params["coordenadas"]:
-            error = 'Coordenadas es requerido' 
         elif not params["apellido_denunciante"]:
             error = 'Apellido del denunciante es requerido'
         elif not params["nombre_denunciante"]:
@@ -155,7 +154,8 @@ def create():
 
         if error is None:
             category= Category.get_categoria(params["categoria"])
-            new_denuncia = Denuncia(titulo=params["titulo"],descripcion=params["descripcion"], coordenadas=params["coordenadas"], categoria_id=category.id, apellido_denunciante=params["apellido_denunciante"], nombre_denunciante=params["nombre_denunciante"], telefono_denunciante=params["telefono_denunciante"], email_denunciante=params["email_denunciante"] )    
+            coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
+            new_denuncia = Denuncia(titulo=params["titulo"],descripcion=params["descripcion"], coordenadas=coordenadas, categoria_id=category.id, apellido_denunciante=params["apellido_denunciante"], nombre_denunciante=params["nombre_denunciante"], telefono_denunciante=params["telefono_denunciante"], email_denunciante=params["email_denunciante"] )    
             db.session.add(new_denuncia)
             db.session.commit()
             flash("Denuncia agregada con exito")

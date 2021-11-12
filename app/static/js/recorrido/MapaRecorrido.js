@@ -4,7 +4,7 @@ const initialLng = -57.956
 const mapLayerUrl = 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=OzyKbXmvXxFkPLosWDvP'
 
 
-export class MapaZona {
+export class MapaRecorrido {
     #drawnItems;
 
     constructor({selector}){
@@ -40,7 +40,7 @@ export class MapaZona {
             const layer = e.layer;
 
             if (type === 'marker'){
-                //blabla
+                //
             }
             layer.editing.enable();
             drawnItems.addLayer(layer);

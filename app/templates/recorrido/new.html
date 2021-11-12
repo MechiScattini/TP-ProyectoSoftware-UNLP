@@ -13,11 +13,11 @@
 {% block content %}
 
 <h1>Crear un recorrido de evacuación</h1>
-<form class="form-user" action="{{ url_for('recorrido_create') }}" method="POST" id="id-recorrido-form">
+<form class="form-recorrido" action="{{ url_for('recorrido_create') }}" method="POST" id="id-recorrido-form">
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <div>
         <label>Nombre<label></br>
-        <input name="nombre" placeholder="Nombre"/>
+        <input name="nombre" placeholder="Nombre" id = "recorrido_name"/>
     </div>
     <div>
         <label>Descripción<label></br>
@@ -30,8 +30,7 @@
             <option value=0>Despublicado</option>
         </select>
     </div>
-    <input type="text" name="lat" id = "lat" >
-    <input type="text" name="lng" id = "lng" >
+    <input type="text" name="coordenadas" id = "coord" >
     
     <div class="map-container">
         <div id="mapid"></div>

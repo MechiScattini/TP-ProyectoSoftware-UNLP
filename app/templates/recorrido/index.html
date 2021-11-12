@@ -45,6 +45,9 @@
                   <td>Despublicado</td>
                   {% endif %}
                   <td>
+                    
+                    <a href="{{ url_for('recorrido_show', id_recorrido=recorrido.id) }}" class="link">Ver más detalles</a>
+                    
                     {% if has_permission(session["user2"].id, "recorrido_update") %}
                     <a href="{{ url_for('recorrido_update', id_recorrido=recorrido.id) }}" class="link" >Editar</a>
                     {% endif %}

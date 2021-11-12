@@ -34,6 +34,10 @@ def index():
 
     return render_template("recorrido/index.html", recorridos=recorridos)
 
+def show(id_recorrido):
+    recorrido = Recorrido.get_recorrido(id_recorrido)
+    return render_template("recorrido/show.html",recorrido=recorrido)
+
 def new():
     """Controlador para mostrar el formulario para crear recorridos de evacuación"""
     #Chequea autenticación y permisos
@@ -48,7 +52,8 @@ def create():
     assert_permission(session, 'recorrido_create')
 
     #catchea todos los errores que levantan los validadores de campos
-    coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
+    # coordenadas = codificar(str(request.form['coordenadas']))
+    coordenadas = '92,60'
     estado = int(request.form['estado'])
     nombre = request.form['nombre']
     descripcion = request.form['descripcion']

@@ -1,5 +1,5 @@
 
-import { MapaZona } from './MapaZona.js';
+import { MapaRecorrido } from './MapaRecorrido.js';
 
 const submitHandler = (event, map) => {
     event.preventDefault();
@@ -14,19 +14,17 @@ const submitHandler = (event, map) => {
         const formData = new FormData();
         formData.append('name',name);
         formData.append('coordinates',JSON.stringify(coordinates));
-        fetch('/recorridos',{
-            method: 'POST',
-            body: formData
-        })
-
-        latlng = map.marker.getLatLng();
-        document.getElementById('lat').setAttribute('value',latlng.lat);
-        document.getElementById('lng').setAttribute('value',latlng.lng);
+        
+        coord = formData.get('#recorrido_name');
+        document.getElementById('coord').setAttribute('value',coord);
+        // latlng = map.marker.getLatLng();
+        // document.getElementById('lat').setAttribute('value',latlng.lat);
+        // document.getElementById('lng').setAttribute('value',latlng.lng);
     }
 }
 
 window.onload = () =>{
-    const map = new MapaZona({
+    const map = new MapaRecorrido({
         selector: 'mapid',
         // coordenadas: coord,
         //color:color,

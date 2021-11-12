@@ -103,6 +103,7 @@ def create_app(environment="development"):
     app.add_url_rule("/recorrido/nuevo", "recorrido_new", recorrido.new)
     app.add_url_rule("/recorrido/editar/<int:id_recorrido>", "recorrido_update", recorrido.update, methods=["POST","GET"])
     app.add_url_rule("/recorrido/eliminar/<int:id_recorrido>", "recorrido_destroy", recorrido.destroy, methods=["POST", "GET"])
+    app.add_url_rule("/recorrido/ver/<int:id_recorrido>", "recorrido_show", recorrido.show)
     # Rutas de zonas inundables
     app.add_url_rule("/zonasInundables", "zonaInundable_index", zonaInundable.index)
     app.add_url_rule("/zonasInundables/ver/<int:id_zona>", "zonaInundable_show", zonaInundable.show)

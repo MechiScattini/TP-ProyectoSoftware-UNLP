@@ -16,7 +16,8 @@ const submitHandler = (event, map) => {
 window.onload = () => {
     const map = new Map({
         selector: 'mapid'
-    });
+    }, punto
+    );
     const form = document.getElementById('id-form');
     form.addEventListener('submit',(event) => submitHandler(event,map));
 }

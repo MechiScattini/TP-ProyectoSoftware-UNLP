@@ -2,9 +2,14 @@
 {% block title %}Denuncias{% endblock %}
 {% block head %}
     {{ super() }}
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" 
+    crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
 {% endblock %}
 {% block content %}
-<form class="create-forms" action="{{ url_for('denuncia_edit', denuncia_id=denuncia.id) }}" method="POST">
+<form class="create-forms" id="id-form" action="{{ url_for('denuncia_edit', denuncia_id=denuncia.id) }}" method="POST">
     <h2>Modificar denuncia</h2>
     <div>
         <label>Titulo<label>
@@ -13,10 +18,6 @@
     <div>
         <label>Descripcion<label>
         <input name="descripcion" placeholder="Descripcion" value="{{denuncia.descripcion}}" />
-    </div>
-    <div>
-        <label>Coordenadas<label>
-        <input name="coordenadas" placeholder="Coordenadas" value="{{denuncia.coordenadas}}" />
     </div>
     <div>
         <label>Apellido denunciante<label>
@@ -52,11 +53,25 @@
             {% endif %}
         </select>
     </div>
+
+    <input type="text" name="lat" id = "lat" >
+    <input type="text" name="lng" id = "lng" >
+    <div class="map-container">
+        <div id="mapid"></div>
+    </div>
+
     <div>
-      <button type="submit">Actualizar</button>
-      <button type="reset">Limpiar</button>
+        <button type="submit">Actualizar</button>
+        <button type="reset">Limpiar</button>
     </div>
 </form>
 <a href="{{ url_for('denuncia_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>
+
+<script>
+    let punto = {{denuncia.coordenadas_tolist()|safe}};
+</script>
+
+<!-- Custom files-->
+<script type = "module" src="../../static/js/punto/createPunto.js"></script>
 {% endblock %}

@@ -2,89 +2,52 @@
 {% block title %}Recorridos{% endblock %}
 {% block head %}
     {{ super() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../static/style.css" />
+    <!-- Archivos de leaftlet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+  crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+
+  <!-- Leaflet-draw -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script> 
+    <!--  -->
+
     <script type = "module" src="../../static/js/recorrido/index.js"></script>
-        
+
 {% endblock %}
 {% block content %}
 
 <h1>Crear un recorrido de evacuación</h1>
-<form class="form-recorrido" action="{{ url_for('recorrido_create') }}" method="POST" id="id-recorrido-form">
+<form class="form-user" id="form" action="{{ url_for('recorrido_create') }}" method="POST" >
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <div>
         <label>Nombre<label></br>
-        <input name="nombre" placeholder="Nombre" id = "recorrido_name"/>
+        <input id= "nombre" name="nombre" placeholder="Nombre"/>
     </div>
     <div>
         <label>Descripción<label></br>
-        <input name="descripcion" placeholder="descripción"/>
+        <input id="descripcion" name="descripcion" placeholder="descripción"/>
     </div>
     <div>
         <label>Estado<label></br>
-        <select name='estado'>
+        <select id="estado" name='estado'>
             <option value=1>Publicado</option>
             <option value=0>Despublicado</option>
         </select>
     </div>
-    <input type="text" name="coordenadas" id = "coord" >
-    
+    <input type="text" name="coord" id = "coord" >
+
     <div class="map-container">
         <div id="mapid"></div>
     </div>
+
     <input type="submit" value="Crear">
     <button type="reset">Limpiar</button>
     </p>
 </form>
 <a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
 height: 50px;">Volver</a>
-
-<!-- en los siguientes scrips puedo crear mapas cualquieras-->
-<!-- <script type="text/javascript">
-
-    // This setup the leafmap object by linking the map() method to the map id (in <div> html element)
-        var map = L.map('map').
-       setView([-34.9187, -57.956],
-       15);
-
-    // Start adding controls as follow... L.controlName().addTo(map);
-
-    // Control 1: This add the OpenStreetMap background tile
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-    // Control 2: This add a scale to the map
-        L.control.scale().addTo(map);
-        
-    // Control 3: This add a Search bar
-        var searchControl = new L.esri.Controls.Geosearch().addTo(map);
-
-        var results = new L.LayerGroup().addTo(map);
-
-          searchControl.on('results', function(data){
-            results.clearLayers();
-            for (var i = data.results.length - 1; i >= 0; i--) {
-              results.addLayer(L.marker(data.results[i].latlng));
-            }
-          });
-        
-</script> -->
-<!-- // <script>
-    var map = L.map('map').
-       setView([-34.9187, -57.956],
-       15);
-       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-maxZoom: 18
-}).addTo(map);
-L.control.scale().addTo(map);
-L.marker([-34.9187, -57.956],{draggable: true}).addTo(map).on('click', function(e) {
-    console.log(e.latlng);
-});
-//   </script> -->
 {% endblock %}

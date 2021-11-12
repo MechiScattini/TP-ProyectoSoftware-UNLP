@@ -28,7 +28,7 @@ def create():
         return jsonify(error)
     response = validate_denuncia(**data)
     if response:
-        return jsonify(response)
+        return jsonify(response), 400
     denuncia = Denuncia.create_denuncia(**data)
     return jsonify(
         'atributos',

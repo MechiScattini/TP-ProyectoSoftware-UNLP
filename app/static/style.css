@@ -11,7 +11,7 @@ body {
   background-size: 10rem;
 }
 
-#lat, #lng {
+#lat, #lng, #coord {
   display:none;
 }
 #coord{

@@ -86,7 +86,7 @@ def update(id_punto):
 
     punto = PuntoEncuentro.get_punto(id_punto)
     if request.method == 'POST':
-        punto.coordenadas = request.form['coordenadas']
+        punto.coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
         punto.estado = int(request.form['estado'])
         punto.telefono = request.form['telefono']
         try:

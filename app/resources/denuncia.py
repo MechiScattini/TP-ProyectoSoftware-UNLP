@@ -159,7 +159,7 @@ def create():
             db.session.add(new_denuncia)
             db.session.commit()
             flash("Denuncia agregada con exito")
-            return redirect(url_for("denuncia_create"))
+            return redirect(url_for("denuncia_index"))
         else:
             flash(error)
             return redirect(url_for("denuncia_create"))

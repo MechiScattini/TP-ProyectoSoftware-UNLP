@@ -1,9 +1,9 @@
 from datetime import datetime
 from sqlalchemy import Column, String, exc
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import SMALLINT, Date, DateTime, Integer
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.sql.sqltypes import SMALLINT,  DateTime
+from sqlalchemy import Column, ForeignKey
 from app.db import db
+from app.helpers.codificador import decodificar
 
 
 class Denuncia(db.Model):
@@ -83,6 +83,9 @@ class Denuncia(db.Model):
 
     def as_dict(self):
         return {attr.name: getattr(self, attr.name) for attr in self.__table__.columns}
+
+    def coordenadas_tolist(self):
+        return decodificar(self.coordenadas) 
 
     @classmethod
     def get_denuncia(self, denuncia_id):

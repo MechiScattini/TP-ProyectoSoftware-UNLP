@@ -18,7 +18,7 @@
 
 
 <h1>Actualizar recorrido: {{recorrido.nombre}}</h1>
-<form class="form-user" id="form" action="{{ url_for('recorrido_update',id_recorrido=recorrido.id) }}" method="POST" >
+<form class="create-forms" id="form" action="{{ url_for('recorrido_update',id_recorrido=recorrido.id) }}" method="POST" >
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <div>
         <label>Nombre<label></br>
@@ -47,14 +47,17 @@
     </div>
     <script>
         let coord = {{recorrido.coordenadas_tolist()|safe}};
-        // let color = "{{recorrido.color|safe}}";
-      </script>
-    <input type="submit" value="Crear">
-    <button type="reset">Limpiar</button>
-    <script type = "module" src="../../static/js/recorrido/edit.js"></script>
-    </p>
+    </script>
+    <script type = "module" src="../../static/js/recorrido/createRecorrido.js"></script>
+
+    <div>
+        <button type="submit">Actualizar</button>
+        <button type="reset">Limpiar</button>
+    </div>
+
+    <a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
+height: 50px;">Volver</a>
 </form>
 
-<a href="{{ url_for('recorrido_index') }}" class="btn btn-outline-dark" style="width: 100px;
-height: 50px;">Volver</a>
+
 {% endblock %}

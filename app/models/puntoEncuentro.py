@@ -2,6 +2,7 @@
 from sqlalchemy import Column, String, SmallInteger, Boolean, Text
 from sqlalchemy.orm import validates
 from app.db import db
+from app.helpers.codificador import decodificar
 
 
 class PuntoEncuentro(db.Model):
@@ -30,6 +31,9 @@ class PuntoEncuentro(db.Model):
         self.estado = estado
         self.telefono = telefono
         self.email = email
+
+    def coordenadas_tolist(self):
+        return decodificar(self.coordenadas)
 
     @validates('direccion')
     def validate_direccion(self, key, direccion):

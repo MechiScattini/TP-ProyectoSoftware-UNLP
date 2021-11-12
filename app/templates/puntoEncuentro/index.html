@@ -47,6 +47,9 @@
                   <td>Despublicado</td>
                   {% endif %}
                   <td>
+                    {% if has_permission(session["user2"].id, "punto_encuentro_show") %}
+                    <a href="{{ url_for('puntoEncuentro_show', id_punto=punto.id) }}" class="link">Ver más detalles</a>
+                    {% endif %}
                     {% if has_permission(session["user2"].id, "punto_encuentro_update") %}
                     <a href="{{ url_for('puntoEncuentro_update', id_punto=punto.id) }}" class="link" >Editar</a>
                     {% endif %}

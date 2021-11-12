@@ -91,6 +91,7 @@ def create_app(environment="development"):
     
     # Rutas de PuntosEncuentro
     app.add_url_rule("/puntosEncuentro", "puntoEncuentro_index", puntoEncuentro.index)
+    app.add_url_rule("/puntosEncuentro/ver/<int:id_punto>", "puntoEncuentro_show", puntoEncuentro.show)
     app.add_url_rule("/puntosEncuentro", "puntoEncuentro_create", puntoEncuentro.create, methods=["POST"])
     app.add_url_rule("/puntosEncuentro/nuevo", "puntoEncuentro_new", puntoEncuentro.new)
     app.add_url_rule("/puntosEncuentro/editar/<int:id_punto>", "puntoEncuentro_update", puntoEncuentro.update, methods=["POST","GET"])

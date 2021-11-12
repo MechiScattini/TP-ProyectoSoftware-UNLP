@@ -34,6 +34,10 @@ def index():
 
     return render_template("puntoEncuentro/index.html", puntos=puntos)
 
+def show(id_punto):
+    punto = PuntoEncuentro.get_punto(id_punto)
+    return render_template("puntoEncuentro/show.html",punto=punto)
+
 def new():
     """Controlador para mostrar el formulario para crear puntos de encuentro"""
     #Chequea autenticación y permisos

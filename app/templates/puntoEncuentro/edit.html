@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 
-<form class="form-user" action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
+<form class="create-forms" action="{{ url_for('puntoEncuentro_update', id_punto=puntoEncuentro.id) }}" method="POST">
     <h2>Modificar punto</h2>
     <h4 style="color: rgb(214, 3, 3);">{{error_message}}</h4>
     <div>

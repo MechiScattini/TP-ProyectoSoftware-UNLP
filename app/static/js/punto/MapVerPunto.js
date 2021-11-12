@@ -3,7 +3,6 @@ const initialLng = -57.956;
 const mapLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 export function Map({selector}){
-    let marker;
     let map;
 
     //Instansiación del mapa
@@ -13,10 +12,7 @@ export function Map({selector}){
     function initializeMap(selector){
         map = L.map(selector).setView([initialLat,initialLng], 13);
         L.tileLayer(mapLayerUrl).addTo(map);
+        L.marker(punto[0]).addTo(map);
     };
 
-    return {
-        get marker() {return marker},
-        addMarker: addMarker
-    };
 }

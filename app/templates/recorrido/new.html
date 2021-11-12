@@ -2,70 +2,12 @@
 {% block title %}Recorridos{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=AIzaSyDuLaeLfXME3VxmIr0nP4nj2Pb3WXV7ewU"></script>
-        <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=AIzaSyDuLaeLfXME3VxmIr0nP4nj2Pb3WXV7ewU"></script>
-        <script type="text/javascript">
-            window.onload = function() {
-
-                var map = L.map('mapid', {
-                    layers: MQ.mapLayer(),
-                    center: [40.731701, -73.993411],
-                    zoom: 12
-                });
-
-                var dir = MQ.routing.directions();
-
-                dir.route({
-                    locations: [
-                        'wood-ridge, nj',
-                        'staten island, ny',
-                        'queens, ny'
-                    ]
-                });
-
-                CustomRouteLayer = MQ.Routing.RouteLayer.extend({
-                    createStartMarker: function (location, stopNumber) {
-                        var custom_icon;
-                        var marker;
-
-                        custom_icon = L.icon({
-                            iconUrl: 'https://www.mapquestapi.com/staticmap/geticon?uri=poi-red_1.png',
-                            iconSize: [20, 29],
-                            iconAnchor: [10, 29],
-                            popupAnchor: [0, -29]
-                        });
-
-                        marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
-
-                        return marker;
-                    },
-
-                    createEndMarker: function (location, stopNumber) {
-                        var custom_icon;
-                        var marker;
-
-                        custom_icon = L.icon({
-                            iconUrl: 'https://www.mapquestapi.com/staticmap/geticon?uri=poi-blue_1.png',
-                            iconSize: [20, 29],
-                            iconAnchor: [10, 29],
-                            popupAnchor: [0, -29]
-                        });
-
-                        marker = L.marker(location.latLng, {icon: custom_icon}).addTo(map);
-
-                        return marker;
-                    }
-                });
-
-                map.addLayer(new CustomRouteLayer({
-                    directions: dir,
-                    fitBounds: true
-                }));
-            }
-        </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0-beta.2.rc.2/leaflet.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../static/style.css" />
+    <script type = "module" src="../../static/js/recorrido/index.js"></script>
         
 {% endblock %}
 {% block content %}
@@ -82,10 +24,6 @@
         <input name="descripcion" placeholder="descripción"/>
     </div>
     <div>
-        <label>Coordenadas<label></br>
-        <input name="coordenadas" placeholder="'x,y'" pattern="\d+,\d+"/>
-    </div>
-    <div>
         <label>Estado<label></br>
         <select name='estado'>
             <option value=1>Publicado</option>
@@ -95,7 +33,9 @@
     <input type="text" name="lat" id = "lat" >
     <input type="text" name="lng" id = "lng" >
     
-    <div id='mapid' style='width: 100%; height:530px;'></div>
+    <div class="map-container">
+        <div id="mapid"></div>
+    </div>
     <input type="submit" value="Crear">
     <button type="reset">Limpiar</button>
     </p>

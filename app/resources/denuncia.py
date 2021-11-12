@@ -39,6 +39,9 @@ def index():
     elif fecha1 and fecha2:
         if fecha1 < fecha2:
             denuncias= Denuncia.denuncias_por_fechas(fecha1,fecha2,ordenacion,page,cant_paginas)
+        else:
+            flash("Las fechas ingresadas son incorrectas")
+            return redirect(url_for("denuncia_index"))
     else:
         denuncias = Denuncia.paginacion(ordenacion, page, cant_paginas)
     return render_template("denuncia/index.html", denuncias=denuncias, users=users, categorias=categorias, estados=estados)

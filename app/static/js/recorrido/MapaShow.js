@@ -12,10 +12,10 @@ export class MapaShow {
     }
 
     #initializeMap(selector, coordenadas){
-        this.map = L.map(selector).setView([initialLat,initialLng], 11);
+        this.map = L.map(selector).setView([initialLat,initialLng], 13);
         L.tileLayer(mapLayerUrl).addTo(this.map);
 
-        L.polyline(coordenadas,{color:color}).addTo(this.map);
+        L.polyline(coordenadas).addTo(this.map);
 
     }
 }

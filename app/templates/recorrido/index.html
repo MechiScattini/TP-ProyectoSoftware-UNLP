@@ -27,7 +27,6 @@
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  <th>Coordenadas</th>
                   <th>Estado</th>
                   <th>Acciones</th>
               </tr>
@@ -38,7 +37,6 @@
                   <th scope="row">{{ loop.index }}</th>
                   <td>{{ recorrido.nombre }}</td>
                   <td>{{ recorrido.descripcion }}</td>
-                  <td>{{ recorrido.coordenadas }}</td>
                   {% if recorrido.estado==1 %}
                   <td>Publicado</td>
                   {% else %}

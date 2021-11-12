@@ -30,7 +30,7 @@ window.onload = () =>{
     const map = new MapaRecorrido({
         selector: 'mapid',
         addSearch: true
-    });
+    }, coord);
 
     const form =  document.getElementsByClassName("form-user");
     form[0].addEventListener('submit',(event) => submitHandler(event,map));

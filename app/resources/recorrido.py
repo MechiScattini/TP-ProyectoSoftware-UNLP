@@ -48,8 +48,12 @@ def create():
     assert_permission(session, 'recorrido_create')
 
     #catchea todos los errores que levantan los validadores de campos
-    coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
     estado = int(request.form['estado'])
+    if len(request.form['coord'])>0:
+        coordenadas = codificar(request.form['coord'])
+    else:
+        error= "Marque un recorrido en el mapa"
+        return render_template("recorrido/new.html", error_message=error)
     nombre = request.form['nombre']
     descripcion = request.form['descripcion']
     try:

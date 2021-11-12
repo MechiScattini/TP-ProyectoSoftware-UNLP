@@ -11,7 +11,7 @@ class Denuncia(db.Model):
 
     __tablename__ = "denuncias"
     id = Column(SMALLINT, primary_key=True)
-    titulo = Column(String(40), unique=True, nullable=False)
+    titulo = Column(String(40), nullable=False)
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
     fecha_cierre = Column(DateTime)
     descripcion = Column(String(500), nullable=False)

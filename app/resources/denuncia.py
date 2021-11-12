@@ -178,8 +178,6 @@ def update(denuncia_id):
             error = 'Titulo es requerido'
         if not params["descripcion"]:
             error = 'Descripcion es requerido'
-        elif not params["coordenadas"]:
-            error = 'Coordenadas es requerido' 
         elif not params["apellido_denunciante"]:
             error = 'Apellido del denunciante es requerido'
         elif not params["nombre_denunciante"]:
@@ -195,7 +193,7 @@ def update(denuncia_id):
             category= Category.get_categoria(params["categoria"])
             denuncia.titulo = params["titulo"]
             denuncia.descripcion = params["descripcion"]
-            denuncia.coordenadas = params["coordenadas"]
+            denuncia.coordenadas = codificar(str([[request.form['lat'],request.form['lng']]]))
             denuncia.apellido_denunciante = params["apellido_denunciante"]
             denuncia.nombre_denunciante = params["nombre_denunciante"]
             denuncia.email_denunciante = params["email_denunciante"]

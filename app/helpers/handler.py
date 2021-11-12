@@ -8,6 +8,13 @@ def not_found_error(e):
     }
     return make_response(kwargs,404)
 
+def bad_request(e):
+    kwargs = {
+        "error_name": "400 Bad Request",
+        "error_description": "Error en la consulta HTTP",
+    }
+    return make_response(kwargs,400)
+
 
 def unauthorized_error(e):
     kwargs = {
@@ -28,7 +35,7 @@ def created(e):
         "error_name": "201 Created",
         "error_description": "El objeto se creó exitosamente",
     }
-    return make_response(kwargs, 500)
+    return make_response(kwargs, 201)
 
 def make_response(data, status):
     if request.path.startswith("/api/"):

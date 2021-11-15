@@ -104,3 +104,13 @@ class PuntoEncuentro(db.Model):
             .order_by(criterio_orden)\
             .paginate(page=pagina, per_page=cant_pagina)
         return puntos
+
+    @classmethod
+    def get_puntos_paginados(self, page, per_page):
+        """Devuelve un paginate object con zonas"""
+        return PuntoEncuentro.query.paginate(page=page, per_page=per_page)
+
+    def as_dict(self):
+        return {
+            attr.name: getattr(self, attr.name) for attr in self.__table__.columns
+         }

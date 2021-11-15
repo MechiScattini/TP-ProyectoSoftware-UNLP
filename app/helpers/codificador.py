@@ -19,3 +19,13 @@ def decodificar(coordenadas):
         list.append([lat,long])
 
     return list
+
+
+def decodificar_para_json(coordenadas):
+    #Recibe string con formato a#b@c#d y devuelve una lista [ [a,b], [c,d] ]
+    list = []
+    for coord in coordenadas.split('@'):
+        lat,long = coord.split('#')
+        list.append(['lat: ',lat,'long: ',long])
+
+    return list

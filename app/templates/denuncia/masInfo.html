@@ -32,7 +32,12 @@
       {% endif %}
     {% endfor %}
     <h7>Fecha: {{ seguimiento.fecha }}</h7> <br>
-    <h7>Descripcion: {{ seguimiento.descripcion }}</h7> <br>
+    <h7>Descripcion: {{ seguimiento.descripcion }}</h7> 
+    <td>
+      <a href="{{ url_for('seguimiento_edit', seguimiento_id= seguimiento.id ) }}" method="POST" class="link"> Editar </a>
+      <a href="{{ url_for('seguimiento_destroy', seguimiento_id= seguimiento.id ) }}" method="POST" class="link" onclick="return confirm('Eliminar seguimiento de fecha {{seguimiento.fecha}}')"> Eliminar</a>
+    </td>
+    <br>
     <h6>---------------------------------------------</h6>
   {% endfor %}
   <br>

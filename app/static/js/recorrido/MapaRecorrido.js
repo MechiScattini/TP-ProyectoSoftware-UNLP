@@ -6,6 +6,7 @@ const mapLayerUrl = 'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=O
 
 export class MapaRecorrido {
     #drawnItems;
+    #recorrido;
 
     constructor({selector}){
         this.#drawnItems = new L.FeatureGroup();
@@ -17,11 +18,19 @@ export class MapaRecorrido {
         this.map.on('draw:deleted', () =>{
             this.#deleteHandler(this.map, this.editControls, this.createControls)
         });
+        this.map.on('draw:drawstop', () =>{
+            this.#editHandler(this.map, this.editControls, this.createControls)
+        });
+
     }
 
     #initializeMap(selector){
         this.map = L.map(selector).setView([initialLat,initialLng], 13);
         L.tileLayer(mapLayerUrl).addTo(this.map);
+
+        if(coord){
+            this.#recorrido = L.polyline(coord).addTo(this.map);
+        }
 
         this.map.addLayer(this.#drawnItems);
 
@@ -36,8 +45,16 @@ export class MapaRecorrido {
             drawnItems.addLayer(layer);
             editControls.addTo(map);
             createControls.remove();
+        }        
+    }
+
+    #editHandler(map, editControls, createControls){
+        editControls.addTo(map);
+        createControls.remove();
+        if(this.#recorrido){
+            this.#recorrido.remove();
+            this.map.addLayer(this.#drawnItems);
         }
-        
     }
 
     #deleteHandler(map, editControls, createControls) {

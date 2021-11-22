@@ -27,7 +27,6 @@
                   <th>#</th>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  <th>Coordenadas</th>
                   <th>Estado</th>
                   <th>Acciones</th>
               </tr>
@@ -38,13 +37,15 @@
                   <th scope="row">{{ loop.index }}</th>
                   <td>{{ recorrido.nombre }}</td>
                   <td>{{ recorrido.descripcion }}</td>
-                  <td>{{ recorrido.coordenadas }}</td>
                   {% if recorrido.estado==1 %}
                   <td>Publicado</td>
                   {% else %}
                   <td>Despublicado</td>
                   {% endif %}
                   <td>
+                    
+                    <a href="{{ url_for('recorrido_show', id_recorrido=recorrido.id) }}" class="link">Ver más detalles</a>
+                    
                     {% if has_permission(session["user2"].id, "recorrido_update") %}
                     <a href="{{ url_for('recorrido_update', id_recorrido=recorrido.id) }}" class="link" >Editar</a>
                     {% endif %}

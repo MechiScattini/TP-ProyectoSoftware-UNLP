@@ -150,4 +150,8 @@ class Seguimiento(db.Model):
     @classmethod
     def get_seguimientos(self, denuncia_id):
         return Seguimiento.query.filter(Seguimiento.denuncia_id==denuncia_id)
+    
+    @classmethod
+    def get_seguimiento(self, seguimiento_id):
+        return Seguimiento.query.get(seguimiento_id)
         

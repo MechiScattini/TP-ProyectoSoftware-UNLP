@@ -275,3 +275,34 @@ def seguimiento(denuncia_id):
             flash(error)
             return redirect(url_for("denuncia_index"))
     return render_template('denuncia/seguimiento.html', denuncia=denuncia)
+
+def seguimiento_destroy(seguimiento_id):
+    """Controlador para eliminar un seguimiento"""
+    #Chequea autenticación y permisos
+    assert_permission(session, 'seguimiento_destroy')
+    #busca y elimina
+    seguimiento = Seguimiento.get_seguimiento(seguimiento_id)
+    db.session.delete(seguimiento)
+    db.session.commit()
+    return redirect(url_for("denuncia_index"))
+
+def seguimiento_update(seguimiento_id):
+    """Controlador para editar un seguimiento"""
+
+    #Chequea autenticación y permisos
+    assert_permission(session, 'seguimiento_update')
+
+    seguimiento = Seguimiento.get_seguimiento(seguimiento_id)
+    if request.method == 'POST':
+        params = request.form   
+        error = None
+        if not params["descripcion"]:
+            error = 'Descripcion es requerido'
+        if error is None:
+            seguimiento.descripcion = params["descripcion"]
+            db.session.commit()
+        else:
+            flash(error)
+            return redirect(url_for("seguimiento_edit", seguimiento_id=seguimiento_id))   
+        return redirect(url_for("denuncia_index"))
+    return render_template('denuncia/editSeguimiento.html', seguimiento=seguimiento)

@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, SmallInteger, Boolean
 from sqlalchemy.orm import validates
 
 from app.db import db
+from app.helpers.codificador import decodificar
 
 
 class Recorrido(db.Model):
@@ -43,6 +44,8 @@ class Recorrido(db.Model):
             raise ValueError("Debe ingresar un nombre")
         return nombre
 
+    def coordenadas_tolist(self):
+        return decodificar(self.coordenadas)
 
     @classmethod
     def get_recorrido(self, recorrido_id):

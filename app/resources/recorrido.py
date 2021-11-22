@@ -34,6 +34,10 @@ def index():
 
     return render_template("recorrido/index.html", recorridos=recorridos)
 
+def show(id_recorrido):
+    recorrido = Recorrido.get_recorrido(id_recorrido)
+    return render_template("recorrido/show.html",recorrido=recorrido)
+
 def new():
     """Controlador para mostrar el formulario para crear recorridos de evacuación"""
     #Chequea autenticación y permisos
@@ -82,11 +86,14 @@ def update(id_recorrido):
 
     recorrido = Recorrido.get_recorrido(id_recorrido)
     if request.method == 'POST':
-        recorrido.coordenadas = request.form['coordenadas']
+        if len(request.form['coord'])>0:
+            recorrido.coordenadas = codificar(request.form['coord'])
+        #recorrido.coordenadas = request.form['coordenadas']
         recorrido.estado = int(request.form['estado'])
+        #recorrido.coordenadas = coordenadas
         try:
             recorrido.nombre = request.form['nombre']
-            recorrido.direccion = request.form['descripcion']
+            recorrido.descripcion = request.form['descripcion']
             db.session.commit()
         except exc.IntegrityError as e: #maneja las excepciones de datos ya ingresados en db
             if 'direccion' in e.orig.args[1]:

@@ -88,9 +88,7 @@ def update(id_recorrido):
     if request.method == 'POST':
         if len(request.form['coord'])>0:
             recorrido.coordenadas = codificar(request.form['coord'])
-        #recorrido.coordenadas = request.form['coordenadas']
         recorrido.estado = int(request.form['estado'])
-        #recorrido.coordenadas = coordenadas
         try:
             recorrido.nombre = request.form['nombre']
             recorrido.descripcion = request.form['descripcion']

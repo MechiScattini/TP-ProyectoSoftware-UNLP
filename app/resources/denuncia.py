@@ -1,9 +1,6 @@
-from datetime import datetime, date
-from re import U
+from datetime import datetime
 from flask import redirect, render_template, request, url_for, session
-from sqlalchemy import exc
 from flask.helpers import flash
-from sqlalchemy.sql.functions import user
 from app.models.category import Category
 from app.models.status import Status
 from app.models.user import User
@@ -14,7 +11,6 @@ from app.models.denuncia import Denuncia, Seguimiento
 from app.helpers.auth import assert_permission
 from app.db import db
 from app.models.elementos import Elementos
-from app.models.colores import Colores
 
 
 def index():

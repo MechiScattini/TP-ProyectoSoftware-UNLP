@@ -1,11 +1,8 @@
 from flask import redirect, render_template, request, url_for, session, abort
-import os
 import string
 import random
-import csv
 
 import pandas as pd
-from werkzeug.utils import secure_filename
 
 from app.models.ordenacion import Ordenacion
 from app.helpers.auth import assert_permission

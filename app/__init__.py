@@ -1,5 +1,5 @@
 from os import path, environ
-from flask import Flask, render_template, Blueprint, session
+from flask import Flask, render_template, Blueprint, session,url_for, redirect
 from flask_session import Session
 from config import config
 
@@ -20,20 +20,66 @@ from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
+from authlib.integrations.flask_client import OAuth
+
+
+from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+
+from oauthlib.oauth2 import WebApplicationClient
+from flask_login import (LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+    )
+
+# Diego Configuration
+GOOGLE_CLIENT_ID = '44050287165-rcvai5a3fmnmgv7tuu1ok4kegj62ut1e.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = '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'
+GOOGLE_DISCOVERY_URL = (
+    "https://accounts.google.com/.well-known/openid-configuration"
+)
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
 
 
+
 def create_app(environment="development"):
     # Configuración inicial de la app
     app = Flask(__name__)
+    
+    app.secret_key = 'randomsecretkey'
+
+    # OAuth 2 client setup
+    client = WebApplicationClient(GOOGLE_CLIENT_ID)
+    
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        return user.get(user_id)
+
     env = environ.get("FLASK_ENV", environment)
     if env == 'development':
         app.debug = True
     else:
         app.debug = False
 
+    twitter_blueprint = make_twitter_blueprint(api_key='NmmQlgwLmC8xtIC9KGvV6IIzV', api_secret='hG2tkRvJqHDf20q1KDdSImy5WmXwXH8g2p39F38MN13ofV6LxH')
+    app.register_blueprint(twitter_blueprint, url_prefix='/twitter-login')
+
+    @app.route('/twitter')
+    def twitter_login():
+        if not twitter.authorized:
+            return redirect(url_for('twitter.login'))
+        account_info = twitter.get('account/settings.json')
+        if account_info.ok:
+            account_json = account_info.json()
+            return '<h1> tu cuenta de twitter es @{}'.format(account_json['screen_name'])
+        return '<h1> request failed!'
     # Carga de la configuración
     
     app.config.from_object(config[env])
@@ -53,6 +99,11 @@ def create_app(environment="development"):
     app.jinja_env.globals.update(get_color_publico=Colores.get_color_publico)
 
     # Autenticación
+    app.add_url_rule("/login-google", "auth_login_with_google", auth.login_with_google)
+    app.add_url_rule(
+        "/login/callback-google", "auth_callback-google", auth.callback_google, methods=["GET"]
+    )
+    app.add_url_rule("/espera", "auth_espera", auth.espera)   
     app.add_url_rule("/iniciar_sesion", "auth_login", auth.login)
     app.add_url_rule("/cerrar_sesion", "auth_logout", auth.logout)
     app.add_url_rule(
@@ -88,6 +139,7 @@ def create_app(environment="development"):
 
     # Rutas de Usuarios
     app.add_url_rule("/usuarios", "user_index", user.index, methods=["POST", "GET"])
+    app.add_url_rule("/usuarios/espera", "users_espera", user.espera, methods=["GET"])
     app.add_url_rule("/usuarios/bloqueados", "user_bloqueados", user.bloqueados, methods=["GET"])
     app.add_url_rule("/usuarios/nobloqueados", "user_no_bloqueados", user.no_bloqueados, methods=["GET"])
     app.add_url_rule("/usuarios/nuevo", "user_create", user.create, methods=["POST", "GET"])
@@ -125,6 +177,11 @@ def create_app(environment="development"):
         else:
             color = Colores.get_color_publico()    
             return render_template("home.html",color = color)
+
+
+
+
+
 
     # Rutas de API-REST (usando Blueprints)
     api = Blueprint("api", __name__, url_prefix="/api")

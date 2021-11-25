@@ -47,6 +47,13 @@
         <input type="checkbox"  value="True" name="bloqueado"/>
       {% endif %}
     </div>
+      <div>
+      {% if user.espera == True %}
+        <label>Usuario en espera, (presione para desbloquearlo) <label>
+      {% else %}
+      {% endif %}
+      <input type="checkbox"  value="True" name="espera"/>
+    </div>
     <div>
       <button type="submit">Actualizar</button>
       <button type="reset">Limpiar</button>

@@ -26,4 +26,4 @@ def index():
             }
 
         )
-    return jsonify(total=len(lista_puntos), pagina=page, zonas=lista_puntos)
+    return jsonify(total=len(lista_puntos), pagina=page, puntos=lista_puntos)

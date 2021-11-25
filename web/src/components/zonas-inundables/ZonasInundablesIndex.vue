@@ -4,7 +4,9 @@
     <l-map style="height: 300px" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <div v-for="(zona,index) in zonas" :key="zona.id">
-        <l-polygon :lat-lngs="zona.coordenadas" :color="zona.color" :fill="true" :fillColor="zona.color"></l-polygon>
+        <l-polygon :lat-lngs="zona.coordenadas" :color="zona.color" :fill="true" :fillColor="zona.color">
+          <l-popup>{{zona.nombre}}</l-popup>
+        </l-polygon>
         {{zona.nombre}} {{index}}
       </div>
     </l-map>
@@ -18,13 +20,14 @@
 </template>
 
 <script>
-import { LMap, LTileLayer, LPolygon } from '@vue-leaflet/vue-leaflet'
+import { LMap, LTileLayer, LPolygon, LPopup } from '@vue-leaflet/vue-leaflet'
 
 export default {
   components: {
     LMap,
     LTileLayer,
-    LPolygon
+    LPolygon,
+    LPopup
   },
   data () {
     return {
@@ -36,14 +39,14 @@ export default {
       zonas: []
     }
   },
-  created () {
-    fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/zonas-inundables/').then((response) => {
-      return response.json()
-    }).then((json) => {
+  async created () {
+    try {
+      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/zonas-inundables/all', { mode: 'no-cors' })
+      const json = await response.json()
       this.zonas = json.zonas
-    }).catch((e) => {
+    } catch (e) {
       console.log(e)
-    })
+    }
   }
 }
 </script>

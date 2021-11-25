@@ -23,6 +23,21 @@ def get_zonas():
         )
     return jsonify(total=len(lista_zonas), pagina=page, zonas=lista_zonas)
 
+@zona_api.get("/all")
+def get_zonas_all():
+    lista_zonas = []
+    zonas = ZonaInundable.get_zonas()
+    for zona in zonas:
+        lista_zonas.append(
+            {
+                'id':zona.id, 
+                'nombre':zona.nombre, 
+                'coordenadas':decodificar(zona.coordenadas),
+                'color':zona.color
+            }
+        )
+    return jsonify(total=len(lista_zonas), zonas=lista_zonas)
+
 @zona_api.get("/<id_zona>")
 def get_zona(id_zona):
     zona = ZonaInundable.get_zona(id_zona)

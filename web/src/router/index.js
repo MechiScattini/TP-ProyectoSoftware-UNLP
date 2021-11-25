@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import IniciarSesion from '../views/IniciarSesion.vue'
-import ZonasInundables from '../components/ZonasInundables.vue'
+import ZonasInundables from '../components/zonas-inundables/ZonasInundablesIndex.vue'
 
 const routes = [
   {

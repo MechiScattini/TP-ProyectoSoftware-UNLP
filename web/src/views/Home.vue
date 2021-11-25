@@ -40,12 +40,13 @@
       <div class="conteiner-info">
       <h2 class="mt-5">Zonas inundables</h2>
       <p>Información y visualización de las zonas inundables de La Plata.</p>
+      <img src="../../../app/static/img/mapa.png">
       <router-link to="/zonas-inundables" class="nav-link">Ver mas</router-link>
       </div>
       <div class="conteiner-info">
       <h2 class="mt-5">Recorridos de evacuacion</h2>
       <div class="fakeimg">Fake Image</div>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+      <p>Vea los recorridos de evacuación.</p>
       <a class="nav-link active" href="#">Ver mas</a>
       </div>
     </div>

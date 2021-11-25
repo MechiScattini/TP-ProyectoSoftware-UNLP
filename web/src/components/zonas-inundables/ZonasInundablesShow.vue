@@ -1,27 +1,34 @@
 <template>
 <div>
-  <form class="form">
+<form class="form">
     <l-map style="height: 300px" :zoom="zoom" :center="center">
-      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <div v-for="(zona) in zonas" :key="zona.id">
-        <l-polygon :lat-lngs="zona.coordenadas" :color="zona.color" :fill="true" :fillColor="zona.color">
-          <l-popup>{{zona.nombre}}</l-popup>
-        </l-polygon>
-        {{zona.nombre}}
-      </div>
+        <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+        <div>
+            <l-polygon :lat-lngs="zona.coordenadas" :color="zona.color" :fill="true" :fillColor="zona.color">
+                <l-popup>{{zona.nombre}}</l-popup>
+            </l-polygon>
+            {{zona.nombre}}
+        </div>
     </l-map>
     <ul>
-      <li v-for="(zona) in zonas" :key="zona.id">
-        {{zona.nombre}}
-        <router-link :to= "{ name: 'zonas-inundables-ver', params: { id: zona.id }}" class="link">Ver detalles</router-link>
-      </li>
+        <li>
+            {{zona.nombre}}
+        </li>
     </ul>
-  </form>
+    <router-link to="/zonas-inundables" class="link">Volver</router-link>
+</form>
 </div>
 </template>
 
 <script>
 import { LMap, LTileLayer, LPolygon, LPopup } from '@vue-leaflet/vue-leaflet'
+
+//  función para calcular el centro aprox del polígono, recibe un arr [ [lat1,long1], [lat2,long2] , .. ]
+function getCentro (arr) {
+  return arr.reduce(function (x, y) {
+    return [x[0] + y[0] / arr.length, x[1] + y[1] / arr.length]
+  }, [0, 0])
+}
 
 export default {
   components: {
@@ -37,14 +44,19 @@ export default {
         '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       zoom: 13,
       center: [-34.9187, -57.956],
-      zonas: []
+      zona: {},
+      id: 0
     }
   },
   async created () {
+    this.id = this.$route.params.id //  pone como id el pasado como parámetro de la URL
+
+    //  hace el fetch a la api
     try {
-      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/zonas-inundables/all')
+      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/zonas-inundables/' + this.id)
       const json = await response.json()
-      this.zonas = json.zonas
+      this.zona = json[1]
+      this.center = getCentro(this.zona.coordenadas) // centra el mapa en el centro de la zona
     } catch (e) {
       console.log(e)
     }

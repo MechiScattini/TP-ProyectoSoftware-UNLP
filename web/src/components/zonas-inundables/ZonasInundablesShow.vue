@@ -58,7 +58,7 @@ export default {
       this.zona = json[1]
       this.center = getCentro(this.zona.coordenadas) // centra el mapa en el centro de la zona
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
     /* if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(function (position) {

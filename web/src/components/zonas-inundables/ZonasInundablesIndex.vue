@@ -46,7 +46,7 @@ export default {
       const json = await response.json()
       this.zonas = json.zonas
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
     /* if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(function (position) {

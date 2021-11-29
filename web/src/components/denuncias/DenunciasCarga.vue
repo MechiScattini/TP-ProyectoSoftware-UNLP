@@ -63,6 +63,7 @@ export default {
   },
   methods: {
     agregarDenuncia () {
+      const coords = [this.markerLatLng.lat, this.markerLatLng.lng]
       var datosEnviar = {
         titulo: this.denuncia.titulo,
         descripcion: this.denuncia.descripcion,
@@ -71,56 +72,23 @@ export default {
         telefono_denunciante: this.denuncia.telefono_denunciante,
         email_denunciante: this.denuncia.email_denunciante,
         categoria: this.denuncia.categoria,
-        coordenadas: this.markerLatLng
+        coordenadas: coords
       }
-      console.log(datosEnviar.titulo)
+      console.log(coords)
+      fetch('http://localhost:5000/api/denuncias', {
+        method: 'POST',
+        body: JSON.stringify(datosEnviar)
+      })
+        .then(respuesta => respuesta.json())
+        .then(datosRespuesta => {
+          console.log(datosRespuesta)
+        })
     },
     onClick (e) {
       if (e.latlng) {
         this.markerLatLng = e.latlng
-        console.log(this.markerLatLng)
-        alert(this.markerLatLng)
       }
     }
   }
 }
 </script>
-<!-- <script>
-    export default{
-        name: 'DenunciaComponent',
-        data() {
-            return {
-                denuncia: {
-                    titulo: '',
-                    descripcion: '',
-                    apellido_denunciante: '',
-                    nombre_denunciante: '',
-                    telefono_denunciante: '',
-                    email_denunciante: '',
-                    categoria: ''
-                }
-            }
-        },
-        methods: {
-          agregarDenuncia() {
-            var datosEnviar={
-              titulo:this.denuncia.titulo,
-              descripcion:this.denuncia.descripcion,
-              apellido_denunciante:this.denuncia.apellido_denunciante,
-              nombre_denunciante:this.denuncia.nombre_denunciante,
-              telefono_denunciante:this.denuncia.telefono_denunciante,
-              email_denunciante:this.denuncia.email_denunciante,
-              categoria:this.denuncia.categoria
-            }
-            fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias', {
-              method:"POST",
-              body:JSON.stringify(datosEnviar)
-            })
-            .then(respuesta=>respuesta.json())
-            .then((datosRespuesta=>{
-              console.log(datosRespuesta);
-            }))
-          }
-        }
-    }
-</script> -->

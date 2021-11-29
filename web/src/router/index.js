@@ -4,6 +4,8 @@ import IniciarSesion from '../views/IniciarSesion.vue'
 import ZonasInundablesIndex from '../components/zonas-inundables/ZonasInundablesIndex.vue'
 import ZonasInundablesShow from '../components/zonas-inundables/ZonasInundablesShow.vue'
 import Denuncias from '../components/denuncias/DenunciasCarga.vue'
+import AllDenuncias from '../components/denuncias/DenunciasVer.vue'
+import PuntosRecorridos from '../components/puntosRecorridos/PuntosRecorridos.vue'
 
 const routes = [
   {
@@ -30,6 +32,16 @@ const routes = [
     path: '/denuncias-carga',
     name: 'denuncias-carga',
     component: Denuncias
+  },
+  {
+    path: '/denuncias-ver',
+    name: 'denuncias-ver',
+    component: AllDenuncias
+  },
+  {
+    path: '/puntosRecorridos',
+    name: 'puntosRecorridos',
+    component: PuntosRecorridos
   }
 ]
 

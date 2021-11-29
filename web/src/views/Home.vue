@@ -11,6 +11,13 @@
       </div>
 
       <div class="conteiner-info">
+        <h2 class="mt-5">
+          <router-link to="/denuncias-carga" class="nav-link">Realizar Denuncia</router-link>
+        </h2>
+        <p>Si desea realizar una denuncia ingrese.</p>
+      </div>
+
+      <div class="conteiner-info">
       <h3 class="mt-4">Links de interes</h3>
       <p>Lorem ipsum dolor sit ame.</p>
       <ul class="nav nav-pills flex-column">

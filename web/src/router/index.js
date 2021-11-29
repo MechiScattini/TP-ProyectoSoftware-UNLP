@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import IniciarSesion from '../views/IniciarSesion.vue'
 import ZonasInundablesIndex from '../components/zonas-inundables/ZonasInundablesIndex.vue'
 import ZonasInundablesShow from '../components/zonas-inundables/ZonasInundablesShow.vue'
+import Denuncias from '../components/denuncias/DenunciasCarga.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/zonas-inundables/ver/:id',
     name: 'zonas-inundables-ver',
     component: ZonasInundablesShow
+  },
+  {
+    path: '/denuncias-carga',
+    name: 'denuncias-carga',
+    component: Denuncias
   }
 ]
 

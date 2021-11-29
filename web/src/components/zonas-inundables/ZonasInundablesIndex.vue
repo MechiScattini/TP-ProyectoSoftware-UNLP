@@ -47,7 +47,7 @@ export default {
       const json = await response.json()
       this.zonas = json.zonas
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
     //  centra el mapa en la localización del usuario
     if ('geolocation' in navigator) {

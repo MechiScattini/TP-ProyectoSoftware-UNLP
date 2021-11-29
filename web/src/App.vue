@@ -7,7 +7,9 @@
 
   <div id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Logotipo</a>
+      <router-link to="/" class="navbar-logo">
+        <img src="../../app/static/img/lp-logo.png">
+      </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -17,7 +19,7 @@
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/iniciar-sesion" class="nav-link">Iniciar Sesion</router-link>
+              <router-link to="/zonas-inundables" class="nav-link">Zonas inundables</router-link>
             </li>
           </ul>
         </div>
@@ -30,3 +32,11 @@
   </footer>
 </div>
 </template>
+<style scoped>
+.navbar-logo{
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
+  height: auto;
+}
+</style>

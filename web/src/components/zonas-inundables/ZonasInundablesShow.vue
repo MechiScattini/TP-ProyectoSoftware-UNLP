@@ -60,15 +60,6 @@ export default {
     } catch (e) {
       console.log(e)
     }
-    /* if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        console.log(position.coords.latitude)
-        console.log(position.coords.longitude)
-        this.center = [position.coords.latitude, position.coords.longitude]
-      })
-    } else {
-      alert('Para centrar el mapa en su zona, habilite la localización de su navegador')
-    } */
   }
 }
 </script>

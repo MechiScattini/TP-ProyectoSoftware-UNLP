@@ -35,8 +35,6 @@
     </form>
     </div>
 </template>
-
-
 <script>
   import {LMap, LTileLayer, LMarker} from '@vue-leaflet/vue-leaflet'
     export default{

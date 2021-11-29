@@ -25,6 +25,10 @@
       <option value= 2>Advertencia</option>
       <option value= 3>Poco probable</option>
     </select>
+    <l-map style="height: 300px" :zoom="zoom" :center="center" @click="onClick">
+      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+      <l-marker :lat-lng="markerLatLng"></l-marker>
+    </l-map>
     <div>
       <button type="submit">Crear</button>
     </div>
@@ -32,7 +36,56 @@
     </div>
 </template>
 
+
 <script>
+  import {LMap, LTileLayer, LMarker} from '@vue-leaflet/vue-leaflet'
+    export default{
+        name: 'DenunciaComponent',
+        components: {
+          LMap,
+          LTileLayer,
+          LMarker
+        },
+        data() {
+            return {
+                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                zoom: 13,
+                center: [-34.9187, -57.956],
+                markerLatLng: [-34.9187, -57.956],
+                denuncia: {
+                    titulo: '',
+                    descripcion: '',
+                    apellido_denunciante: '',
+                    nombre_denunciante: '',
+                    telefono_denunciante: '',
+                    email_denunciante: '',
+                    categoria: ''
+                }
+            }
+        },
+        methods: {
+          agregarDenuncia() {
+            var datosEnviar={
+              titulo:this.denuncia.titulo,
+              descripcion:this.denuncia.descripcion,
+              apellido_denunciante:this.denuncia.apellido_denunciante,
+              nombre_denunciante:this.denuncia.nombre_denunciante,
+              telefono_denunciante:this.denuncia.telefono_denunciante,
+              email_denunciante:this.denuncia.email_denunciante,
+              categoria:this.denuncia.categoria,
+              coordenadas:this.markerLatLng
+            }
+          },
+          onClick(e){
+            if (e.latlng) {
+              this.markerLatLng = e.latlng;
+            }
+          }
+        }
+    }
+</script>
+
+<!-- <script>
     export default{
         name: 'DenunciaComponent',
         data() {
@@ -70,4 +123,4 @@
           }
         }
     }
-</script>
+</script> -->

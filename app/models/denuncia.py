@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, exc
 from sqlalchemy.sql.sqltypes import SMALLINT,  DateTime
 from sqlalchemy import Column, ForeignKey
 from app.db import db
-from app.helpers.codificador import decodificar
+from app.helpers.codificador import decodificar, codificar
 
 
 class Denuncia(db.Model):
@@ -62,10 +62,11 @@ class Denuncia(db.Model):
         telcel_denunciante=None,
         email_denunciante=None
         ):
+        coords=codificar(coordenadas)
         new_denuncia = Denuncia(titulo,
             fecha_cierre,
             descripcion,
-            coordenadas,
+            coords,
             categoria_id,
             asignado_a,
             apellido_denunciante,

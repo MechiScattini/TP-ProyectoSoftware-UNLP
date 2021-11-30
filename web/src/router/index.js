@@ -1,5 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
+import IniciarSesion from '../views/IniciarSesion.vue'
+import ZonasInundablesIndex from '../components/zonas-inundables/ZonasInundablesIndex.vue'
+import ZonasInundablesShow from '../components/zonas-inundables/ZonasInundablesShow.vue'
+import Denuncias from '../components/denuncias/DenunciasCarga.vue'
+import AllDenuncias from '../components/denuncias/DenunciasVer.vue'
+import PuntosRecorridos from '../components/puntosRecorridos/PuntosRecorridos.vue'
 
 const routes = [
   {
@@ -8,12 +14,34 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/iniciar-sesion',
+    name: 'iniciar-sesion',
+    component: IniciarSesion
+  },
+  {
+    path: '/zonas-inundables',
+    name: 'zonas-inundables',
+    component: ZonasInundablesIndex
+  },
+  {
+    path: '/zonas-inundables/ver/:id',
+    name: 'zonas-inundables-ver',
+    component: ZonasInundablesShow
+  },
+  {
+    path: '/denuncias-carga',
+    name: 'denuncias-carga',
+    component: Denuncias
+  },
+  {
+    path: '/denuncias-ver',
+    name: 'denuncias-ver',
+    component: AllDenuncias
+  },
+  {
+    path: '/puntosRecorridos',
+    name: 'puntosRecorridos',
+    component: PuntosRecorridos
   }
 ]
 

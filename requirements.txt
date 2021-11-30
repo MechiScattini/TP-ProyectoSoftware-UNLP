@@ -11,3 +11,4 @@ cryptography==36.0.0
 flask_login==0.5.9
 oauthlib==0.15.5
 requests==2.26.0
+Flask-Cors==3.0.10

@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, String, SmallInteger, Boolean
+from sqlalchemy import Column, String, SmallInteger, Boolean, Text
 
 from sqlalchemy.orm import validates
 
@@ -13,8 +13,8 @@ class Recorrido(db.Model):
     __tablename__ = "recorridos"
     id = Column(SmallInteger, primary_key=True)
     nombre = Column(String(40), unique=True, nullable=False)
-    descripcion = Column(String(80))
-    coordenadas = Column(String(80))
+    descripcion = Column(Text)
+    coordenadas = Column(Text)
     estado = Column(Boolean)
 
     def __init__(

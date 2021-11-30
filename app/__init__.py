@@ -1,6 +1,9 @@
 from os import path, environ
 from flask import Flask, render_template, Blueprint, session,url_for, redirect
+from os import environ
+from flask import Flask, render_template, Blueprint, session
 from flask_session import Session
+from flask_cors import CORS
 from config import config
 
 from app import db
@@ -66,8 +69,11 @@ def create_app(environment="development"):
         app.debug = True
     else:
         app.debug = False
+    #configuración de CORS
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     
+    # Carga de la configuración
     app.config.from_object(config[env])
 
     # Server Side session

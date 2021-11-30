@@ -17,14 +17,12 @@ from app.resources.api.denuncia import denuncia_api
 from app.resources.api.puntoEncuentro import puntoEncuentro_api
 from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
 
+
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
 from authlib.integrations.flask_client import OAuth
-
-
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-
+from requests_oauthlib.oauth1_auth import Client
 from oauthlib.oauth2 import WebApplicationClient
 from flask_login import (LoginManager,
     current_user,
@@ -33,7 +31,7 @@ from flask_login import (LoginManager,
     logout_user,
     )
 
-# Diego Configuration
+# GOOGLE Configuration
 GOOGLE_CLIENT_ID = '44050287165-rcvai5a3fmnmgv7tuu1ok4kegj62ut1e.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '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'
 GOOGLE_DISCOVERY_URL = (
@@ -42,6 +40,7 @@ GOOGLE_DISCOVERY_URL = (
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
+
 
 
 
@@ -68,19 +67,6 @@ def create_app(environment="development"):
     else:
         app.debug = False
 
-    twitter_blueprint = make_twitter_blueprint(api_key='NmmQlgwLmC8xtIC9KGvV6IIzV', api_secret='hG2tkRvJqHDf20q1KDdSImy5WmXwXH8g2p39F38MN13ofV6LxH')
-    app.register_blueprint(twitter_blueprint, url_prefix='/twitter-login')
-
-    @app.route('/twitter')
-    def twitter_login():
-        if not twitter.authorized:
-            return redirect(url_for('twitter.login'))
-        account_info = twitter.get('account/settings.json')
-        if account_info.ok:
-            account_json = account_info.json()
-            return '<h1> tu cuenta de twitter es @{}'.format(account_json['screen_name'])
-        return '<h1> request failed!'
-    # Carga de la configuración
     
     app.config.from_object(config[env])
 
@@ -167,6 +153,9 @@ def create_app(environment="development"):
     app.add_url_rule("/zonasInundables/importar", "zonaInundable_importar", zonaInundable.importar, methods=["POST","GET"])
     app.add_url_rule("/zonasInundables/eliminar/<int:id_zona>", "zonaInundable_destroy", zonaInundable.destroy, methods=["POST", "GET"])
     app.add_url_rule("/zonasInundables/editar/<int:id_zona>", "zonaInundable_update", zonaInundable.update, methods=["POST", "GET"])
+
+
+    
 
     # Ruta para el Home (usando decorator)
     @app.route("/")

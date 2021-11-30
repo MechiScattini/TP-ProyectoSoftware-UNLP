@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.colores import Colores
 from werkzeug.security import check_password_hash
 from app.helpers.auth import assert_permission
+# Import our oauth object from our app
 
 import requests
 from oauthlib.oauth2 import WebApplicationClient
@@ -17,7 +18,7 @@ from flask_login import (
 )
 import json
 
-# Diego Configuration
+# Configuration
 GOOGLE_CLIENT_ID = '44050287165-rcvai5a3fmnmgv7tuu1ok4kegj62ut1e.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = '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'
 GOOGLE_DISCOVERY_URL = (
@@ -76,49 +77,41 @@ def callback_google():
         users_name = userinfo_response.json()["given_name"]
     else:
         return "User email not available or not verified by Google.", 400
-        
-    # Create a user in your db with the information provided
-    # by Google
+    
 
     # Doesn't exist? Add it to the database.
     user =User.get(users_email)
     if  user is None:
         new_user = User(
-         username=users_name, email=users_email
+         username=users_name, email=users_email, espera=True
         )
         db.session.add(new_user)
         db.session.commit()
 
-        if new_user.bloqueado == True:
-            error= "Usuario bloqueado no puede iniciar sesion"
+        if User.esta_en_espera(new_user.id):
+            error= "Se registro el usuario exitosamente, espere a que el administrador habilite su cuenta"
             flash(error)
             return redirect(url_for("auth_login"))
-
-        if new_user.espera == True:
-            error= "Usuario en espera no puede iniciar sesion"
-            flash(error)
-            return redirect(url_for("auth_login"))
-        
-            #login
-        session.clear()
-        session["user"] = new_user.email
-        session["user2"] = new_user
+        else:
+             #login
+            session.clear()
+            session["user"] = new_user.email
+            session["user2"] = new_user
     else:
         
-        if user.bloqueado:
+        if  User.esta_bloqueado(user.id):
             error= "Usuario bloqueado no puede iniciar sesion"
             flash(error)
             return redirect(url_for("auth_login"))
-
-        if user.espera:
+        elif  User.esta_en_espera(user.id):
             error= "Usuario en espera no puede iniciar sesion"
             flash(error)
             return redirect(url_for("auth_login"))
-
-        #login
-        session.clear()
-        session["user"] = user.email
-        session["user2"] = user
+        else:
+            #login
+            session.clear()
+            session["user"] = user.email
+            session["user2"] = user
 
 
     # Send user back to homepage
@@ -180,3 +173,5 @@ def logout():
     flash("La sesión se cerró correctamente.")
 
     return redirect(url_for("auth_login"))
+
+

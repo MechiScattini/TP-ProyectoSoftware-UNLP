@@ -32,18 +32,13 @@ class User(db.Model):
     roles = relationship( "Rol", secondary='users_roles', lazy='subquery', backref=db.backref('users',lazy='subquery'))
     espera= Column(Boolean, default= False)
     
-    def __init__(self, username=None,first_name=None, last_name=None, email=None, password=None):
+    def __init__(self, username=None,first_name=None, last_name=None, email=None, password=None, espera =False):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
         self.bloqueado = False
-        self.username = username
-    
-    def __init__(self, username=None, email=None):
-        self.email = email
-        self.bloqueado = False
-        self.espera = True
+        self.espera = espera
         self.username = username
     
 
@@ -71,7 +66,7 @@ class User(db.Model):
         return user.bloqueado
 
     @classmethod
-    def esta_espera(self, user_id):
+    def esta_en_espera(self, user_id):
         user= User.query.filter(User.id == user_id).first()
         return user.espera
 

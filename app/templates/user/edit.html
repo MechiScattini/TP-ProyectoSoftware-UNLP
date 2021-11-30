@@ -50,9 +50,9 @@
       <div>
       {% if user.espera == True %}
         <label>Usuario en espera, (presione para desbloquearlo) <label>
-      {% else %}
+        <input type="checkbox"  value="True" name="espera"/>
       {% endif %}
-      <input type="checkbox"  value="True" name="espera"/>
+      
     </div>
     <div>
       <button type="submit">Actualizar</button>

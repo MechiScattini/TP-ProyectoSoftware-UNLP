@@ -112,4 +112,3 @@ flask_session
 coc-settings.json
 .vscode
 config.py
-web

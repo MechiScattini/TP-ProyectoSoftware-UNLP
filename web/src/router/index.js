@@ -6,6 +6,7 @@ import ZonasInundablesShow from '../components/zonas-inundables/ZonasInundablesS
 import Denuncias from '../components/denuncias/DenunciasCarga.vue'
 import AllDenuncias from '../components/denuncias/DenunciasVer.vue'
 import PuntosRecorridos from '../components/puntosRecorridos/PuntosRecorridos.vue'
+import Estadisticas from '../components/Estadisticas.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/puntosRecorridos',
     name: 'puntosRecorridos',
     component: PuntosRecorridos
+  },
+  {
+    path: '/estadisticas',
+    name: 'estadisticas',
+    component: Estadisticas
   }
 ]
 

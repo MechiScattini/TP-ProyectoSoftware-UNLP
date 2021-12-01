@@ -19,6 +19,11 @@ class Category(db.Model):
     @classmethod
     def get_categoria(self,categoria_name):
         return Category.query.filter(Category.name == categoria_name).first()
+    
+    @classmethod
+    def get_categoria_id(self, id_categoria):
+        """Devuelve, si existe, el objeto categoria con id=id_categoria"""
+        return Category.query.get(id_categoria)
 
     @classmethod
     def check_id(self, id):

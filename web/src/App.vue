@@ -19,6 +19,18 @@
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
             <li class="nav-item">
+              <router-link to="Estadisticas" class="nav-link">Estadísticas</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/puntosRecorridos" class="nav-link">Puntos de encuentro y recorridos</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/denuncias-carga" class="nav-link">Realizar denuncia</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/denuncias-ver" class="nav-link">Ver denuncias</router-link>
+            </li>
+            <li class="nav-item">
               <router-link to="/zonas-inundables" class="nav-link">Zonas inundables</router-link>
             </li>
           </ul>

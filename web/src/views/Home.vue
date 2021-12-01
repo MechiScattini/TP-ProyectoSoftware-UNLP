@@ -16,7 +16,9 @@
         <p>Si desea realizar una denuncia ingrese.</p>
       </div>
       <div class="conteiner-info">
-        <h2 class="mt-5">Estadisticas</h2>
+        <h2 class="mt-5">
+          <router-link to="/Estadisticas" class="nav-link">Estadísticas</router-link>
+        </h2>
         <p>Seccion de estadisticas</p>
       </div>
     </div>

@@ -55,18 +55,19 @@ def get_denuncias_confirmadas():
     page = request.args.get('page',1,type=int)
     ordenacion = Ordenacion.get_ordenacion_denuncias()
 
-    denuncias = Denuncia.get_denuncias_enCurso(ordenacion,page,cant_per_page)
+    denuncias = Denuncia.paginacion(ordenacion,page,cant_per_page)
     for denuncia in denuncias.items:
         categoria = Category.get_categoria_id(denuncia.categoria_id)
         estado = Status.get_status(denuncia.estado_id)
-        lista_denuncias.append(
-            {
-                'id':denuncia.id, 
-                'titulo':denuncia.titulo, 
-                'descripcion': denuncia.descripcion,
-                'coordenadas':decodificar(denuncia.coordenadas),
-                'categoria': categoria.name,
-                'estado': estado.name
-            }
-        )
+        if estado != 'sin_confirmar':
+            lista_denuncias.append(
+                {
+                    'id':denuncia.id, 
+                    'titulo':denuncia.titulo, 
+                    'descripcion': denuncia.descripcion,
+                    'coordenadas':decodificar(denuncia.coordenadas),
+                    'categoria': categoria.name,
+                    'estado': estado.name
+                }
+            )
     return jsonify(total=len(lista_denuncias), pagina=page, denuncias=lista_denuncias)

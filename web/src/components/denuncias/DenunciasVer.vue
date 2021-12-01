@@ -2,20 +2,19 @@
 <div>
   <div v-if = denuncias>
     <form class="form">
-        <l-map style="height: 300px" :zoom="zoom" :center="center">
+        <l-map style="height: 500px" :zoom="zoom" :center="center">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
         <div v-for="(denuncia) in denuncias" :key="denuncia.id">
             <l-marker :lat-lng="denuncia.coordenadas[0]" >
-                <l-popup>{{denuncia.titulo}}</l-popup>
+                <l-popup>
+                  <h6>{{denuncia.titulo}}</h6>
+                  <h6>DESCRIPCION:{{denuncia.descripcion}}</h6>
+                  <h6>CATEGORIA:{{denuncia.categoria}}</h6>
+                  <h6>ESTADO:{{denuncia.estado}}</h6>
+                </l-popup>
             </l-marker>
         </div>
         </l-map>
-        <ul>
-        <li v-for="(denuncia) in denuncias" :key="denuncia.id">
-            {{denuncia.titulo}}
-            <router-link to= "/" class="link">Ver detalles</router-link>
-        </li>
-        </ul>
     </form>
     <button v-if="page>1" @click=decrement>Ant</button>
     <p>{{page}}</p>
@@ -85,7 +84,7 @@ export default {
 <style scoped>
 .form{
 text-align: center;
-width: 40%;
+width: 70%;
 height: 80%;
 padding:16px;
 border-radius:10px;

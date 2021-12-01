@@ -59,7 +59,7 @@ def get_denuncias_confirmadas():
     for denuncia in denuncias.items:
         categoria = Category.get_categoria_id(denuncia.categoria_id)
         estado = Status.get_status(denuncia.estado_id)
-        if estado != 'sin_confirmar':
+        if estado.name != 'sin confirmar':
             lista_denuncias.append(
                 {
                     'id':denuncia.id, 

@@ -105,6 +105,11 @@ class Denuncia(db.Model):
         return Denuncia.query.order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
     @classmethod
+    def get_denuncias_all(self):
+        """Devuelve una lista de todas las denuncias en la db"""
+        return Denuncia.query.all()
+
+    @classmethod
     def get_denuncias_sinConfirmar(self,orden,pagina,cant_paginas):
         return Denuncia.query.filter(Denuncia.estado_id == 3).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 

@@ -30,14 +30,22 @@ class User(db.Model):
     bloqueado = Column(Boolean, default= False)
     username = Column(String(39),unique = True)
     roles = relationship( "Rol", secondary='users_roles', lazy='subquery', backref=db.backref('users',lazy='subquery'))
+    espera= Column(Boolean, default= False)
     
-    def __init__(self, username=None,first_name=None, last_name=None, email=None, password=None):
+    def __init__(self, username=None,first_name=None, last_name=None, email=None, password=None, espera =False):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
         self.bloqueado = False
+        self.espera = espera
         self.username = username
+    
+
+    @staticmethod
+    def get(user_email):
+        return User.query.filter(User.email == user_email).first()
+
     
     @classmethod
     def has_permission(self,user_id, permission):
@@ -56,6 +64,11 @@ class User(db.Model):
     def esta_bloqueado(self, user_id):
         user= User.query.filter(User.id == user_id).first()
         return user.bloqueado
+
+    @classmethod
+    def esta_en_espera(self, user_id):
+        user= User.query.filter(User.id == user_id).first()
+        return user.espera
 
     @classmethod
     def get_email(self,email):
@@ -93,9 +106,27 @@ class User(db.Model):
     def get_users_no_bloqueados(self,orden,pagina,cant_paginas):
         return User.query.filter(User.bloqueado== False).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
+    @classmethod
+    def get_users_en_espera(self,orden,pagina,cant_paginas):
+        return User.query.filter(User.espera== True).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
+    @classmethod    
     def allUsers():
         return db.session.query(User).all()
+
+    @classmethod
+    def create(cls, conn, data):
+        sql = """
+            INSERT INTO users (email, password, first_name, last_name)
+            VALUES (%s, %s, %s, %s)
+        """
+
+        cursor = conn.cursor()
+        cursor.execute(sql, list(data.values()))
+        conn.commit()
+        
+
+        return True
 
        
                 

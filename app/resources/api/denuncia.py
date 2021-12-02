@@ -38,7 +38,7 @@ def create():
     return jsonify(
         'atributos',
             {
-                'categoria_id':denuncia.categoria_id, 
+                'categoria_id':denuncia.categoria_id,
                 'apellido_denunciante':denuncia.apellido_denunciante, 
                 'nombre_denunciante':denuncia.nombre_denunciante,
                 'telcel_denunciante':denuncia.telefono_denunciante,

@@ -6,6 +6,14 @@
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <div v-for="(punto) in puntos" :key="punto.id">
         <l-marker :lat-lngs="punto.coordenadas" :fill="true" >
+        <l-popup>
+          <ul>
+            <li> nombre:         {{punto.nombre}}       </li>
+            <li> dirección:         {{punto.direccion}}       </li>
+            <li> teléfono:          {{punto.telefono}}       </li>
+            <li> email:          {{punto.email}}       </li>
+          </ul>
+        </l-popup>
         </l-marker>
       </div>
       <div v-for="(recorrido) in recorridos" :key="recorrido.id">
@@ -31,13 +39,14 @@
 
 </template>
 <script>
-import { LMap, LTileLayer, LMarker, Lpolyline } from "./../../components";
+import { LMap, LTileLayer, LMarker, Lpolyline, LPopup } from "./../../components";
 export default {
   components: {
     LMap,
     LTileLayer,
     LMarker,
-    Lpolyline
+    Lpolyline,
+    LPopup
   },
   data() {
     return {

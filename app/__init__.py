@@ -23,9 +23,13 @@ from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
 
 from app.helpers import handler
 from app.helpers import auth as helper_auth
+from flask_login import (LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+    )
 
-from authlib.integrations.flask_client import OAuth
-from requests_oauthlib.oauth1_auth import Client
 from oauthlib.oauth2 import WebApplicationClient
 
 
@@ -38,9 +42,6 @@ GOOGLE_DISCOVERY_URL = (
 
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
-
-
-
 
 def create_app(environment="development"):
     # Configuración inicial de la app

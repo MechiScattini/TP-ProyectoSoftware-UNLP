@@ -23,10 +23,6 @@
       <button v-if= denuncias @click=increment v-on:click="getData">&raquo;</button>
     </div>
   </div>
-  <!-- <div v-else style="display:flex; justify-content:center">
-    No hay denuncias
-    <button @click="page=1" v-on:click="getData">Volver</button>
-  </div> -->
 </div>
 </template>
 

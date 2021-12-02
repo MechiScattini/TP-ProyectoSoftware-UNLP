@@ -5,7 +5,7 @@
     <l-map style="height: 300px" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <div v-for="(punto) in puntos" :key="punto.id">
-        <l-marker :lat-lng="punto.coordenadas" :fill="true" >
+        <l-marker :lat-lng="punto.coordenadas[0]" :fill="true" >
         <l-popup>
           <ul>
             <li> nombre:         {{punto.nombre}}       </li>
@@ -17,8 +17,7 @@
         </l-marker>
       </div>
       <div v-for="(recorrido) in recorridos" :key="recorrido.id">
-        <l-polyline :lat-lng="recorrido.coordenadas" :fill="true" >
-        </l-polyline>
+        <l-polyline :lat-lngs="recorrido.coordenadas"></l-polyline>
       </div>
     </l-map>
     <div>
@@ -34,17 +33,22 @@
       </li>
     </ul>
   </form>
+  <div style="display:flex; justify-content:center">
+    <button v-if="page>1" @click=decrement v-on:click="getData">&laquo;</button>
+      <p>página:{{page}}</p>
+    <button v-if= puntos or recorridos @click=increment v-on:click="getData">&raquo;</button>
+  </div>
 </div>
 
 </template>
 <script>
-import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
+import { LMap, LTileLayer, LPolyline, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 export default {
   components: {
     LMap,
     LTileLayer,
     LMarker,
-    //  Lpolyline,
+    LPolyline,
     LPopup
   },
   data () {
@@ -57,22 +61,41 @@ export default {
       center: [-34.92149, -57.954597],
       polyline: [],
       puntos: {},
-      recorridos: {}
+      recorridos: {},
+      page: 1
+    }
+  },
+  methods: {
+    increment () {
+      this.page++
+    },
+    decrement () {
+      this.page--
+    },
+    async getData () {
+      try {
+        const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/?page=' + this.page)
+        const json = await response.json()
+        this.puntos = json.puntos
+        const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/?page=' + this.page)
+        const json2 = await response2.json()
+        this.recorridos = json2.recorridos
+      } catch (e) {
+        alert(e)
+      }
     }
   },
   async created () {
     //  hace la petición a la api
     try {
       //  peticion a los puntos
-      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/')
+      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/?page=' + this.page)
       const json = await response.json()
       this.puntos = json.puntos
-      //  console.log(this.puntos)
       //  peticion a recorridos
-      const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/')
+      const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/?page=' + this.page)
       const json2 = await response2.json()
       this.recorridos = json2.recorridos
-      //  console.log(this.recorridos)
     } catch (e) {
       alert(e)
     }

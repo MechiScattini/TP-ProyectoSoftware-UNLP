@@ -45,11 +45,6 @@ const routes = [
     component: PuntosRecorridosIndex
   },
   {
-    path: '/puntoShow/ver/:id',
-    name: 'punto-ver',
-    component: PuntoShow
-  },
-  {
     path: '/estadisticas',
     name: 'estadisticas',
     component: Estadisticas

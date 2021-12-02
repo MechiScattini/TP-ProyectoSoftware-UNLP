@@ -21,7 +21,7 @@
     Email Denunciante: <input type="email" name="email_denunciante" placeholder="Email Denunciante" class="form-control" required v-model="denuncia.email_denunciante">
   </p>
   <select name="categoria" v-model="denuncia.categoria">
-    <option value= 1 >Urgente</option>
+    <option value= 1>Urgente</option>
     <option value= 2>Advertencia</option>
     <option value= 3>Poco probable</option>
   </select>
@@ -37,6 +37,8 @@
 </template>
 <script>
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
+import axios from 'axios'
+
 export default {
   name: 'DenunciaComponent',
   components: {
@@ -69,18 +71,29 @@ export default {
         descripcion: this.denuncia.descripcion,
         apellido_denunciante: this.denuncia.apellido_denunciante,
         nombre_denunciante: this.denuncia.nombre_denunciante,
-        telefono_denunciante: this.denuncia.telefono_denunciante,
+        telcel_denunciante: this.denuncia.telefono_denunciante,
         email_denunciante: this.denuncia.email_denunciante,
-        categoria: this.denuncia.categoria,
-        coordenadas: coords
+        categoria_id: this.denuncia.categoria,
+        coordenadas: coords.toString()
       }
-      fetch('http://localhost:5000/api/denuncias', {
-        method: 'POST',
-        body: JSON.stringify(datosEnviar)
+      var data = new FormData()
+      data.append('json', JSON.stringify(datosEnviar))
+      console.log(data)
+      axios.post('http://localhost:5000/api/denuncias/', data).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err.response)
       })
-        .then(respuesta => respuesta.json())
-        .then(datosRespuesta => {
-        })
+      //  fetch('http://localhost:5000/api/denuncias/', {
+      //  method: 'POST',
+      //  mode: 'no-cors',
+      //  credentials: 'same-origin',
+      //  body: data
+      //  })
+      //  .then(respuesta => respuesta.json())
+      //  .then(datosRespuesta => {
+      //  console.log(datosRespuesta)
+      //  })
     },
     onClick (e) {
       if (e.latlng) {

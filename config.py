@@ -21,7 +21,7 @@ class ProductionConfig(Config):
 
     DB_HOST = environ.get("DB_HOST", "localhost")
     DB_USER = environ.get("DB_USER", "root")
-    DB_PASS = environ.get("DB_PASS", "41925429")
+    DB_PASS = environ.get("DB_PASS", "ODYwNDk5MWQwODk0")
     DB_NAME = environ.get("DB_NAME", "grupo18")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = (

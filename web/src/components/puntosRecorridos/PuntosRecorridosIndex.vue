@@ -67,12 +67,12 @@ export default {
       const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/')
       const json = await response.json()
       this.puntos = json.puntos
-      console.log(this.puntos)
+      //  console.log(this.puntos)
       //  peticion a recorridos
       const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/')
       const json2 = await response2.json()
       this.recorridos = json2.recorridos
-      console.log(this.recorridos)
+      //  console.log(this.recorridos)
     } catch (e) {
       alert(e)
     }

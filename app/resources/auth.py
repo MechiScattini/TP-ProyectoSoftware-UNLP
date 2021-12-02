@@ -9,13 +9,6 @@ from app.helpers.auth import assert_permission
 import requests
 from oauthlib.oauth2 import WebApplicationClient
 
-from flask_login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
 import json
 
 # Configuration

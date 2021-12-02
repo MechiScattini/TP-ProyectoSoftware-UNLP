@@ -27,12 +27,7 @@ from app.helpers import auth as helper_auth
 from authlib.integrations.flask_client import OAuth
 from requests_oauthlib.oauth1_auth import Client
 from oauthlib.oauth2 import WebApplicationClient
-from flask_login import (LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-    )
+
 
 # GOOGLE Configuration
 GOOGLE_CLIENT_ID = '44050287165-rcvai5a3fmnmgv7tuu1ok4kegj62ut1e.apps.googleusercontent.com'

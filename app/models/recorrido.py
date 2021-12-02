@@ -93,4 +93,7 @@ class Recorrido(db.Model):
             .paginate(page=pagina, per_page=cant_pagina)
         return puntos
 
-    
+    @classmethod
+    def get_recorridos_paginados(self, page, per_page):
+        """Devuelve un paginate object con zonas"""
+        return Recorrido.query.paginate(page=page, per_page=per_page)

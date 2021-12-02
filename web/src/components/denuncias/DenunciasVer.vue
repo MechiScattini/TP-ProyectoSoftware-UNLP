@@ -1,6 +1,7 @@
 <template>
 <div>
-  <div v-if = denuncias>
+  <div>
+    <h1 v-if= not denuncias>No hay denuncias cargadas</h1>
     <form class="form">
         <l-map style="height: 500px" :zoom="zoom" :center="center">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
@@ -16,13 +17,16 @@
         </div>
         </l-map>
     </form>
-    <button v-if="page>1" @click=decrement>Ant</button>
-    <p>{{page}}</p>
-    <button @click=increment>Siguiente</button>
+    <div style="display:flex; justify-content:center">
+      <button v-if="page>1" @click=decrement v-on:click="getData">&laquo;</button>
+          <p>página:{{page}}</p>
+      <button v-if= denuncias @click=increment v-on:click="getData">&raquo;</button>
+    </div>
   </div>
-  <div v-else>
+  <!-- <div v-else style="display:flex; justify-content:center">
     No hay denuncias
-  </div>
+    <button @click="page=1" v-on:click="getData">Volver</button>
+  </div> -->
 </div>
 </template>
 
@@ -48,14 +52,20 @@ export default {
     }
   },
   methods: {
-    // a computed getter
     increment () {
-      // `this` points to the vm instance
       this.page++
     },
     decrement () {
-      // `this` points to the vm instance
       this.page--
+    },
+    async getData () {
+      try {
+        const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/paginate?page=' + this.page)
+        const json = await response.json()
+        this.denuncias = json.denuncias
+      } catch (e) {
+        alert(e)
+      }
     }
   },
   async created () {
@@ -68,12 +78,11 @@ export default {
     } else {
       alert('Para centrar el mapa en su zona, habilite la localización de su navegador')
     }
-    //  hace la petición a la api
+    //  hace la petición a la api con el número de página en la que esté el user
     try {
-      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/')
+      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/paginate?page=' + this.page)
       const json = await response.json()
       this.denuncias = json.denuncias
-      //    this.page = json.pagina
     } catch (e) {
       alert(e)
     }

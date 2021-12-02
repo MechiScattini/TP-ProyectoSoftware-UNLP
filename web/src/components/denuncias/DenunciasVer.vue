@@ -1,6 +1,7 @@
 <template>
 <div>
-  <div v-if = denuncias>
+  <div>
+    <h1 v-if= not denuncias>No hay denuncias cargadas</h1>
     <form class="form">
         <l-map style="height: 500px" :zoom="zoom" :center="center">
         <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
@@ -19,13 +20,13 @@
     <div style="display:flex; justify-content:center">
       <button v-if="page>1" @click=decrement v-on:click="getData">&laquo;</button>
           <p>página:{{page}}</p>
-      <button @click=increment v-on:click="getData">&raquo;</button>
+      <button v-if= denuncias @click=increment v-on:click="getData">&raquo;</button>
     </div>
   </div>
-  <div v-else>
+  <!-- <div v-else style="display:flex; justify-content:center">
     No hay denuncias
-    <router-link to="/denuncias-ver" class="nav-link">Volver</router-link>
-  </div>
+    <button @click="page=1" v-on:click="getData">Volver</button>
+  </div> -->
 </div>
 </template>
 

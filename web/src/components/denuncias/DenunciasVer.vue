@@ -16,12 +16,15 @@
         </div>
         </l-map>
     </form>
-    <button v-if="page>1" @click=decrement>Ant</button>
-    <p>{{page}}</p>
-    <button @click=increment>Siguiente</button>
+    <div style="display:flex; justify-content:center">
+      <button v-if="page>1" @click=decrement v-on:click="getData">&laquo;</button>
+          <p>página:{{page}}</p>
+      <button @click=increment v-on:click="getData">&raquo;</button>
+    </div>
   </div>
   <div v-else>
     No hay denuncias
+    <router-link to="/denuncias-ver" class="nav-link">Volver</router-link>
   </div>
 </div>
 </template>
@@ -48,14 +51,20 @@ export default {
     }
   },
   methods: {
-    // a computed getter
     increment () {
-      // `this` points to the vm instance
       this.page++
     },
     decrement () {
-      // `this` points to the vm instance
       this.page--
+    },
+    async getData () {
+      try {
+        const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/paginate?page=' + this.page)
+        const json = await response.json()
+        this.denuncias = json.denuncias
+      } catch (e) {
+        alert(e)
+      }
     }
   },
   async created () {
@@ -68,12 +77,11 @@ export default {
     } else {
       alert('Para centrar el mapa en su zona, habilite la localización de su navegador')
     }
-    //  hace la petición a la api
+    //  hace la petición a la api con el número de página en la que esté el user
     try {
-      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/')
+      const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/paginate?page=' + this.page)
       const json = await response.json()
       this.denuncias = json.denuncias
-      //    this.page = json.pagina
     } catch (e) {
       alert(e)
     }

@@ -6,6 +6,8 @@ from app.operations.operaciones_api import validate_denuncia
 from app.helpers.codificador import decodificar
 from app.models.elementos import Elementos
 from app.models.ordenacion import Ordenacion
+import sys
+
 
 denuncia_api = Blueprint("denuncias", __name__, url_prefix="/denuncias")
 
@@ -13,6 +15,7 @@ denuncia_api = Blueprint("denuncias", __name__, url_prefix="/denuncias")
 def create():
     data = request.get_json()
     error = ""
+    print(data, file=sys.stderr)
     if 'categoria_id' not in data:
         error ="Debe enviar un campo categoria_id"
     if 'coordenadas' not in data:

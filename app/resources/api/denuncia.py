@@ -1,6 +1,11 @@
 from flask import jsonify, Blueprint, request
+from app.models.category import Category
 from app.models.denuncia import Denuncia
+from app.models.status import Status
 from app.operations.operaciones_api import validate_denuncia
+from app.helpers.codificador import decodificar
+from app.models.elementos import Elementos
+from app.models.ordenacion import Ordenacion
 
 denuncia_api = Blueprint("denuncias", __name__, url_prefix="/denuncias")
 
@@ -42,3 +47,49 @@ def create():
                 'descripcion':denuncia.descripcion
             }
     ), 201
+
+@denuncia_api.get("/")
+def get_denuncias_confirmadas():
+    lista_denuncias = []
+    cant_per_page = Elementos.get_elementos()
+
+    denuncias = Denuncia.get_denuncias_all()
+    for denuncia in denuncias:
+        categoria = Category.get_categoria_id(denuncia.categoria_id)
+        estado = Status.get_status(denuncia.estado_id)
+        if estado.name != 'sin confirmar':
+            lista_denuncias.append(
+                {
+                    'id':denuncia.id, 
+                    'titulo':denuncia.titulo, 
+                    'descripcion': denuncia.descripcion,
+                    'coordenadas':decodificar(denuncia.coordenadas),
+                    'categoria': categoria.name,
+                    'estado': estado.name
+                }
+            )
+    return jsonify(total=len(lista_denuncias), per_page=cant_per_page, denuncias=lista_denuncias)
+
+@denuncia_api.get("/paginate")
+def get_denuncias_confirmadas_paginadas():
+    lista_denuncias = []
+    cant_per_page = Elementos.get_elementos()
+    page = request.args.get('page',1,type=int)
+    ordenacion = Ordenacion.get_ordenacion_denuncias()
+
+    denuncias = Denuncia.paginacion(ordenacion,page,cant_per_page)
+    for denuncia in denuncias.items:
+        categoria = Category.get_categoria_id(denuncia.categoria_id)
+        estado = Status.get_status(denuncia.estado_id)
+        if estado.name != 'sin confirmar':
+            lista_denuncias.append(
+                {
+                    'id':denuncia.id, 
+                    'titulo':denuncia.titulo, 
+                    'descripcion': denuncia.descripcion,
+                    'coordenadas':decodificar(denuncia.coordenadas),
+                    'categoria': categoria.name,
+                    'estado': estado.name
+                }
+            )
+    return jsonify(total=len(lista_denuncias), pagina=page, denuncias=lista_denuncias)

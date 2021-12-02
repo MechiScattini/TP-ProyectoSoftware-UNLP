@@ -11,7 +11,11 @@ class Status(db.Model):
     def __init__(self, name=None):
         self.name = name
 
-
     @classmethod
     def get_all(self):
         return Status.query.all()
+
+    @classmethod
+    def get_status(self, id_status):
+        """Devuelve, si existe, el objeto status con id=id_status"""
+        return Status.query.get(id_status)

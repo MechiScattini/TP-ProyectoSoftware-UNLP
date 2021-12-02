@@ -41,22 +41,23 @@ export default {
     }
   },
   async created () {
+    //  hace la petición a la api
     try {
       const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/zonas-inundables/all')
       const json = await response.json()
       this.zonas = json.zonas
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
-    /* if ('geolocation' in navigator) {
+    //  centra el mapa en la localización del usuario
+    if ('geolocation' in navigator) {
+      var self = this
       navigator.geolocation.getCurrentPosition(function (position) {
-        console.log(position.coords.latitude)
-        console.log(position.coords.longitude)
-        this.center = [position.coords.latitude, position.coords.longitude]
+        self.center = [position.coords.latitude, position.coords.longitude]
       })
     } else {
       alert('Para centrar el mapa en su zona, habilite la localización de su navegador')
-    } */
+    }
   }
 }
 </script>

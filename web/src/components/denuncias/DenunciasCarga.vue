@@ -74,14 +74,12 @@ export default {
         categoria: this.denuncia.categoria,
         coordenadas: coords
       }
-      //  console.log(coords)
       fetch('http://localhost:5000/api/denuncias', {
         method: 'POST',
         body: JSON.stringify(datosEnviar)
       })
         .then(respuesta => respuesta.json())
         .then(datosRespuesta => {
-          //  console.log(datosRespuesta)
         })
     },
     onClick (e) {

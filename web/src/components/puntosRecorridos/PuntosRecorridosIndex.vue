@@ -96,7 +96,6 @@ export default {
       const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/?page=' + this.page)
       const json2 = await response2.json()
       this.recorridos = json2.recorridos
-      console.log(this.recorridos)
     } catch (e) {
       alert(e)
     }

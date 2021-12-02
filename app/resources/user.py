@@ -33,6 +33,26 @@ def index():
             users = User.paginacion(ordenacion, page, cant_paginas)
         return render_template("user/index.html", users=users)
 
+def espera():
+    """ Muestra los usuarios en espera del sistema """
+    assert_permission(session,'user_index')
+
+    #paginacion
+    page  = int(request.args.get('page', 1,type=int))
+
+    cant_paginas = Elementos.get_elementos()
+
+    #variable para opción de ordenación
+    ordenacion = Ordenacion.get_ordenacion_usuarios()
+
+
+    q = request.args.get("q")
+    if q:
+        users= User.users_por_busqueda(q,ordenacion ,page,cant_paginas)
+    else:
+        users = User.get_users_en_espera(ordenacion, page, cant_paginas)
+    return render_template("user/index.html", users=users)
+
 def bloqueados():
     """ Muestra los usuarios bloqueados """
     assert_permission(session,'user_index') 
@@ -96,6 +116,8 @@ def edit(user_id):
                 user.first_name =params['first_name']
                 user.last_name =params['last_name']
                 cheackbox = None
+
+                #chequeo cheackbox de bloqueo
                 cheackbox = params.get("bloqueado")
                 if cheackbox is not None:
                         if user.bloqueado == False:
@@ -113,6 +135,10 @@ def edit(user_id):
                         else:
                             user.bloqueado= False
 
+                #chequeo cheackbox de espera         
+                cheackbox = params.get("espera")
+                if cheackbox is not None:
+                    user.espera = False
                 lista_roles= request.form.getlist("roles[]")
 
                 #acutalizo roles deseleccionados

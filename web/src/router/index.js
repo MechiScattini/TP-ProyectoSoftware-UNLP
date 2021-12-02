@@ -5,7 +5,7 @@ import ZonasInundablesIndex from '../components/zonas-inundables/ZonasInundables
 import ZonasInundablesShow from '../components/zonas-inundables/ZonasInundablesShow.vue'
 import Denuncias from '../components/denuncias/DenunciasCarga.vue'
 import AllDenuncias from '../components/denuncias/DenunciasVer.vue'
-import PuntosRecorridos from '../components/puntosRecorridos/PuntosRecorridos.vue'
+import PuntosRecorridosIndex from '../components/puntosRecorridos/PuntosRecorridosIndex.vue'
 import Estadisticas from '../components/Estadisticas.vue'
 
 const routes = [
@@ -41,8 +41,8 @@ const routes = [
   },
   {
     path: '/puntosRecorridos',
-    name: 'puntosRecorridos',
-    component: PuntosRecorridos
+    name: 'puntos-recorridos',
+    component: PuntosRecorridosIndex
   },
   {
     path: '/estadisticas',

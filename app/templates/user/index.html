@@ -13,7 +13,7 @@
   <a href="{{ url_for('user_index') }}" class="link" method="GET">Todos</a>
   <a href="{{ url_for('user_bloqueados') }}" class="link" method="GET">Bloqueados</a>
   <a href="{{ url_for('user_no_bloqueados') }}" class="link"  method="GET">No bloqueados</a>
-  
+  <a href="{{ url_for('users_espera') }}" class="link"  method="GET">En Espera</a>
   </div>
   {%if users.items %}
   <div class="table-responsive">
@@ -26,6 +26,7 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Bloqueado</th>
+                <th>Espera</th>
                 <th>Accion</th>
             </tr>
         </thead>
@@ -38,6 +39,7 @@
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.bloqueado }}</td>
+                <td>{{ user.espera }}</td>
                 {% if has_permission(session["user2"].id, "user_update") %}
                 <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}

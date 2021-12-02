@@ -33,7 +33,7 @@ def login_with_google():
     # scopes that let you retrieve user's profile from Google
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri="https://127.0.0.1:5000/login/callback-google",
+        redirect_uri="https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/login/callback-google",
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)

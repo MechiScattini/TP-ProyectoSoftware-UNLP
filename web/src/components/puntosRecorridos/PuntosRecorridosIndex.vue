@@ -105,7 +105,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .form{
 text-align: center;

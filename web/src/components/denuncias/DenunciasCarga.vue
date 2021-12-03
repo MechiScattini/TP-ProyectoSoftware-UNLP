@@ -74,27 +74,12 @@ export default {
         telcel_denunciante: this.denuncia.telefono_denunciante,
         email_denunciante: this.denuncia.email_denunciante,
         categoria_id: this.denuncia.categoria,
-        coordenadas: coords.toString()
+        coordenadas: '[' + coords.toString() + ']'
       }
-      var data = new FormData()
-      data.append('json', JSON.stringify(datosEnviar))
-      //  console.log(data)
-      axios.post('http://localhost:5000/api/denuncias/', data).then(res => {
-        //  console.log(res)
-      }).catch(err => {
+      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar
+      ).catch(err => {
         alert(err)
-        //  console.log(err.response)
       })
-      //  fetch('http://localhost:5000/api/denuncias/', {
-      //  method: 'POST',
-      //  mode: 'no-cors',
-      //  credentials: 'same-origin',
-      //  body: data
-      //  })
-      //  .then(respuesta => respuesta.json())
-      //  .then(datosRespuesta => {
-      //  console.log(datosRespuesta)
-      //  })
     },
     onClick (e) {
       if (e.latlng) {

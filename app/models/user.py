@@ -111,7 +111,7 @@ class User(db.Model):
         return User.query.filter(User.espera== True).order_by(orden.orderBy).paginate(page=pagina, per_page=cant_paginas)
 
     @classmethod    
-    def allUsers():
+    def allUsers(asd):
         return db.session.query(User).all()
 
     @classmethod

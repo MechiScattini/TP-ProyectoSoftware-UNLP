@@ -24,8 +24,6 @@ from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
 from app.helpers import handler
 from app.helpers import auth as helper_auth
 
-from authlib.integrations.flask_client import OAuth
-from requests_oauthlib.oauth1_auth import Client
 from oauthlib.oauth2 import WebApplicationClient
 from flask_login import (LoginManager,
     current_user,

@@ -5,6 +5,7 @@ from app.models.denuncia import Denuncia
 from app.models.recorrido import Recorrido
 from app.helpers.codificador import decodificar
 from app.models.elementos import Elementos
+import sys
 
 
 estadisticas_api = Blueprint("estadisticas", __name__, url_prefix="/estadisticas")
@@ -19,11 +20,12 @@ def index():
 
     lista.append(
         {
-            'cantidad puntos ':cant_puntos, 
-            'cantidad recorridos ':cant_recorridos, 
-            'cantidad denuncias ':cant_denuncias,
-            'cantidad zonas inundables ':cant_zonasInundables,
+            'cantidad_puntos ':cant_puntos, 
+            'cantidad_recorridos ':cant_recorridos, 
+            'cantidad_denuncias ':cant_denuncias,
+            'cantidad_zonas inundables ':cant_zonasInundables,
         }
 
     )
+    print(lista, file=sys.stderr)
     return jsonify(lista)

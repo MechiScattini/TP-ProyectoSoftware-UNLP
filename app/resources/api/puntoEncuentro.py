@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint,request
 from app.models.puntoEncuentro import PuntoEncuentro
-from app.helpers.codificador import decodificar_para_json
+from app.helpers.codificador import decodificar
 from app.models.elementos import Elementos
 
 
@@ -19,7 +19,7 @@ def index():
                 'id':punto.id, 
                 'nombre':punto.nombre, 
                 'direccion': punto.direccion,
-                'coordenadas':decodificar_para_json(punto.coordenadas),
+                'coordenadas':decodificar(punto.coordenadas),
                 'estado': punto.estado,
                 'telefono': punto.telefono,
                 'email': punto.email

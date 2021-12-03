@@ -209,7 +209,14 @@ def destroy(denuncia_id):
     """Controlador para eliminar una denuncia"""
     #Chequea autenticación y permisos
     assert_permission(session, 'denuncia_destroy')
-    #busca y elimina
+    
+    #busca seguimientos si es que tiene, los eliminar
+    seguimientos = Seguimiento.get_seguimientos(denuncia_id)
+    if seguimientos is not None:
+        for x in seguimientos:
+            seguimiento = Seguimiento.get_seguimiento(x.id)
+            db.session.delete(seguimiento)
+    #busca y elimina denuncia        
     denuncia = Denuncia.get_denuncia(denuncia_id)
     db.session.delete(denuncia)
     db.session.commit()

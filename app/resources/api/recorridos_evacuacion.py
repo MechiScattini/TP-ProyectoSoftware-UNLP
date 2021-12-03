@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint,request
 from app.models.recorrido import Recorrido
-from app.helpers.codificador import decodificar_para_json
+from app.helpers.codificador import decodificar
 from app.models.elementos import Elementos
 
 
@@ -19,7 +19,7 @@ def index():
                 'id':recorrido.id, 
                 'nombre':recorrido.nombre, 
                 'descripcion': recorrido.descripcion,
-                'coordenadas':decodificar_para_json(recorrido.coordenadas),
+                'coordenadas':decodificar(recorrido.coordenadas),
                 'estado': recorrido.estado
             }
 

@@ -104,7 +104,7 @@ export default {
   }
 }
 </script>
-<script src="https://kit.fontawesome.com/675b7f3ddb.js" crossorigin="anonymous"></script>
+//<script src="https://kit.fontawesome.com/675b7f3ddb.js" crossorigin="anonymous"></script>
 
 <style scoped>
 .form{

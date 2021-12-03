@@ -25,6 +25,9 @@ class ZonaInundable(db.Model):
         return decodificar(self.coordenadas)
 
     @classmethod
+    def get_cantidad(self):
+        return ZonaInundable.query.count()
+    @classmethod
     def get_zonas(self):
         """Devuelve una lista de todas las zonas en la db"""
         return ZonaInundable.query.all()

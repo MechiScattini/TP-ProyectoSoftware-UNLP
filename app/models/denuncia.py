@@ -81,7 +81,10 @@ class Denuncia(db.Model):
             db.session.rollback()
             return e
         return new_denuncia
-
+        
+    @classmethod
+    def get_cantidad(self):
+        return Denuncia.query.count()
     def as_dict(self):
         return {attr.name: getattr(self, attr.name) for attr in self.__table__.columns}
 

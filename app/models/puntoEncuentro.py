@@ -60,6 +60,9 @@ class PuntoEncuentro(db.Model):
         return email
 
     @classmethod
+    def get_cantidad(self):
+        return PuntoEncuentro.query.count()
+    @classmethod
     def get_punto(self, punto_id):
         return PuntoEncuentro.query.get(punto_id)
 

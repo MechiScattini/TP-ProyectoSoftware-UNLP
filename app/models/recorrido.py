@@ -46,7 +46,9 @@ class Recorrido(db.Model):
 
     def coordenadas_tolist(self):
         return decodificar(self.coordenadas)
-
+    @classmethod    
+    def get_cantidad(self):
+        return Recorrido.query.count()
     @classmethod
     def get_recorrido(self, recorrido_id):
         return Recorrido.query.get(recorrido_id)

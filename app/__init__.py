@@ -19,7 +19,7 @@ from app.resources.api.zonaInundable import zona_api
 from app.resources.api.denuncia import denuncia_api
 from app.resources.api.puntoEncuentro import puntoEncuentro_api
 from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
-
+from app.resources.api.estadisticas import estadisticas_api
 
 from app.helpers import handler
 from app.helpers import auth as helper_auth
@@ -181,6 +181,7 @@ def create_app(environment="development"):
     api.register_blueprint(denuncia_api)
     api.register_blueprint(puntoEncuentro_api)
     api.register_blueprint(recorridos_evacuacion_api)
+    api.register_blueprint(estadisticas_api)
 
     app.register_blueprint(api)
 

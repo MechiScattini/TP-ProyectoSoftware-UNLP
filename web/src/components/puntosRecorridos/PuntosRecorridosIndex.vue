@@ -22,14 +22,14 @@
     </l-map>
     <div>
     <ul>
-      <h3> Recorridos de evacuación <i class="fas fa-horizontal-rule"></i> style="font-size:24px;"></i>: </h3>
+      <h3> Recorridos de evacuación: </h3>
       <li v-for="(recorrido) in recorridos" :key="recorrido.id">
         {{recorrido.nombre}}
       </li>
     </ul>
     </div>
     <ul>
-      <h3> Puntos de encuentro <i class="fas fa-map-marker-alt" style="font-size:24px;"></i> :  </h3>
+      <h3> Puntos de encuentro:  </h3>
       <li v-for="(punto) in puntos" :key="punto.id">
         {{punto.nombre}}
       </li>
@@ -104,7 +104,7 @@ export default {
   }
 }
 </script>
-//<script src="https://kit.fontawesome.com/675b7f3ddb.js" crossorigin="anonymous"></script>
+
 
 <style scoped>
 .form{

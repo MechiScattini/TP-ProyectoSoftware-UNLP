@@ -20,10 +20,10 @@ def index():
 
     lista.append(
         {
-            'cantidad_puntos ':cant_puntos, 
-            'cantidad_recorridos ':cant_recorridos, 
-            'cantidad_denuncias ':cant_denuncias,
-            'cantidad_zonas inundables ':cant_zonasInundables,
+            'cantidad_puntos':cant_puntos, 
+            'cantidad_recorridos':cant_recorridos, 
+            'cantidad_denuncias':cant_denuncias,
+            'cantidad_zonas inundables':cant_zonasInundables,
         }
 
     )

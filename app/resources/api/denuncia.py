@@ -38,7 +38,7 @@ def create():
     if response:
         return jsonify(response), 400
     denuncia = Denuncia.create_denuncia(**data)
-    return jsonify(
+    var = jsonify(
         'atributos',
             {
                 'categoria_id':denuncia.categoria_id,
@@ -50,6 +50,8 @@ def create():
                 'descripcion':denuncia.descripcion
             }
     ), 201
+    var.headers.add('Access-Control-Allow-Origin', '*')
+    return var
 
 @denuncia_api.get("/")
 def get_denuncias_confirmadas():

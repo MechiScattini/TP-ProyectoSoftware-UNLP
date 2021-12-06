@@ -23,7 +23,7 @@ def index():
             'cantidad_puntos':cant_puntos, 
             'cantidad_recorridos':cant_recorridos, 
             'cantidad_denuncias':cant_denuncias,
-            'cantidad_zonas inundables':cant_zonasInundables,
+            'cantidad_zonas_inundables':cant_zonasInundables,
         }
 
     )

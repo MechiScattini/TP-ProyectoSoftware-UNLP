@@ -27,8 +27,9 @@
   </select>
   <l-map style="height: 300px" :zoom="zoom" :center="center" @click="onClick">
     <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-    <l-marker :lat-lng="markerLatLng"></l-marker>
+    <l-marker :lat-lng="marker" v-on:click="deleteMarker"></l-marker>
   </l-map>
+  <h4 v-if="success != ''">{{ success }}</h4>
   <div>
     <button type="submit">Crear</button>
   </div>
@@ -51,7 +52,8 @@ export default {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       zoom: 13,
       center: [-34.9187, -57.956],
-      markerLatLng: [-34.9187, -57.956],
+      marker: null,
+      success: '',
       denuncia: {
         titulo: '',
         descripcion: '',
@@ -64,42 +66,41 @@ export default {
     }
   },
   methods: {
+    deleteMarker () {
+      this.marker = null
+    },
     agregarDenuncia () {
-      const coords = [this.markerLatLng.lat, this.markerLatLng.lng]
-      var coords2 = '[' + '[' + coords.toString() + ']' + ']'
-      var datosEnviar = {
-        titulo: this.denuncia.titulo,
-        descripcion: this.denuncia.descripcion,
-        apellido_denunciante: this.denuncia.apellido_denunciante,
-        nombre_denunciante: this.denuncia.nombre_denunciante,
-        telcel_denunciante: this.denuncia.telefono_denunciante,
-        email_denunciante: this.denuncia.email_denunciante,
-        categoria_id: this.denuncia.categoria,
-        coordenadas: coords2
+      if (this.marker != null) {
+        const coords = [this.marker.lat, this.marker.lng]
+        var coords2 = '[' + '[' + coords.toString() + ']' + ']'
+        var datosEnviar = {
+          titulo: this.denuncia.titulo,
+          descripcion: this.denuncia.descripcion,
+          apellido_denunciante: this.denuncia.apellido_denunciante,
+          nombre_denunciante: this.denuncia.nombre_denunciante,
+          telcel_denunciante: this.denuncia.telefono_denunciante,
+          email_denunciante: this.denuncia.email_denunciante,
+          categoria_id: this.denuncia.categoria,
+          coordenadas: coords2
+        }
+        axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
+          {
+            headers: { 'Access-Control-Allow-Origin': '*' }
+          }
+        ).then((response) => {
+          if (response.status === 201) {
+            alert('La denuncia fue cargada exitosamente')
+          }
+        }).catch(error => {
+          alert(error.response.data)
+        })
+      } else {
+        alert('Debe seleccionar el lugar de la denuncia en el mapa')
       }
-      /* fetch('http://127.0.0.1:5000/api/denuncias/',
-        {
-          method: 'POST',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(datosEnviar)
-        }
-      ).catch(err => {
-        alert('fetch error:' + err)
-      }) */
-      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
-        {
-          headers: { 'Access-Control-Allow-Origin': '*' }
-        }
-      ).catch(err => {
-        alert('axios error:' + err)
-      })
     },
     onClick (e) {
-      if (e.latlng) {
-        this.markerLatLng = e.latlng
+      if (this.marker == null) {
+        this.marker = e.latlng
       }
     }
   }

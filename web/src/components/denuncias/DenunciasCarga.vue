@@ -37,7 +37,7 @@
 </template>
 <script>
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
-/* import axios from 'axios' */
+import axios from 'axios'
 
 export default {
   name: 'DenunciaComponent',
@@ -64,8 +64,9 @@ export default {
     }
   },
   methods: {
-    async agregarDenuncia () {
+    agregarDenuncia () {
       const coords = [this.markerLatLng.lat, this.markerLatLng.lng]
+      var coords2 = '[' + '[' + coords.toString() + ']' + ']'
       var datosEnviar = {
         titulo: this.denuncia.titulo,
         descripcion: this.denuncia.descripcion,
@@ -74,9 +75,9 @@ export default {
         telcel_denunciante: this.denuncia.telefono_denunciante,
         email_denunciante: this.denuncia.email_denunciante,
         categoria_id: this.denuncia.categoria,
-        coordenadas: '[' + coords.toString() + ']'
+        coordenadas: coords2
       }
-      await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/',
+      /* fetch('http://127.0.0.1:5000/api/denuncias/',
         {
           method: 'POST',
           headers: {
@@ -87,14 +88,14 @@ export default {
         }
       ).catch(err => {
         alert('fetch error:' + err)
-      })/*
+      }) */
       axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
         {
           headers: { 'Access-Control-Allow-Origin': '*' }
         }
       ).catch(err => {
         alert('axios error:' + err)
-      }) */
+      })
     },
     onClick (e) {
       if (e.latlng) {

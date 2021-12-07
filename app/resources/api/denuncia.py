@@ -13,11 +13,10 @@ import sys
 denuncia_api = Blueprint("denuncias", __name__, url_prefix="/denuncias")
 
 @denuncia_api.post("/")
-@cross_origin
+@cross_origin()
 def create():
     data = request.get_json()
     error = ""
-    print(data, file=sys.stderr)
     if 'categoria_id' not in data:
         error ="Debe enviar un campo categoria_id"
     if 'coordenadas' not in data:
@@ -52,7 +51,6 @@ def create():
                 'descripcion':denuncia.descripcion
             }
     ), 201
-    var.headers.add('Access-Control-Allow-Origin', '*')
     return var
 
 @denuncia_api.get("/")

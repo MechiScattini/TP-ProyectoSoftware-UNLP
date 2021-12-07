@@ -37,7 +37,7 @@
 </template>
 <script>
 import { LMap, LTileLayer, LMarker } from '@vue-leaflet/vue-leaflet'
-/* import axios from 'axios' */
+import axios from 'axios'
 
 export default {
   name: 'DenunciaComponent',
@@ -76,7 +76,7 @@ export default {
         categoria_id: this.denuncia.categoria,
         coordenadas: '[' + coords.toString() + ']'
       }
-      await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/',
+      /* await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/',
         {
           method: 'POST',
           headers: {
@@ -86,15 +86,15 @@ export default {
           }
         }
       ).catch(err => {
-        alert('axios error:' + err)
-      })/*
-      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
-        {
-          headers: 'Access-Control-Allow-Origin: *'
-        }
-      ).catch(err => {
-        alert('axios error:', err)
+        alert('fetch error:' + err)
       }) */
+      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
+        /* {
+          headers: { 'Access-Control-Allow-Origin': '*' }
+        } */
+      ).catch(err => {
+        alert('axios error:' + err)
+      })
     },
     onClick (e) {
       if (e.latlng) {

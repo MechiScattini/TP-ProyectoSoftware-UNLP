@@ -50,7 +50,7 @@ def create():
                 'descripcion':denuncia.descripcion
             }
     ), 201
-    var.headers.add('Access-Control-Allow-Origin', '*')
+    #var.headers.add('Access-Control-Allow-Origin', '*')
     return var
 
 @denuncia_api.get("/")

@@ -88,8 +88,8 @@ export default {
       ).catch(err => {
         alert('fetch error:' + err)
       }) */
-      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar,
-        /* {
+      axios.post('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/denuncias/', datosEnviar/* ,
+        {
           headers: { 'Access-Control-Allow-Origin': '*' }
         } */
       ).catch(err => {

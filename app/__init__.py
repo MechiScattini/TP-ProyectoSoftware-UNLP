@@ -71,8 +71,11 @@ def create_app(environment="development"):
 
     #configuración de CORS
     CORS(app)
-    """ app.config['CORS_HEADERS'] = {'Access-Control-Allow-Origin': "*"}
-    app.config['CORS_HEADERS'] = 'Content-Type' """
+    app.config['CORS_HEADERS'] = {
+        'Access-Control-Allow-Origin': "*", 
+        'Content-Type': 'application/json'
+        }
+    app.config['CORS_ORIGINS'] = "*"
 
     # Server Side session
     app.config["SESSION_TYPE"] = "filesystem"

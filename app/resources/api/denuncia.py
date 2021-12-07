@@ -1,4 +1,5 @@
 from flask import jsonify, Blueprint, request
+from flask_cors import cross_origin
 from app.models.category import Category
 from app.models.denuncia import Denuncia
 from app.models.status import Status
@@ -12,6 +13,7 @@ import sys
 denuncia_api = Blueprint("denuncias", __name__, url_prefix="/denuncias")
 
 @denuncia_api.post("/")
+@cross_origin
 def create():
     data = request.get_json()
     error = ""

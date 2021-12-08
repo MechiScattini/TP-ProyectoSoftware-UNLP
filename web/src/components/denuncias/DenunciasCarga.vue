@@ -26,10 +26,9 @@
     <option value= 3>Poco probable</option>
   </select>
   <l-map style="height: 300px" :zoom="zoom" :center="center" @click="onClick">
-    <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+    <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="marker" v-on:click="deleteMarker"></l-marker>
   </l-map>
-  <h4 v-if="success != ''">{{ success }}</h4>
   <div>
     <button type="submit">Crear</button>
   </div>
@@ -52,8 +51,7 @@ export default {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       zoom: 13,
       center: [-34.9187, -57.956],
-      marker: null,
-      success: '',
+      marker: [0, 0],
       denuncia: {
         titulo: '',
         descripcion: '',
@@ -99,6 +97,7 @@ export default {
       }
     },
     onClick (e) {
+      this.deleteMarker()
       if (this.marker == null) {
         this.marker = e.latlng
       }

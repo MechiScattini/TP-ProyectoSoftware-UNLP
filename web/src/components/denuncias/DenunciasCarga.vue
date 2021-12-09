@@ -27,7 +27,7 @@
   </select>
   <l-map style="height: 300px" :zoom="zoom" :center="center" @click="onClick">
     <l-tile-layer :url="url" ></l-tile-layer>
-    <l-marker :lat-lng="marker" v-on:click="deleteMarker"></l-marker>
+    <l-marker :lat-lng="marker"></l-marker>
   </l-map>
   <div>
     <button type="submit">Crear</button>
@@ -98,9 +98,7 @@ export default {
     },
     onClick (e) {
       this.deleteMarker()
-      if (this.marker == null) {
-        this.marker = e.latlng
-      }
+      this.marker = e.latlng
     }
   }
 }

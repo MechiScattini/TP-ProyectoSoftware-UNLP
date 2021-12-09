@@ -1,5 +1,6 @@
 <template>
 <div>
+  <h2 style="display:flex; justify-content: center">Denuncias</h2>
   <div>
     <h1 v-if= not denuncias>No hay denuncias cargadas</h1>
     <form class="form">

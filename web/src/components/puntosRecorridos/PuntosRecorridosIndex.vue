@@ -1,6 +1,7 @@
 <template>
 
   <div>
+  <h2 style="display:flex; justify-content: center">Puntos de encuentro y recorridos de evacuación</h2>
   <form class="form">
     <l-map style="height: 300px" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>

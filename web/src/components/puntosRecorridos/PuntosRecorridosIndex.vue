@@ -2,44 +2,60 @@
 
   <div>
   <h2 style="display:flex; justify-content: center">Puntos de encuentro y recorridos de evacuación</h2>
-  <form class="form">
+  <div class="form">
     <l-map style="height: 300px" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <div v-for="(punto) in puntos" :key="punto.id">
         <l-marker :lat-lng="punto.coordenadas[0]" :fill="true" >
         <l-popup>
           <ul>
-            <li> nombre:         {{punto.nombre}}       </li>
-            <li> dirección:         {{punto.direccion}}       </li>
-            <li> teléfono:          {{punto.telefono}}       </li>
-            <li> email:          {{punto.email}}       </li>
+            <li> Nombre:         {{punto.nombre}}       </li>
+            <li> Dirección:         {{punto.direccion}}       </li>
+            <li> Teléfono:          {{punto.telefono}}       </li>
+            <li> Email:          {{punto.email}}       </li>
           </ul>
         </l-popup>
         </l-marker>
       </div>
       <div v-for="(recorrido) in recorridos" :key="recorrido.id">
-        <l-polyline :lat-lngs="recorrido.coordenadas"></l-polyline>
+        <l-polyline :lat-lngs="recorrido.coordenadas">
+          <l-popup>
+            <ul>
+              <li> Nombre:         {{recorrido.nombre}}       </li>
+              <li> Descripción:         {{recorrido.descripcion}}       </li>
+              <li v-if="recorrido.estado"> Estado:          Publicado       </li>
+              <li v-else> Estado:          Despublicado       </li>
+            </ul>
+          </l-popup>
+        </l-polyline>
       </div>
     </l-map>
     <div>
-    <ul>
-      <h3> Recorridos de evacuación: </h3>
-      <li v-for="(recorrido) in recorridos" :key="recorrido.id">
-        {{recorrido.nombre}}
-      </li>
-    </ul>
+      <ul>
+        <h3> Recorridos de evacuación: </h3>
+        <li v-for="(recorrido) in recorridos" :key="recorrido.id">
+          {{recorrido.nombre}}
+        </li>
+      </ul>
+      <div style="display:flex; justify-content:center">
+        <button v-if="pageRecorridos>1" @click=decrementPageR v-on:click="getDataRecorridos">&laquo;</button>
+          <p>página:{{pageRecorridos}}</p>
+        <button v-if= recorridos @click=incrementPageR v-on:click="getDataRecorridos">&raquo;</button>
+      </div>
     </div>
-    <ul>
-      <h3> Puntos de encuentro:  </h3>
-      <li v-for="(punto) in puntos" :key="punto.id">
-        {{punto.nombre}}
-      </li>
-    </ul>
-  </form>
-  <div style="display:flex; justify-content:center">
-    <button v-if="page>1" @click=decrement v-on:click="getData">&laquo;</button>
-      <p>página:{{page}}</p>
-    <button v-if= puntos or recorridos @click=increment v-on:click="getData">&raquo;</button>
+    <div>
+      <ul>
+        <h3> Puntos de encuentro:  </h3>
+        <li v-for="(punto) in puntos" :key="punto.id">
+          {{punto.nombre}}
+        </li>
+      </ul>
+      <div style="display:flex; justify-content:center">
+        <button v-if="pagePuntos>1" @click=decrementPageP v-on:click="getDataPuntos">&laquo;</button>
+          <p>página:{{pagePuntos}}</p>
+        <button v-if= puntos @click=incrementPageP v-on:click="getDataPuntos">&raquo;</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -65,22 +81,35 @@ export default {
       polyline: [],
       puntos: {},
       recorridos: {},
-      page: 1
+      pagePuntos: 1,
+      pageRecorridos: 1
     }
   },
   methods: {
-    increment () {
-      this.page++
+    incrementPageP () {
+      this.pagePuntos++
     },
-    decrement () {
-      this.page--
+    decrementPageP () {
+      this.pagePuntos--
     },
-    async getData () {
+    incrementPageR () {
+      this.pageRecorridos++
+    },
+    decrementPageR () {
+      this.pageRecorridos--
+    },
+    async getDataPuntos () {
       try {
-        const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/?page=' + this.page)
+        const response = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/puntos-encuentro/?page=' + this.pagePuntos)
         const json = await response.json()
         this.puntos = json.puntos
-        const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/?page=' + this.page)
+      } catch (e) {
+        alert(e)
+      }
+    },
+    async getDataRecorridos () {
+      try {
+        const response2 = await fetch('https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/api/recorridos-evacuacion/?page=' + this.pageRecorridos)
         const json2 = await response2.json()
         this.recorridos = json2.recorridos
       } catch (e) {

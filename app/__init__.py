@@ -21,7 +21,7 @@ from app.resources.api.puntoEncuentro import puntoEncuentro_api
 from app.resources.api.recorridos_evacuacion import recorridos_evacuacion_api
 from app.resources.api.estadisticas import estadisticas_api
 
-from app.helpers import handler
+from app.helpers import handler, auth_google
 from app.helpers import auth as helper_auth
 from flask_login import (LoginManager,
     current_user,
@@ -86,9 +86,9 @@ def create_app(environment="development"):
     app.jinja_env.globals.update(get_color_publico=Colores.get_color_publico)
 
     # Autenticación
-    app.add_url_rule("/login-google", "auth_login_with_google", auth.login_with_google)
+    app.add_url_rule("/login-google", "auth_login_with_google", auth_google.login_with_google)
     app.add_url_rule(
-        "/login/callback-google", "auth_callback-google", auth.callback_google, methods=["GET"]
+        "/login/callback-google", "auth_callback-google", auth.callback_control, methods=["GET"]
     )
     app.add_url_rule("/espera", "auth_espera", auth.espera)   
     app.add_url_rule("/iniciar_sesion", "auth_login", auth.login)

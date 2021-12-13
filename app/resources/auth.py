@@ -3,83 +3,22 @@ from app.db import db
 from app.models.user import User
 from app.models.colores import Colores
 from werkzeug.security import check_password_hash
-from app.helpers.auth import assert_permission
-# Import our oauth object from our app
+from app.helpers.auth_google import callback_google
 
-import requests
-from oauthlib.oauth2 import WebApplicationClient
 
-import json
-
-# Configuration
-GOOGLE_CLIENT_ID = '44050287165-rcvai5a3fmnmgv7tuu1ok4kegj62ut1e.apps.googleusercontent.com'
-GOOGLE_CLIENT_SECRET = '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'
-GOOGLE_DISCOVERY_URL = (
-    "https://accounts.google.com/.well-known/openid-configuration"
-)
-
-def get_google_provider_cfg():
-    return requests.get(GOOGLE_DISCOVERY_URL).json()
-
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-def login_with_google():
-    # Find out what URL to hit for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-    
-
-    # Use library to construct the request for Google login and provide
-    # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri="https://admin-grupo18.proyecto2021.linti.unlp.edu.ar/login/callback-google",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
-
-# @app.route("/login/callback_google")
-def callback_google():
-    # Get authorization code Google sent back to you
-    code = request.args.get("code")
-
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-    token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
-    )
-
-    # Parse the tokens!
-    client.parse_request_body_response(json.dumps(token_response.json()))
-    
-    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        users_name = userinfo_response.json()["given_name"]
+def callback_control():
+    user_info = callback_google()
+    if user_info.json().get("email_verified"):
+        users_email = user_info.json()["email"]
     else:
         return "User email not available or not verified by Google.", 400
     
-
-    # Doesn't exist? Add it to the database.
+    #Busco si existe un usuario en la bd con ese email
     user =User.get(users_email)
     if  user is None:
-        new_user = User(
-         username=users_name, email=users_email, espera=True
-        )
-        db.session.add(new_user)
-        db.session.commit()
+
+        # Doesn't exist? Add it to the database.
+        new_user = User.create_with_google(user_info)
 
         if User.esta_en_espera(new_user.id):
             error= "Se registro el usuario exitosamente, espere a que el administrador habilite su cuenta"
@@ -91,7 +30,7 @@ def callback_google():
             session["user"] = new_user.email
             session["user2"] = new_user
     else:
-        
+        # existe ? me fijo si puede iniciar sesion
         if  User.esta_bloqueado(user.id):
             error= "Usuario bloqueado no puede iniciar sesion"
             flash(error)

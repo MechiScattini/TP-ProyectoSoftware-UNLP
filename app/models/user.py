@@ -46,7 +46,15 @@ class User(db.Model):
     def get(user_email):
         return User.query.filter(User.email == user_email).first()
 
-    
+    @classmethod
+    def create_with_google(self,user_info):
+        new_user = User(
+         username= user_info.json()["given_name"], email=user_info.json()["email"], espera=True
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user
+
     @classmethod
     def has_permission(self,user_id, permission):
         user = User.query.filter(User.id==user_id).first()

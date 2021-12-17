@@ -19,7 +19,6 @@ def login_with_google():
     # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-    
 
     # Use library to construct the request for Google login and provide
     # scopes that let you retrieve user's profile from Google

@@ -36,10 +36,26 @@
                 <th scope="row">{{ loop.index }}</th>
                 <td>{{ user.email }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.first_name }}</td>
-                <td>{{ user.last_name }}</td>
-                <td>{{ user.bloqueado }}</td>
-                <td>{{ user.espera }}</td>
+                {% if user.first_name %}
+                  <td>{{ user.first_name }}</td>
+                {% else %}
+                  <td>--</td>
+                {% endif %}
+                {% if user.last_name %}
+                  <td>{{ user.last_name }}</td>
+                {% else %}
+                  <td>--</td>
+                {% endif %}
+                {% if user.bloqueado %}
+                  <td>&#10004;</td>
+                {% else %}
+                  <td>&#10006</td>
+                {% endif %}
+                {% if user.espera %}
+                  <td>&#10004;</td>
+                {% else %}
+                  <td>&#10006</td>
+                {% endif %}
                 {% if has_permission(session["user2"].id, "user_update") %}
                 <td><a href="{{ url_for('user_edit', user_id= user.id ) }}" method="POST" class="link"> Editar </a>
                 {% endif %}

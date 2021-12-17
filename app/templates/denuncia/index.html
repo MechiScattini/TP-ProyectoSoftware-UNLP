@@ -53,7 +53,7 @@
                   {% endif %}
                 {% endfor %}
                 {% if denuncia.asignado_a == None %}
-                  <td>None</td>
+                  <td>--</td>
                 {% else %}
                   {% for user in users %}
                     {% if user.id == denuncia.asignado_a %}
